@@ -1,584 +1,1555 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rutina de Gimnasio</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0e0e0f;
-    --surface: #161618;
-    --card: #1e1e21;
-    --border: #2a2a2e;
-    --accent: #e8ff47;
-    --accent2: #ff6b35;
-    --text: #f0f0f0;
-    --muted: #888;
-    --day1: #e8ff47;
-    --day2: #ff6b35;
-    --day3: #47c5ff;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi Rutina de Gym</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg:        #0D0D0D;
+      --surface:   #161616;
+      --surface2:  #1F1F1F;
+      --border:    #2A2A2A;
+      --accent:    #E8FF00;
+      --accent2:   #BFFF00;
+      --text:      #F0F0F0;
+      --muted:     #888;
+      --danger:    #FF4545;
+      --safe:      #00D68F;
+    }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    padding: 24px 16px 60px;
-  }
+    html { scroll-behavior: smooth; }
 
-  header {
-    text-align: center;
-    margin-bottom: 40px;
-    padding-top: 16px;
-  }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
 
-  .tag {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(232,255,71,0.1);
-    border: 1px solid rgba(232,255,71,0.25);
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-bottom: 16px;
-  }
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 80px 24px 60px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,255,0,.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(52px, 10vw, 96px);
+      font-weight: 900;
+      line-height: .95;
+      text-transform: uppercase;
+      letter-spacing: -.01em;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero-sub {
+      max-width: 480px;
+      margin: 22px auto 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .stat-val {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
 
-  h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(52px, 12vw, 88px);
-    letter-spacing: 0.03em;
-    line-height: 0.9;
-    color: var(--text);
-  }
+    /* ── LESIÓN BANNER ── */
+    .injury-banner {
+      background: rgba(255,69,69,.08);
+      border: 1px solid rgba(255,69,69,.25);
+      border-radius: 10px;
+      padding: 14px 20px;
+      margin: 28px auto;
+      max-width: 760px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 13px;
+      color: #ffaaaa;
+    }
+    .injury-banner .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
 
-  h1 span { color: var(--accent); }
+    /* ── TABS ── */
+    .tabs-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13,13,13,.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .tabs {
+      display: flex;
+      max-width: 900px;
+      margin: 0 auto;
+      gap: 0;
+    }
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 16px 0 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color .2s, border-color .2s;
+      position: relative;
+    }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    .tab-btn:hover:not(.active) { color: var(--text); }
+    .tab-badge {
+      display: inline-block;
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 10px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 20px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .tab-btn.active .tab-badge {
+      background: rgba(232,255,0,.15);
+      color: var(--accent);
+    }
 
-  .subtitle {
-    margin-top: 14px;
-    font-size: 14px;
-    color: var(--muted);
-    font-weight: 400;
-  }
+    /* ── MAIN ── */
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
 
-  .stats-bar {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    margin: 28px 0 40px;
-    flex-wrap: wrap;
-  }
+    /* ── DAY SECTION ── */
+    .day-section { display: none; }
+    .day-section.active { display: block; }
 
-  .stat {
-    text-align: center;
-  }
+    .day-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .day-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 42px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .day-title span { color: var(--accent); }
+    .day-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .pill.accent {
+      background: rgba(232,255,0,.1);
+      border-color: rgba(232,255,0,.3);
+      color: var(--accent);
+    }
 
-  .stat-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 32px;
-    letter-spacing: 0.04em;
-    color: var(--accent);
-  }
+    /* ── PROGRESS BAR ── */
+    .session-progress {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 28px;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .progress-label strong { color: var(--text); }
+    .progress-bar-bg {
+      height: 6px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 10px;
+      transition: width .5s ease;
+    }
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 14px;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background .3s;
+      cursor: pointer;
+    }
+    .step-dot.done { background: var(--accent); }
 
-  .stat-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    margin-top: 2px;
-  }
+    /* ── EXERCISE CARD ── */
+    .exercises-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
 
-  .alert {
-    background: rgba(255,107,53,0.08);
-    border: 1px solid rgba(255,107,53,0.3);
-    border-left: 3px solid var(--accent2);
-    border-radius: 10px;
-    padding: 14px 16px;
-    margin-bottom: 32px;
-    max-width: 680px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+    .ex-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color .2s, transform .15s;
+      cursor: pointer;
+    }
+    .ex-card:hover { border-color: #3a3a3a; transform: translateY(-1px); }
+    .ex-card.expanded { border-color: rgba(232,255,0,.3); }
 
-  .alert-title {
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--accent2);
-    margin-bottom: 6px;
-  }
+    .ex-card-header {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      gap: 0;
+      align-items: stretch;
+    }
 
-  .alert p {
-    font-size: 13px;
-    color: #ccc;
-    line-height: 1.6;
-  }
+    .ex-img-wrap {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0;
+      flex-shrink: 0;
+    }
+    .ex-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(20%);
+      transition: filter .3s, transform .3s;
+    }
+    .ex-card:hover .ex-img-wrap img { filter: grayscale(0%); transform: scale(1.04); }
+    .ex-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 60%, var(--surface));
+      pointer-events: none;
+    }
 
-  .tabs {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-  }
+    .ex-info {
+      padding: 16px 16px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+    }
+    .ex-number {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .ex-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .01em;
+      line-height: 1.1;
+    }
+    .ex-machine {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .ex-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+    .chip.sets { color: var(--accent); border-color: rgba(232,255,0,.3); background: rgba(232,255,0,.07); }
+    .chip.reps { color: #7dd3fc; border-color: rgba(125,211,252,.25); background: rgba(125,211,252,.06); }
+    .chip.rest { color: #a78bfa; border-color: rgba(167,139,250,.25); background: rgba(167,139,250,.06); }
 
-  .tab {
-    padding: 10px 22px;
-    border-radius: 100px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
+    .ex-toggle {
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      color: var(--muted);
+      font-size: 18px;
+      transition: transform .3s, color .2s;
+      user-select: none;
+    }
+    .ex-card.expanded .ex-toggle { transform: rotate(180deg); color: var(--accent); }
 
-  .tab:hover { border-color: #444; color: var(--text); }
+    /* ── EXPANDED CONTENT ── */
+    .ex-body {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--border);
+      margin-top: 0;
+      animation: fadeIn .25s ease;
+    }
+    .ex-card.expanded .ex-body { display: block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
 
-  .tab.active[data-day="1"] {
-    background: rgba(232,255,71,0.1);
-    border-color: var(--day1);
-    color: var(--day1);
-  }
-  .tab.active[data-day="2"] {
-    background: rgba(255,107,53,0.1);
-    border-color: var(--day2);
-    color: var(--day2);
-  }
-  .tab.active[data-day="3"] {
-    background: rgba(71,197,255,0.1);
-    border-color: var(--day3);
-    color: var(--day3);
-  }
+    .ex-body-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding-top: 18px;
+    }
+    @media (max-width: 600px) { .ex-body-inner { grid-template-columns: 1fr; } }
 
-  .day-panel { display: none; max-width: 700px; margin: 0 auto; }
-  .day-panel.active { display: block; }
+    .ex-section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .steps-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .steps-list li {
+      display: flex;
+      gap: 10px;
+      font-size: 13px;
+      color: #ccc;
+      line-height: 1.5;
+    }
+    .steps-list li::before {
+      content: attr(data-n);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--accent);
+      flex-shrink: 0;
+      width: 16px;
+      margin-top: 1px;
+    }
 
-  .day-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
+    .muscles-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .muscle-tag {
+      background: rgba(0,214,143,.08);
+      border: 1px solid rgba(0,214,143,.2);
+      color: var(--safe);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+    }
 
-  .day-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 42px;
-    letter-spacing: 0.03em;
-    line-height: 1;
-  }
+    .ex-tips {
+      margin-top: 14px;
+      background: rgba(232,255,0,.05);
+      border: 1px solid rgba(232,255,0,.15);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 12.5px;
+      color: #d4e8a0;
+      line-height: 1.55;
+    }
+    .ex-tips strong { color: var(--accent); display: block; margin-bottom: 3px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
 
-  [data-day="1"] .day-title { color: var(--day1); }
-  [data-day="2"] .day-title { color: var(--day2); }
-  [data-day="3"] .day-title { color: var(--day3); }
+    .bankart-warning {
+      margin-top: 10px;
+      background: rgba(255,69,69,.07);
+      border: 1px solid rgba(255,69,69,.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #ffaaaa;
+    }
+    .bankart-warning strong { color: var(--danger); }
 
-  .day-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
-  }
+    /* ── INTENSIDAD POR DÍA ── */
+    .intensity-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .intensity-block {
+      height: 6px;
+      flex: 1;
+      border-radius: 4px;
+      background: var(--border);
+    }
+    .intensity-block.active { background: var(--accent); }
 
-  .day-focus {
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 400;
-  }
+    /* ── TABLA RESUMEN ── */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .summary-table th {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .summary-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(42,42,42,.5);
+      color: #ccc;
+      vertical-align: middle;
+    }
+    .summary-table tr:last-child td { border-bottom: none; }
+    .summary-table tr:hover td { background: rgba(255,255,255,.02); }
 
-  .time-badge {
-    font-size: 12px;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 100px;
-    background: var(--card);
-    color: var(--muted);
-  }
+    /* ── OVERVIEW SECTION ── */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .overview-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .overview-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .overview-big {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .overview-big sub {
+      font-size: 16px;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+    }
 
-  .section-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    margin: 20px 0 10px;
-    padding-left: 2px;
-  }
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
 
-  .exercise-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 500px) {
+      .ex-card-header { grid-template-columns: 80px 1fr auto; }
+      .ex-name { font-size: 18px; }
+      .day-title { font-size: 32px; }
+    }
 
-  .exercise {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 8px;
-    align-items: center;
-    transition: border-color 0.2s;
-  }
+    /* ── DONE CHECKBOX ── */
+    .done-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .done-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .done-btn.done { background: rgba(232,255,0,.1); border-color: rgba(232,255,0,.4); color: var(--accent); }
 
-  .exercise:hover { border-color: #3a3a3e; }
-
-  .ex-name {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text);
-  }
-
-  .ex-detail {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 3px;
-  }
-
-  .ex-badge {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 0.04em;
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  [data-day="1"] .ex-badge { color: var(--day1); }
-  [data-day="2"] .ex-badge { color: var(--day2); }
-  [data-day="3"] .ex-badge { color: var(--day3); }
-
-  .ex-sub {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--muted);
-    text-align: right;
-  }
-
-  .warmup {
-    background: rgba(255,255,255,0.02);
-    border-style: dashed;
-  }
-
-  .tip-box {
-    margin-top: 20px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-  }
-
-  .tip-title {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--muted);
-    margin-bottom: 8px;
-    font-weight: 600;
-  }
-
-  .tip-box ul {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .tip-box li {
-    font-size: 13px;
-    color: #bbb;
-    padding-left: 14px;
-    position: relative;
-    line-height: 1.5;
-  }
-
-  .tip-box li::before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: var(--muted);
-    font-size: 11px;
-    top: 1px;
-  }
-
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 24px 0;
-  }
-
-  footer {
-    text-align: center;
-    margin-top: 48px;
-    font-size: 12px;
-    color: #555;
-  }
-</style>
+    .ex-card.done-card { opacity: .7; }
+    .ex-card.done-card .ex-name { text-decoration: line-through; text-decoration-color: var(--accent); }
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="tag">Rutina personalizada</div>
-  <h1>IRON<span>.</span><br>PLAN</h1>
-  <p class="subtitle">Adaptada a lesión de Bankart · Hombro protegido · 3 días / semana</p>
-</header>
-
-<div class="stats-bar">
-  <div class="stat"><div class="stat-value">3</div><div class="stat-label">Días / semana</div></div>
-  <div class="stat"><div class="stat-value">≤60'</div><div class="stat-label">Por sesión</div></div>
-  <div class="stat"><div class="stat-value">90kg</div><div class="stat-label">Peso corporal</div></div>
-  <div class="stat"><div class="stat-value">0°</div><div class="stat-label">Hombro >90° activos</div></div>
-</div>
-
-<div class="alert">
-  <div class="alert-title">⚠ Bankart — Restricciones aplicadas</div>
-  <p>Se eliminan: press militar, fondos en paralelas, aperturas, pull-over, remo al cuello, y cualquier movimiento con el hombro por encima de 90°. El press inclinado se permite a máximo 30° con mancuernas y codos cerrados. El trabajo de hombro se limita a rotaciones externas e internas con el brazo pegado al cuerpo. Consulta con tu fisioterapeuta antes de empezar.</p>
-</div>
-
-<!-- TABS -->
-<div class="tabs">
-  <button class="tab active" data-day="1" onclick="showDay(1)">Día 1 — Pecho & Tríceps</button>
-  <button class="tab" data-day="2" onclick="showDay(2)">Día 2 — Espalda & Bíceps</button>
-  <button class="tab" data-day="3" onclick="showDay(3)">Día 3 — Pierna & Core</button>
-</div>
-
-<!-- DÍA 1 -->
-<div class="day-panel active" data-day="1" id="day-1">
-  <div class="day-header">
-    <div>
-      <div class="day-title">DÍA 1</div>
-      <div class="day-focus">Pecho · Tríceps · Hombro anterior (seguro)</div>
-    </div>
-    <div class="day-meta">
-      <span class="time-badge">~55 min</span>
-    </div>
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <p class="hero-eyebrow">Rutina personalizada · 3 días / semana</p>
+  <h1>Menos<br/><em>grasa.</em><br/>Más músculo.</h1>
+  <p class="hero-sub">Full body con máquinas guiadas. Diseñada para recomposición corporal con lesión de Bankart.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-val">3</span><span class="stat-label">días / semana</span></div>
+    <div class="stat"><span class="stat-val">50<span style="font-size:22px">min</span></span><span class="stat-label">por sesión</span></div>
+    <div class="stat"><span class="stat-val">8</span><span class="stat-label">ejercicios</span></div>
+    <div class="stat"><span class="stat-val">12<span style="font-size:22px">sem</span></span><span class="stat-label">para resultados</span></div>
   </div>
+</section>
 
-  <div class="section-label">Calentamiento — 8 min</div>
-  <div class="exercise-list">
-    <div class="exercise warmup">
-      <div><div class="ex-name">Rotaciones de hombro con banda</div><div class="ex-detail">Codo pegado al cuerpo. Rotación externa e interna suave.</div></div>
-      <div><div class="ex-badge">2×15</div><div class="ex-sub">cada lado</div></div>
-    </div>
-    <div class="exercise warmup">
-      <div><div class="ex-name">Círculos de escápula en cuadrupedia</div><div class="ex-detail">Movilización activa sin cargar el hombro.</div></div>
-      <div><div class="ex-badge">1×10</div></div>
-    </div>
-    <div class="exercise warmup">
-      <div><div class="ex-name">Bicicleta estática o remo suave</div><div class="ex-detail">Activación cardiovascular general.</div></div>
-      <div><div class="ex-badge">5 min</div></div>
-    </div>
-  </div>
-
-  <div class="section-label">Bloque principal — 42 min</div>
-  <div class="exercise-list">
-    <div class="exercise">
-      <div><div class="ex-name">Press banca plano con barra</div><div class="ex-detail">Codos a 45-60° del cuerpo. NO abrir los codos a 90°. Rango controlado, sin llegar al fallo.</div></div>
-      <div><div class="ex-badge">4×8</div><div class="ex-sub">2' descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Press banca inclinado con mancuernas (30°)</div><div class="ex-detail">Inclinación máxima 30°. Codos a 45-60° del cuerpo, nunca abiertos. Rango corto y controlado.</div></div>
-      <div><div class="ex-badge">3×10</div><div class="ex-sub">90s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Cruces en polea baja</div><div class="ex-detail">Poleas bajas → movimiento hacia arriba sin superar los 90°. Controla la fase excéntrica.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">60s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Elevaciones laterales con mancuerna (hasta 90°)</div><div class="ex-detail">Solo llegar a la horizontal. No levantar más. Peso ligero, control total.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">60s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Extensión de tríceps en polea alta (cuerda)</div><div class="ex-detail">Codos fijos al cuerpo. Empuje hacia abajo. Seguro para el hombro.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">60s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Kickback de tríceps con mancuerna</div><div class="ex-detail">Torso inclinado, codo pegado al cuerpo. Extiende el brazo hacia atrás hasta bloquearlo. Sin implicación de hombro. Muy seguro para Bankart.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">cada lado · 60s</div></div>
-    </div>
-  </div>
-
-  <div class="tip-box">
-    <div class="tip-title">⚡ Notas clave del día</div>
-    <ul>
-      <li>En press banca, baja la barra hasta rozar el pecho pero sin rebotar. Codos a 45°.</li>
-      <li>Las elevaciones laterales: para cuando el brazo llegue a la horizontal. Nada más.</li>
-      <li>Si el hombro molesta en algún ejercicio, detente y cambia por polea.</li>
-    </ul>
+<!-- ══ TABS ══ -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showDay('lunes', this)">Lunes <span class="tab-badge">70%</span></button>
+    <button class="tab-btn" onclick="showDay('miercoles', this)">Miércoles <span class="tab-badge">80%</span></button>
+    <button class="tab-btn" onclick="showDay('viernes', this)">Viernes <span class="tab-badge">65%</span></button>
+    <button class="tab-btn" onclick="showDay('overview', this)">Resumen</button>
   </div>
 </div>
 
-<!-- DÍA 2 -->
-<div class="day-panel" data-day="2" id="day-2">
-  <div class="day-header">
-    <div>
-      <div class="day-title">DÍA 2</div>
-      <div class="day-focus">Espalda · Bíceps · Rotadores (rehabilitación)</div>
-    </div>
-    <div class="day-meta">
-      <span class="time-badge">~55 min</span>
-    </div>
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <!-- ══ LESIÓN ══ -->
+  <div class="injury-banner">
+    <span class="icon">⚠️</span>
+    <div><strong>Lesión de Bankart activa.</strong> Todos los ejercicios de esta rutina están adaptados. Evita press militar, remo con agarre ancho, fondos y cualquier movimiento con el brazo por encima del hombro bajo carga. Consulta con tu fisio antes de comenzar.</div>
   </div>
 
-  <div class="section-label">Calentamiento — 8 min</div>
-  <div class="exercise-list">
-    <div class="exercise warmup">
-      <div><div class="ex-name">Rotación externa con banda (ángulo 0°)</div><div class="ex-detail">Codo a 90° pegado al costado. Abre lentamente hacia fuera. Fortalece el manguito.</div></div>
-      <div><div class="ex-badge">2×15</div><div class="ex-sub">cada lado</div></div>
+  <!-- ══════════════════════════════════════
+       LUNES — Intensidad Media (70%)
+  ══════════════════════════════════════ -->
+  <section class="day-section active" id="day-lunes">
+    <div class="day-header">
+      <div class="day-title"><span>Lunes</span> — Técnica</div>
+      <div class="day-meta">
+        <span class="pill accent">Intensidad 70%</span>
+        <span class="pill">12–15 reps</span>
+        <span class="pill">~50 min</span>
+      </div>
     </div>
-    <div class="exercise warmup">
-      <div><div class="ex-name">Face pull con banda o polea</div><div class="ex-detail">Llevar hacia la cara, codos a la altura de los hombros. Perfecto para Bankart.</div></div>
-      <div><div class="ex-badge">2×12</div></div>
-    </div>
-    <div class="exercise warmup">
-      <div><div class="ex-name">Cardio suave (elíptica/bici)</div></div>
-      <div><div class="ex-badge">5 min</div></div>
-    </div>
-  </div>
 
-  <div class="section-label">Bloque principal — 43 min</div>
-  <div class="exercise-list">
-    <div class="exercise">
-      <div><div class="ex-name">Remo con barra (agarre prono)</div><div class="ex-detail">Torso inclinado ~45°, remo hacia el ombligo. Uno de los mejores para la espalda con Bankart.</div></div>
-      <div><div class="ex-badge">4×8</div><div class="ex-sub">2' descanso</div></div>
+    <div class="session-progress">
+      <div class="progress-label"><span>Progreso de sesión</span><strong id="lunes-progress-text">0 / 8 ejercicios</strong></div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="lunes-bar" style="width:0%"></div></div>
+      <div class="progress-steps" id="lunes-dots"></div>
     </div>
-    <div class="exercise">
-      <div><div class="ex-name">Remo en polea baja con agarre neutro</div><div class="ex-detail">Espalda recta, retracción escapular al final del recorrido. Seguro y efectivo.</div></div>
-      <div><div class="ex-badge">3×10</div><div class="ex-sub">90s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Jalón al pecho en polea (agarre ancho)</div><div class="ex-detail">Llevar la barra hasta el pecho. Evita jalones detrás del cuello. Codos bajan lateralmente sin forzar.</div></div>
-      <div><div class="ex-badge">3×10</div><div class="ex-sub">90s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Remo con mancuerna a una mano</div><div class="ex-detail">Apoyo en banco, recorrido natural. Excelente aislamiento del dorsal.</div></div>
-      <div><div class="ex-badge">3×10</div><div class="ex-sub">cada lado · 60s</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Curl de bíceps con mancuernas (alterno)</div><div class="ex-detail">Codo pegado al cuerpo en todo momento. Supinación controlada.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">60s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Curl martillo con mancuernas</div><div class="ex-detail">Agarre neutro. Trabaja braquial y braquiorradial. Cero implicación de hombro.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">60s descanso</div></div>
-    </div>
-  </div>
 
-  <div class="tip-box">
-    <div class="tip-title">⚡ Notas clave del día</div>
-    <ul>
-      <li>El face pull del calentamiento es casi terapéutico para el Bankart — no lo saltes.</li>
-      <li>En el jalón al pecho, no bajes los codos por detrás del torso. Para al llegar al pecho.</li>
-      <li>El remo con barra es el ejercicio estrella del día: prioriza carga aquí.</li>
-    </ul>
-  </div>
-</div>
+    <div class="exercises-grid" id="lunes-exercises">
 
-<!-- DÍA 3 -->
-<div class="day-panel" data-day="3" id="day-3">
-  <div class="day-header">
-    <div>
-      <div class="day-title">DÍA 3</div>
-      <div class="day-focus">Pierna · Glúteo · Core</div>
-    </div>
-    <div class="day-meta">
-      <span class="time-badge">~55 min</span>
-    </div>
-  </div>
+      <!-- 1. Hack Squat -->
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=200&q=70&auto=format" alt="Hack Squat" loading="lazy"/>
+          </div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 01</span>
+            <span class="ex-name">Hack Squat</span>
+            <span class="ex-machine">Máquina Hack Squat</span>
+            <div class="ex-chips">
+              <span class="chip sets">4 series</span>
+              <span class="chip reps">12–15 reps</span>
+              <span class="chip rest">60s descanso</span>
+            </div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Cómo hacerlo</p>
+              <ul class="steps-list">
+                <li data-n="1">Coloca los pies a la anchura de caderas, ligeramente hacia afuera.</li>
+                <li data-n="2">Desbloquea los seguros y baja controlando la bajada (2 seg).</li>
+                <li data-n="3">Baja hasta que los muslos estén paralelos al suelo o un poco más.</li>
+                <li data-n="4">Empuja con los talones para subir. No bloquees las rodillas arriba.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'lunes', 0)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list">
+                <span class="muscle-tag">Cuádriceps</span>
+                <span class="muscle-tag">Glúteo mayor</span>
+                <span class="muscle-tag">Isquiotibiales</span>
+                <span class="muscle-tag">Core (secundario)</span>
+              </div>
+              <div class="ex-tips" style="margin-top:14px">
+                <strong>💡 Tip clave</strong>
+                El Hack Squat es mejor que la prensa para ti: activa más músculos, quema más calorías y trabaja el core de forma secundaria. Mantén la espalda pegada al respaldo.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <div class="section-label">Calentamiento — 8 min</div>
-  <div class="exercise-list">
-    <div class="exercise warmup">
-      <div><div class="ex-name">Movilidad de cadera en cuadrupedia</div><div class="ex-detail">Círculos de cadera, apertura lateral. Activa glúteos.</div></div>
-      <div><div class="ex-badge">1×10</div><div class="ex-sub">cada lado</div></div>
-    </div>
-    <div class="exercise warmup">
-      <div><div class="ex-name">Sentadilla con peso corporal (suave)</div><div class="ex-detail">Calentamiento articular, rodillas bien alineadas.</div></div>
-      <div><div class="ex-badge">2×12</div></div>
-    </div>
-    <div class="exercise warmup">
-      <div><div class="ex-name">Bicicleta estática o elíptica</div></div>
-      <div><div class="ex-badge">5 min</div></div>
-    </div>
-  </div>
+      <!-- 2. Curl Femoral -->
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&q=70&auto=format" alt="Curl Femoral" loading="lazy"/>
+          </div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 02</span>
+            <span class="ex-name">Curl Femoral</span>
+            <span class="ex-machine">Máquina tumbada</span>
+            <div class="ex-chips">
+              <span class="chip sets">3 series</span>
+              <span class="chip reps">12–15 reps</span>
+              <span class="chip rest">45s descanso</span>
+            </div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Cómo hacerlo</p>
+              <ul class="steps-list">
+                <li data-n="1">Túmbate boca abajo con el rodillo justo por encima de los tobillos.</li>
+                <li data-n="2">Dobla las rodillas llevando los talones hacia los glúteos.</li>
+                <li data-n="3">Sube en 1 seg, baja en 3 seg (fase excéntrica lenta = más resultados).</li>
+                <li data-n="4">No despegues las caderas del acolchado en ningún momento.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'lunes', 1)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list">
+                <span class="muscle-tag">Isquiotibiales</span>
+                <span class="muscle-tag">Bíceps femoral</span>
+                <span class="muscle-tag">Glúteo (secundario)</span>
+              </div>
+              <div class="ex-tips" style="margin-top:14px">
+                <strong>💡 Por qué importa</strong>
+                Equilibra la fuerza entre cuádriceps e isquios. Sin este equilibrio aumenta el riesgo de lesión de rodilla.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <div class="section-label">Bloque principal — 43 min</div>
-  <div class="exercise-list">
-    <div class="exercise">
-      <div><div class="ex-name">Sentadilla con barra en rack</div><div class="ex-detail">Barra en posición baja o media. Hombros solo sostienen la barra en horizontal — dentro del rango seguro.</div></div>
-      <div><div class="ex-badge">4×8</div><div class="ex-sub">2' descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Prensa de piernas</div><div class="ex-detail">Alternativa cómoda si la sentadilla con barra molesta. Ajusta el ángulo de las rodillas.</div></div>
-      <div><div class="ex-badge">3×10</div><div class="ex-sub">90s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Peso muerto rumano con mancuernas</div><div class="ex-detail">Bisagra de cadera, espalda recta. Trabaja isquiotibiales y glúteo. Mancuernas → sin implicar hombro.</div></div>
-      <div><div class="ex-badge">3×10</div><div class="ex-sub">90s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Hip thrust con barra</div><div class="ex-detail">Barra sobre las caderas (con almohadilla). El mejor ejercicio para glúteo. Hombros no intervienen.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">60s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Curl femoral en máquina (tumbado)</div><div class="ex-detail">Isquiotibiales en aislamiento. Movimiento seguro y controlado.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">60s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Plancha frontal</div><div class="ex-detail">Core antiflexión. Mantén la posición sin arquear la espalda lumbar.</div></div>
-      <div><div class="ex-badge">3×45s</div><div class="ex-sub">45s descanso</div></div>
-    </div>
-    <div class="exercise">
-      <div><div class="ex-name">Máquina de aductores</div><div class="ex-detail">Rango de movimiento controlado, sin forzar el final del recorrido. Peso ligero al principio. Recomendado por fisio para equilibrar con isquios.</div></div>
-      <div><div class="ex-badge">3×12</div><div class="ex-sub">60s descanso</div></div>
-    </div>
-  </div>
+      <!-- 3. Remo en Máquina -->
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1581009137042-c552e485697a?w=200&q=70&auto=format" alt="Remo Máquina" loading="lazy"/>
+          </div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 03</span>
+            <span class="ex-name">Remo Máquina</span>
+            <span class="ex-machine">Máquina de remo (agarre neutro)</span>
+            <div class="ex-chips">
+              <span class="chip sets">4 series</span>
+              <span class="chip reps">12 reps</span>
+              <span class="chip rest">60s descanso</span>
+            </div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Cómo hacerlo</p>
+              <ul class="steps-list">
+                <li data-n="1">Usa agarre neutro (palmas enfrentadas). Siéntate con el pecho apoyado.</li>
+                <li data-n="2">Tira llevando los codos pegados al cuerpo hacia atrás.</li>
+                <li data-n="3">Aprieta los omóplatos al final del recorrido (1 seg de contracción).</li>
+                <li data-n="4">Devuelve el peso de forma controlada sin dejar caer.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'lunes', 2)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list">
+                <span class="muscle-tag">Dorsal ancho</span>
+                <span class="muscle-tag">Romboides</span>
+                <span class="muscle-tag">Bíceps</span>
+                <span class="muscle-tag">Trapecio medio</span>
+              </div>
+              <div class="ex-tips" style="margin-top:14px">
+                <strong>💡 Bankart safe ✅</strong>
+                El agarre neutro con codos pegados al cuerpo es el más seguro para tu hombro. Nunca uses agarre ancho.
+              </div>
+              <div class="bankart-warning">
+                <strong>⚠️ Bankart:</strong> Evita el agarre pronado (palmas abajo) y no lleves los brazos por encima de la horizontal.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-  <div class="tip-box">
-    <div class="tip-title">⚡ Notas clave del día</div>
-    <ul>
-      <li>En sentadilla con barra, si el rack no llega a la altura ideal, usa goblet squat con mancuerna en su lugar.</li>
-      <li>El hip thrust es el ejercicio más importante del día. Aprieta glúteo en la parte alta del recorrido.</li>
-      <li>Este día no hay trabajo de hombro — es el más cómodo para tu lesión de Bankart.</li>
-    </ul>
-  </div>
-</div>
+      <!-- 4. Press de Pecho -->
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=200&q=70&auto=format" alt="Press de Pecho" loading="lazy"/>
+          </div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 04</span>
+            <span class="ex-name">Press de Pecho</span>
+            <span class="ex-machine">Máquina convergente</span>
+            <div class="ex-chips">
+              <span class="chip sets">4 series</span>
+              <span class="chip reps">12 reps</span>
+              <span class="chip rest">60s descanso</span>
+            </div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Cómo hacerlo</p>
+              <ul class="steps-list">
+                <li data-n="1">Ajusta el asiento para que los mangos queden a la altura del pecho medio.</li>
+                <li data-n="2">Pies planos en el suelo, espalda pegada al respaldo.</li>
+                <li data-n="3">Empuja hacia adelante sin bloquear los codos al final.</li>
+                <li data-n="4">Controla la vuelta: 3 segundos de bajada.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'lunes', 3)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list">
+                <span class="muscle-tag">Pectoral mayor</span>
+                <span class="muscle-tag">Deltoides anterior</span>
+                <span class="muscle-tag">Tríceps</span>
+              </div>
+              <div class="ex-tips" style="margin-top:14px">
+                <strong>💡 Para el pecho caído</strong>
+                La máquina convergente es ideal porque el recorrido curvo maximiza la contracción del pectoral en comparación con el press plano.
+              </div>
+              <div class="bankart-warning">
+                <strong>⚠️ Bankart:</strong> No uses el agarre muy ancho. Mantén los codos a 45° respecto al torso, no a 90°.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<div style="max-width:700px; margin: 32px auto 0;">
-  <div class="divider"></div>
-  <div class="tip-box">
-    <div class="tip-title">📋 Consideraciones generales</div>
-    <ul>
-      <li>Días recomendados: Lunes / Miércoles / Viernes. Deja al menos 1 día de descanso entre sesiones.</li>
-      <li>Progresión: aumenta el peso solo cuando completes todas las series con buena técnica.</li>
-      <li>Ejercicios que evitar siempre con Bankart: press militar, aperturas, dips, remo al cuello, pull-over.</li>
-      <li>Si el hombro carga o duele durante algún ejercicio, detente. No intentes aguantar.</li>
-      <li>Esta rutina no sustituye el alta de tu fisioterapeuta — consúltala con él antes de empezar.</li>
-    </ul>
-  </div>
-</div>
+      <!-- 5. Extensión de Cuádriceps -->
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1520877880798-5ee004e3f11e?w=200&q=70&auto=format" alt="Extensión Cuad" loading="lazy"/>
+          </div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 05</span>
+            <span class="ex-name">Extensión Cuáds</span>
+            <span class="ex-machine">Máquina de extensión de pierna</span>
+            <div class="ex-chips">
+              <span class="chip sets">3 series</span>
+              <span class="chip reps">15 reps</span>
+              <span class="chip rest">45s descanso</span>
+            </div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Cómo hacerlo</p>
+              <ul class="steps-list">
+                <li data-n="1">Siéntate con la rodilla alineada con el eje de la máquina.</li>
+                <li data-n="2">Extiende las piernas hasta casi la extensión completa (no bloquear).</li>
+                <li data-n="3">Mantén la contracción 1 segundo arriba.</li>
+                <li data-n="4">Baja muy despacio: 3-4 segundos de bajada.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'lunes', 4)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list">
+                <span class="muscle-tag">Cuádriceps (x4)</span>
+                <span class="muscle-tag">Recto femoral</span>
+              </div>
+              <div class="ex-tips" style="margin-top:14px">
+                <strong>💡 Complementa el Hack Squat</strong>
+                Aísla el cuádriceps para conseguir más definición en la parte frontal del muslo.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<footer>Rutina generada por Claude · Adaptada para lesión de Bankart · Consulta a tu fisio antes de comenzar</footer>
+      <!-- 6. Pulldown Agarre Neutro -->
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1584466977773-e625c37cdd50?w=200&q=70&auto=format" alt="Pulldown" loading="lazy"/>
+          </div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 06</span>
+            <span class="ex-name">Pulldown</span>
+            <span class="ex-machine">Polea alta — agarre neutro</span>
+            <div class="ex-chips">
+              <span class="chip sets">3 series</span>
+              <span class="chip reps">12 reps</span>
+              <span class="chip rest">60s descanso</span>
+            </div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Cómo hacerlo</p>
+              <ul class="steps-list">
+                <li data-n="1">Usa el accesorio en V (agarre neutro, palmas enfrentadas).</li>
+                <li data-n="2">Siéntate, muslos bajo el rodillo, inclinación leve del torso hacia atrás.</li>
+                <li data-n="3">Tira hacia el pecho llevando los codos hacia las caderas.</li>
+                <li data-n="4">Controla la subida: no dejes que el peso te arrastre.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'lunes', 5)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list">
+                <span class="muscle-tag">Dorsal ancho</span>
+                <span class="muscle-tag">Bíceps</span>
+                <span class="muscle-tag">Redondo mayor</span>
+                <span class="muscle-tag">Core</span>
+              </div>
+              <div class="ex-tips" style="margin-top:14px">
+                <strong>💡 Para las lorzas</strong>
+                Un dorsal ancho bien desarrollado estrecha visualmente la cintura. Clave para tu objetivo estético.
+              </div>
+              <div class="bankart-warning">
+                <strong>⚠️ Bankart:</strong> Agarre neutro siempre. Nunca agarre ancho en pronación. No bajes por detrás de la nuca.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Hip Thrust Máquina -->
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=200&q=70&auto=format" alt="Hip Thrust" loading="lazy"/>
+          </div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 07</span>
+            <span class="ex-name">Hip Thrust</span>
+            <span class="ex-machine">Máquina de Hip Thrust o banco + banda</span>
+            <div class="ex-chips">
+              <span class="chip sets">3 series</span>
+              <span class="chip reps">15 reps</span>
+              <span class="chip rest">45s descanso</span>
+            </div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Cómo hacerlo</p>
+              <ul class="steps-list">
+                <li data-n="1">Apoya la espalda alta en el banco, pies apoyados en el suelo a 90°.</li>
+                <li data-n="2">Empuja las caderas hacia arriba apretando el glúteo.</li>
+                <li data-n="3">Cuerpo en línea recta arriba: hombros-cadera-rodillas alineados.</li>
+                <li data-n="4">Baja sin tocar el suelo y repite. Pausa 2 seg arriba.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'lunes', 6)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list">
+                <span class="muscle-tag">Glúteo mayor</span>
+                <span class="muscle-tag">Isquiotibiales</span>
+                <span class="muscle-tag">Core</span>
+              </div>
+              <div class="ex-tips" style="margin-top:14px">
+                <strong>💡 El mejor ejercicio de glúteo</strong>
+                Activa el glúteo mayor más que cualquier otro ejercicio. Mejora la postura y reduce el dolor lumbar.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Plancha Isométrica -->
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap">
+            <img src="https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=200&q=70&auto=format" alt="Plancha" loading="lazy"/>
+          </div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 08</span>
+            <span class="ex-name">Plancha</span>
+            <span class="ex-machine">Suelo (sin máquina)</span>
+            <div class="ex-chips">
+              <span class="chip sets">3 series</span>
+              <span class="chip reps">30–60 seg</span>
+              <span class="chip rest">45s descanso</span>
+            </div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Cómo hacerlo</p>
+              <ul class="steps-list">
+                <li data-n="1">Apoya antebrazos y punteras. Codos bajo los hombros.</li>
+                <li data-n="2">Cuerpo en línea recta: no subas ni bajes las caderas.</li>
+                <li data-n="3">Aprieta el abdomen, los glúteos y los cuádriceps a la vez.</li>
+                <li data-n="4">Respira de forma normal. No aguantes el aliento.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'lunes', 7)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list">
+                <span class="muscle-tag">Transverso abdominal</span>
+                <span class="muscle-tag">Recto abdominal</span>
+                <span class="muscle-tag">Oblicuos</span>
+                <span class="muscle-tag">Lumbar</span>
+                <span class="muscle-tag">Glúteos</span>
+              </div>
+              <div class="ex-tips" style="margin-top:14px">
+                <strong>💡 El mejor abdominal</strong>
+                Trabaja todo el core de forma funcional. Más eficiente que cualquier crunch para eliminar la tripa.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end exercises-grid -->
+  </section>
+
+  <!-- ══════════════════════════════════════
+       MIÉRCOLES — Intensidad Alta (80%)
+  ══════════════════════════════════════ -->
+  <section class="day-section" id="day-miercoles">
+    <div class="day-header">
+      <div class="day-title"><span>Miércoles</span> — Fuerza</div>
+      <div class="day-meta">
+        <span class="pill accent">Intensidad 80%</span>
+        <span class="pill">8–10 reps</span>
+        <span class="pill">~50 min</span>
+      </div>
+    </div>
+
+    <div class="session-progress">
+      <div class="progress-label"><span>Progreso de sesión</span><strong id="miercoles-progress-text">0 / 8 ejercicios</strong></div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="miercoles-bar" style="width:0%"></div></div>
+      <div class="progress-steps" id="miercoles-dots"></div>
+    </div>
+
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-bottom:24px;">
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Diferencia con el Lunes</p>
+      <p style="font-size:13px;color:#ccc;line-height:1.6;">Mismo circuito de ejercicios, <strong style="color:var(--accent)">más peso, menos repeticiones (8–10)</strong>. El objetivo es trabajar la fuerza máxima. Sube la carga un 15–20% respecto al lunes. Si no puedes completar 8 reps, baja el peso.</p>
+    </div>
+
+    <div class="exercises-grid" id="miercoles-exercises">
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=200&q=70&auto=format" alt="Hack Squat" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 01</span>
+            <span class="ex-name">Hack Squat</span>
+            <span class="ex-machine">Máquina Hack Squat · +15% peso vs Lunes</span>
+            <div class="ex-chips"><span class="chip sets">4 series</span><span class="chip reps">8–10 reps</span><span class="chip rest">90s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div>
+              <p class="ex-section-title">Enfoque del día</p>
+              <ul class="steps-list">
+                <li data-n="→">Carga más elevada que el lunes. Baja completo y controlado.</li>
+                <li data-n="→">Si a la rep 6 ya fallas, el peso es demasiado alto. Bájalo.</li>
+                <li data-n="→">Descansa 90 segundos entre series para recuperar bien.</li>
+              </ul>
+              <button class="done-btn" onclick="markDone(event, this, 'miercoles', 0)">☐ Marcar como hecho</button>
+            </div>
+            <div>
+              <p class="ex-section-title">Músculos trabajados</p>
+              <div class="muscles-list"><span class="muscle-tag">Cuádriceps</span><span class="muscle-tag">Glúteo mayor</span><span class="muscle-tag">Isquiotibiales</span></div>
+              <div class="ex-tips" style="margin-top:14px"><strong>💡 Día de fuerza</strong>Trabajar en el rango 8–10 reps con más carga genera más adaptación muscular (hipertrofia) que el rango alto.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&q=70&auto=format" alt="Curl Femoral" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 02</span>
+            <span class="ex-name">Curl Femoral</span>
+            <span class="ex-machine">Máquina tumbada · +15% peso</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">8–10 reps</span><span class="chip rest">60s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Más peso, mismo control. La fase excéntrica (bajada) sigue siendo clave.</li><li data-n="→">Si sientes tirantez en la corva, reduce el peso.</li></ul><button class="done-btn" onclick="markDone(event, this, 'miercoles', 1)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Isquiotibiales</span><span class="muscle-tag">Bíceps femoral</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1581009137042-c552e485697a?w=200&q=70&auto=format" alt="Remo" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 03</span>
+            <span class="ex-name">Remo Máquina</span>
+            <span class="ex-machine">Agarre neutro · +15% peso</span>
+            <div class="ex-chips"><span class="chip sets">4 series</span><span class="chip reps">8–10 reps</span><span class="chip rest">90s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Mayor carga. Asegúrate de que tiras con la espalda, no con los brazos.</li><li data-n="→">Mantén el pecho apoyado para no compensar con la zona lumbar.</li></ul><button class="done-btn" onclick="markDone(event, this, 'miercoles', 2)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Dorsal</span><span class="muscle-tag">Romboides</span><span class="muscle-tag">Bíceps</span></div><div class="bankart-warning"><strong>⚠️ Bankart:</strong> Agarre neutro. Codos pegados al cuerpo siempre.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=200&q=70&auto=format" alt="Press Pecho" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 04</span>
+            <span class="ex-name">Press de Pecho</span>
+            <span class="ex-machine">Máquina convergente · +15% peso</span>
+            <div class="ex-chips"><span class="chip sets">4 series</span><span class="chip reps">8–10 reps</span><span class="chip rest">90s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">No sacrifiques el recorrido por más peso. Rango completo siempre.</li><li data-n="→">Espalda pegada al respaldo en todo momento.</li></ul><button class="done-btn" onclick="markDone(event, this, 'miercoles', 3)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Pectoral</span><span class="muscle-tag">Deltoides ant.</span><span class="muscle-tag">Tríceps</span></div><div class="bankart-warning"><strong>⚠️ Bankart:</strong> Codos a 45°, no a 90°.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1520877880798-5ee004e3f11e?w=200&q=70&auto=format" alt="Extensión" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 05</span>
+            <span class="ex-name">Extensión Cuáds</span>
+            <span class="ex-machine">Máquina extensión pierna · +15%</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">8–10 reps</span><span class="chip rest">60s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Más peso. Sigue sin bloquear la rodilla al final.</li><li data-n="→">Pausa de 2 segundos en la extensión completa.</li></ul><button class="done-btn" onclick="markDone(event, this, 'miercoles', 4)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Cuádriceps</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1584466977773-e625c37cdd50?w=200&q=70&auto=format" alt="Pulldown" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 06</span>
+            <span class="ex-name">Pulldown</span>
+            <span class="ex-machine">Polea alta — agarre neutro · +15%</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">8–10 reps</span><span class="chip rest">90s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Más peso. Asegúrate de que la escápula baja antes de tirar con el brazo.</li></ul><button class="done-btn" onclick="markDone(event, this, 'miercoles', 5)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Dorsal</span><span class="muscle-tag">Bíceps</span></div><div class="bankart-warning"><strong>⚠️ Bankart:</strong> Agarre en V neutro. Nunca agarre ancho.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=200&q=70&auto=format" alt="Hip Thrust" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 07</span>
+            <span class="ex-name">Hip Thrust</span>
+            <span class="ex-machine">Máquina Hip Thrust · +15% peso</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">10 reps</span><span class="chip rest">60s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Mayor carga. Pausa de 2 segundos arriba apretando glúteo.</li></ul><button class="done-btn" onclick="markDone(event, this, 'miercoles', 6)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Glúteo mayor</span><span class="muscle-tag">Isquios</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=200&q=70&auto=format" alt="Plancha" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 08</span>
+            <span class="ex-name">Plancha</span>
+            <span class="ex-machine">Suelo · máxima tensión</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">45–60 seg</span><span class="chip rest">45s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Intenta aguantar 5 segundos más que el lunes.</li><li data-n="→">Opcional: añade una plancha lateral 30 seg cada lado.</li></ul><button class="done-btn" onclick="markDone(event, this, 'miercoles', 7)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Core completo</span><span class="muscle-tag">Glúteos</span></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       VIERNES — Intensidad Moderada (65%)
+  ══════════════════════════════════════ -->
+  <section class="day-section" id="day-viernes">
+    <div class="day-header">
+      <div class="day-title"><span>Viernes</span> — Definición</div>
+      <div class="day-meta">
+        <span class="pill accent">Intensidad 65%</span>
+        <span class="pill">15–20 reps</span>
+        <span class="pill">~45 min</span>
+      </div>
+    </div>
+
+    <div class="session-progress">
+      <div class="progress-label"><span>Progreso de sesión</span><strong id="viernes-progress-text">0 / 8 ejercicios</strong></div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="viernes-bar" style="width:0%"></div></div>
+      <div class="progress-steps" id="viernes-dots"></div>
+    </div>
+
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-bottom:24px;">
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Enfoque de este día</p>
+      <p style="font-size:13px;color:#ccc;line-height:1.6;">Menos peso, más repeticiones. El objetivo es la <strong style="color:var(--accent)">quema metabólica y la definición</strong>. Reduce la carga un 20% respecto al lunes. Descansa menos entre series (30–45 seg) para mantener el ritmo cardíaco elevado.</p>
+    </div>
+
+    <div class="exercises-grid" id="viernes-exercises">
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=200&q=70&auto=format" alt="Hack Squat" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 01</span>
+            <span class="ex-name">Hack Squat</span>
+            <span class="ex-machine">Máquina Hack Squat · −20% peso vs Lunes</span>
+            <div class="ex-chips"><span class="chip sets">4 series</span><span class="chip reps">15–20 reps</span><span class="chip rest">40s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Menos peso pero más volumen. Sentirás quemazón en el cuádriceps: es normal.</li><li data-n="→">Ritmo constante. No pares entre repeticiones.</li></ul><button class="done-btn" onclick="markDone(event, this, 'viernes', 0)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Cuádriceps</span><span class="muscle-tag">Glúteo</span><span class="muscle-tag">Isquios</span></div><div class="ex-tips" style="margin-top:14px"><strong>💡 Quema calórica</strong>Las series largas en piernas son las que más calorías queman en todo el gimnasio.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&q=70&auto=format" alt="Curl Femoral" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 02</span>
+            <span class="ex-name">Curl Femoral</span>
+            <span class="ex-machine">Máquina tumbada · −20% peso</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">15–20 reps</span><span class="chip rest">40s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Ritmo fluido. No te detengas entre repeticiones.</li></ul><button class="done-btn" onclick="markDone(event, this, 'viernes', 1)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Isquiotibiales</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1581009137042-c552e485697a?w=200&q=70&auto=format" alt="Remo" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 03</span>
+            <span class="ex-name">Remo Máquina</span>
+            <span class="ex-machine">Agarre neutro · −20% peso</span>
+            <div class="ex-chips"><span class="chip sets">4 series</span><span class="chip reps">15 reps</span><span class="chip rest">40s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Ritmo controlado pero sin pausas largas entre reps.</li></ul><button class="done-btn" onclick="markDone(event, this, 'viernes', 2)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Dorsal</span><span class="muscle-tag">Bíceps</span></div><div class="bankart-warning"><strong>⚠️ Bankart:</strong> Agarre neutro siempre.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=200&q=70&auto=format" alt="Press Pecho" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 04</span>
+            <span class="ex-name">Press de Pecho</span>
+            <span class="ex-machine">Máquina convergente · −20% peso</span>
+            <div class="ex-chips"><span class="chip sets">4 series</span><span class="chip reps">15 reps</span><span class="chip rest">40s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Rango completo de movimiento a pesar de ser más reps.</li></ul><button class="done-btn" onclick="markDone(event, this, 'viernes', 3)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Pectoral</span><span class="muscle-tag">Tríceps</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1520877880798-5ee004e3f11e?w=200&q=70&auto=format" alt="Extensión" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 05</span>
+            <span class="ex-name">Extensión Cuáds</span>
+            <span class="ex-machine">Máquina extensión pierna · −20%</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">20 reps</span><span class="chip rest">40s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Superset opcional: haz curl femoral justo después sin descanso.</li></ul><button class="done-btn" onclick="markDone(event, this, 'viernes', 4)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Cuádriceps</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1584466977773-e625c37cdd50?w=200&q=70&auto=format" alt="Pulldown" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 06</span>
+            <span class="ex-name">Pulldown</span>
+            <span class="ex-machine">Polea alta · agarre neutro · −20%</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">15 reps</span><span class="chip rest">40s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Fluido y controlado. Siente la contracción del dorsal en cada rep.</li></ul><button class="done-btn" onclick="markDone(event, this, 'viernes', 5)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Dorsal</span><span class="muscle-tag">Bíceps</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=200&q=70&auto=format" alt="Hip Thrust" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 07</span>
+            <span class="ex-name">Hip Thrust</span>
+            <span class="ex-machine">Máquina Hip Thrust · −20%</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">20 reps</span><span class="chip rest">40s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Sin pausa entre reps. El glúteo tiene que estar en llamas al acabar.</li></ul><button class="done-btn" onclick="markDone(event, this, 'viernes', 6)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Glúteo mayor</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ex-card" onclick="toggleCard(this)">
+        <div class="ex-card-header">
+          <div class="ex-img-wrap"><img src="https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=200&q=70&auto=format" alt="Plancha" loading="lazy"/></div>
+          <div class="ex-info">
+            <span class="ex-number">Ejercicio 08</span>
+            <span class="ex-name">Plancha + Variante</span>
+            <span class="ex-machine">Suelo · plancha frontal + lateral</span>
+            <div class="ex-chips"><span class="chip sets">3 series</span><span class="chip reps">30s frontal + 20s cada lado</span><span class="chip rest">40s descanso</span></div>
+          </div>
+          <div class="ex-toggle">▼</div>
+        </div>
+        <div class="ex-body">
+          <div class="ex-body-inner">
+            <div><ul class="steps-list"><li data-n="→">Plancha frontal 30 seg → gira a plancha lateral derecha 20 seg → lateral izquierda 20 seg. Una serie.</li></ul><button class="done-btn" onclick="markDone(event, this, 'viernes', 7)">☐ Marcar como hecho</button></div>
+            <div><div class="muscles-list"><span class="muscle-tag">Oblicuos</span><span class="muscle-tag">Core completo</span></div><div class="ex-tips" style="margin-top:14px"><strong>💡 Para las lorzas</strong>La plancha lateral trabaja directamente los oblicuos, los responsables de marcar la cintura.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ OVERVIEW ══ -->
+  <section class="day-section" id="day-overview">
+    <div class="day-header">
+      <div class="day-title"><span>Resumen</span> completo</div>
+    </div>
+
+    <div class="overview-grid">
+      <div class="overview-card">
+        <h3>Semanas para resultados</h3>
+        <div class="overview-big">12 <sub>sem</sub></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px;">Con dieta adecuada, cambio visible en 8–10 semanas.</p>
+      </div>
+      <div class="overview-card">
+        <h3>Tiempo por sesión</h3>
+        <div class="overview-big">50 <sub>min</sub></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px;">Incluye calentamiento. Sin perder tiempo.</p>
+      </div>
+      <div class="overview-card">
+        <h3>Calorías objetivo</h3>
+        <div class="overview-big">2.100 <sub>kcal</sub></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px;">Déficit moderado. 150g proteína mínimo al día.</p>
+      </div>
+      <div class="overview-card">
+        <h3>Días sin gym</h3>
+        <div class="overview-big">4 <sub>días</sub></div>
+        <p style="font-size:13px;color:var(--muted);margin-top:8px;">El músculo crece en el descanso, no en el gym.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:24px;">
+      <div style="padding:18px 20px;border-bottom:1px solid var(--border);">
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;">Tabla de ejercicios</p>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Ejercicio</th>
+              <th>Máquina</th>
+              <th>Lunes</th>
+              <th>Miércoles</th>
+              <th>Viernes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>01</td><td><strong>Hack Squat</strong></td><td>Máquina Hack Squat</td><td>4×12–15</td><td>4×8–10</td><td>4×15–20</td></tr>
+            <tr><td>02</td><td><strong>Curl Femoral</strong></td><td>Máquina tumbada</td><td>3×12–15</td><td>3×8–10</td><td>3×15–20</td></tr>
+            <tr><td>03</td><td><strong>Remo Máquina</strong></td><td>Máq. remo agarre neutro</td><td>4×12</td><td>4×8–10</td><td>4×15</td></tr>
+            <tr><td>04</td><td><strong>Press de Pecho</strong></td><td>Máquina convergente</td><td>4×12</td><td>4×8–10</td><td>4×15</td></tr>
+            <tr><td>05</td><td><strong>Extensión Cuáds</strong></td><td>Máquina extensión pierna</td><td>3×15</td><td>3×8–10</td><td>3×20</td></tr>
+            <tr><td>06</td><td><strong>Pulldown</strong></td><td>Polea alta (accesorio V)</td><td>3×12</td><td>3×8–10</td><td>3×15</td></tr>
+            <tr><td>07</td><td><strong>Hip Thrust</strong></td><td>Máquina Hip Thrust</td><td>3×15</td><td>3×10</td><td>3×20</td></tr>
+            <tr><td>08</td><td><strong>Plancha</strong></td><td>Suelo</td><td>3×45–60s</td><td>3×45–60s</td><td>3× frontal+lateral</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;">
+      <div style="padding:18px 20px;border-bottom:1px solid var(--border);">
+        <p style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;">Cronograma de resultados</p>
+      </div>
+      <div style="padding:20px;display:flex;flex-direction:column;gap:16px;">
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--accent);min-width:70px;line-height:1;">1–3<br/><span style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:400;">sem</span></div>
+          <div><p style="font-size:14px;font-weight:600;margin-bottom:3px;">Adaptación</p><p style="font-size:13px;color:var(--muted);">Mejora del sueño y la energía. Posible agujetas. El cuerpo aprende los movimientos.</p></div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--accent);min-width:70px;line-height:1;">4–6<br/><span style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:400;">sem</span></div>
+          <div><p style="font-size:14px;font-weight:600;margin-bottom:3px;">Primer tono visible</p><p style="font-size:13px;color:var(--muted);">Ropa más holgada. Brazos y piernas más definidos. Cintura empieza a reducirse.</p></div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--accent);min-width:70px;line-height:1;">8–10<br/><span style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:400;">sem</span></div>
+          <div><p style="font-size:14px;font-weight:600;margin-bottom:3px;">Cambio notorio</p><p style="font-size:13px;color:var(--muted);">Reducción visible de tripa y lorzas. Pecho más firme. Postura mejorada.</p></div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--accent);min-width:70px;line-height:1;">12–16<br/><span style="font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:400;">sem</span></div>
+          <div><p style="font-size:14px;font-weight:600;margin-bottom:3px;">Transformación real</p><p style="font-size:13px;color:var(--muted);">Cambio físico completo y reconocible. Músculo ganado, grasa reducida considerablemente.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  Rutina adaptada con lesión de Bankart · Consulta siempre con tu fisioterapeuta antes de comenzar · 2024
+</footer>
 
 <script>
-  function showDay(n) {
-    document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('day-' + n).classList.add('active');
-    document.querySelector('.tab[data-day="' + n + '"]').classList.add('active');
+  // ── STATE ──
+  const done = { lunes: Array(8).fill(false), miercoles: Array(8).fill(false), viernes: Array(8).fill(false) };
+
+  // ── TABS ──
+  function showDay(day, btn) {
+    document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const el = document.getElementById('day-' + day);
+    if (el) el.classList.add('active');
+    btn.classList.add('active');
   }
+
+  // ── CARD TOGGLE ──
+  function toggleCard(card) {
+    card.classList.toggle('expanded');
+  }
+
+  // ── DONE ──
+  function markDone(e, btn, day, idx) {
+    e.stopPropagation();
+    done[day][idx] = !done[day][idx];
+    btn.textContent = done[day][idx] ? '☑ Hecho' : '☐ Marcar como hecho';
+    btn.classList.toggle('done', done[day][idx]);
+    const card = btn.closest('.ex-card');
+    card.classList.toggle('done-card', done[day][idx]);
+    updateProgress(day);
+  }
+
+  function updateProgress(day) {
+    const count = done[day].filter(Boolean).length;
+    const total = done[day].length;
+    const pct = Math.round((count / total) * 100);
+    document.getElementById(day + '-bar').style.width = pct + '%';
+    document.getElementById(day + '-progress-text').textContent = count + ' / ' + total + ' ejercicios';
+    const dots = document.getElementById(day + '-dots');
+    if (dots) {
+      dots.querySelectorAll('.step-dot').forEach((d, i) => {
+        d.classList.toggle('done', done[day][i]);
+      });
+    }
+  }
+
+  // ── INIT DOTS ──
+  ['lunes', 'miercoles', 'viernes'].forEach(day => {
+    const container = document.getElementById(day + '-dots');
+    if (!container) return;
+    for (let i = 0; i < 8; i++) {
+      const d = document.createElement('div');
+      d.className = 'step-dot';
+      d.title = 'Ejercicio ' + (i + 1);
+      d.onclick = (e) => {
+        e.stopPropagation();
+        done[day][i] = !done[day][i];
+        updateProgress(day);
+        // also update the button inside the card
+        const cards = document.querySelectorAll('#day-' + day + ' .ex-card');
+        if (cards[i]) {
+          const btn = cards[i].querySelector('.done-btn');
+          if (btn) {
+            btn.textContent = done[day][i] ? '☑ Hecho' : '☐ Marcar como hecho';
+            btn.classList.toggle('done', done[day][i]);
+            cards[i].classList.toggle('done-card', done[day][i]);
+          }
+        }
+      };
+      container.appendChild(d);
+    }
+  });
 </script>
 </body>
 </html>
