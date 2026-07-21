@@ -221,6 +221,39 @@
     font-weight:500;
     margin-bottom:14px;
   }
+  .ex-weight{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .ex-weight label{
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .weight-input{
+    width:64px;
+    border:none;
+    border-bottom:1.5px solid var(--line);
+    background:transparent;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    color:var(--rose-deep);
+    text-align:center;
+    padding:3px 2px;
+    outline:none;
+    transition:border-color .18s ease;
+  }
+  .weight-input:focus{border-bottom-color:var(--rose);}
+  .weight-input::placeholder{color:var(--line);font-weight:400;}
+  .ex-weight .unit{
+    font-size:13px;
+    color:var(--ink-soft);
+  }
   .ex-steps{list-style:none;padding:0;margin:0 0 14px 0;}
   .ex-steps li{
     display:flex;gap:10px;
@@ -343,6 +376,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/prensa-piernas.jpg" alt="Foto de una prensa de piernas en el gimnasio"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 75 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="A1" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Siéntate con la espalda bien apoyada, pies separados al ancho de la cadera.</span></li>
           <li><span class="n">ii.</span><span>Empuja la plataforma estirando las piernas, sin bloquear del todo las rodillas.</span></li>
@@ -367,6 +401,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/curl-femoral.jpg" alt="Foto de una máquina de curl femoral"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="A2" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Ajusta la máquina para que el rodillo quede justo sobre el talón.</span></li>
           <li><span class="n">ii.</span><span>Flexiona la rodilla llevando el talón hacia el glúteo, controlada.</span></li>
@@ -391,6 +426,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/abduccion-cadera.jpg" alt="Foto de una máquina de abducción de cadera"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 15 repeticiones · 45 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="A3" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Siéntate en la máquina con la espalda apoyada y las piernas dentro de los apoyos acolchados.</span></li>
           <li><span class="n">ii.</span><span>Abre las piernas hacia afuera apretando los glúteos, de forma controlada.</span></li>
@@ -415,6 +451,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/jalon-pecho.jpg" alt="Foto de una mujer haciendo jalón al pecho en polea"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 75 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="A4" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Siéntate y sujeta la barra con las manos algo más abiertas que los hombros.</span></li>
           <li><span class="n">ii.</span><span>Tira hacia la parte alta del pecho, llevando los codos abajo y atrás.</span></li>
@@ -439,6 +476,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/remo-sentado.jpg" alt="Foto de una mujer usando la máquina de remo sentado"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 75 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="A5" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Rodillas algo flexionadas, espalda recta, sujeta el asa.</span></li>
           <li><span class="n">ii.</span><span>Tira hacia el abdomen, juntando los omóplatos al final.</span></li>
@@ -462,6 +500,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/plancha.jpg" alt="Foto de una mujer haciendo plancha abdominal"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 20–30 segundos · 45 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="A6" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Apóyate en los antebrazos y puntas de los pies, codos bajo los hombros.</span></li>
           <li><span class="n">ii.</span><span>Aprieta abdomen y glúteos, línea recta de cabeza a talones.</span></li>
@@ -498,6 +537,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/sentadilla.jpg" alt="Foto de una mujer haciendo sentadilla en el gimnasio"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 90 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="B1" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Pies al ancho de los hombros. Si usas mancuerna, sujétala frente al pecho.</span></li>
           <li><span class="n">ii.</span><span>Baja como si te fueras a sentar, cadera hacia atrás y abajo.</span></li>
@@ -522,6 +562,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/hip-thrust.jpg" alt="Foto de una mujer entrenando piernas y glúteo en el gimnasio"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 90 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="B2" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Omóplatos en el borde del banco, pies en el suelo, rodillas flexionadas.</span></li>
           <li><span class="n">ii.</span><span>Coloca el peso sobre la cadera, o usa la máquina si el gym la tiene.</span></li>
@@ -545,6 +586,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/extension-cuadriceps.jpg" alt="Foto de una máquina de extensión de cuádriceps"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="B3" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Espalda apoyada, rodillo justo sobre el tobillo.</span></li>
           <li><span class="n">ii.</span><span>Estira las piernas arriba sin bloquear del todo la rodilla.</span></li>
@@ -568,6 +610,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/elevaciones-laterales.jpg" alt="Foto de una mujer haciendo elevaciones laterales"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="B4" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>De pie, una mancuerna ligera en cada mano, brazos a los lados.</span></li>
           <li><span class="n">ii.</span><span>Levanta los brazos a los lados hasta la altura del hombro.</span></li>
@@ -591,6 +634,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/curl-biceps.jpg" alt="Foto de una mujer haciendo curl de bíceps con mancuernas"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="B5" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>De pie o sentada, mancuernas a los lados, palmas hacia adelante.</span></li>
           <li><span class="n">ii.</span><span>Flexiona los codos llevando el peso hacia los hombros, sin moverlos del cuerpo.</span></li>
@@ -614,6 +658,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/extension-triceps.jpg" alt="Foto de una mujer haciendo extensión de tríceps con mancuerna"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="B6" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>De pie frente a la polea alta, codos pegados a las costillas.</span></li>
           <li><span class="n">ii.</span><span>Estira los brazos hacia abajo sin mover los codos.</span></li>
@@ -650,6 +695,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/peso-muerto.jpg" alt="Foto de un peso muerto con mancuernas"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 10–12 repeticiones · 90 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="C1" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>De pie, mancuernas frente a los muslos, rodillas casi rectas.</span></li>
           <li><span class="n">ii.</span><span>Empuja la cadera atrás mientras bajas las mancuernas pegadas a las piernas.</span></li>
@@ -674,6 +720,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/zancadas.jpg" alt="Foto de una persona haciendo una zancada en el gimnasio"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 10–12 repeticiones por pierna · 90 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="C2" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span><b>Zancada:</b> paso adelante, baja doblando ambas rodillas a 90°, vuelve al inicio.</span></li>
           <li><span class="n">ii.</span><span><b>Step-up (más fácil):</b> sube a un banco con una pierna, empuja con el talón y baja controlada.</span></li>
@@ -697,6 +744,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/face-pull.jpg" alt="Foto de una mujer entrenando hombros en el gimnasio"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 15 repeticiones · 45 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="C3" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Polea a la altura de la cara, agarra la cuerda con ambas manos.</span></li>
           <li><span class="n">ii.</span><span>Tira hacia tu cara separando las manos al final, codos altos.</span></li>
@@ -720,6 +768,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/patada-gluteo.jpg" alt="Foto de una patada de glúteo en polea"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones por pierna · 45 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="C4" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Coloca la tobillera en un pie, de frente a la polea baja, sujétate ligeramente para mantener el equilibrio.</span></li>
           <li><span class="n">ii.</span><span>Lleva la pierna hacia atrás apretando el glúteo, sin arquear la espalda baja.</span></li>
@@ -744,6 +793,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/curl-martillo.jpg" alt="Foto de una mujer haciendo curl con mancuerna"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="C5" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Igual que el curl normal, palmas mirándose entre sí, como sujetando un martillo.</span></li>
           <li><span class="n">ii.</span><span>Sube y baja controlado, codos pegados al cuerpo.</span></li>
@@ -766,6 +816,7 @@
       <div class="ex-image"><div class="ex-image-inner"><img src="images/plancha-lateral.jpg" alt="Foto de una mujer haciendo plancha lateral"></div></div>
       <div class="ex-body">
         <div class="ex-stats">3 series · 15–20 seg por lado · 45 seg de descanso</div>
+        <div class="ex-weight"><label>Peso</label><input type="text" inputmode="decimal" class="weight-input" data-weight-id="C6" placeholder="—"><span class="unit">kg</span></div>
         <ol class="ex-steps">
           <li><span class="n">i.</span><span>Túmbate de lado, apóyate en el antebrazo y el lateral del pie.</span></li>
           <li><span class="n">ii.</span><span>Eleva la cadera formando una línea recta de cabeza a pies.</span></li>
@@ -881,6 +932,24 @@
       }
     });
   });
+
+  // ---- Weights + storage ----
+  const WEIGHT_KEY = 'gymPlanWeights';
+  function loadWeights(){ try{ return JSON.parse(localStorage.getItem(WEIGHT_KEY)) || {}; }catch(e){ return {}; } }
+  function saveWeights(data){ localStorage.setItem(WEIGHT_KEY, JSON.stringify(data)); }
+  function initWeights(){
+    const weights = loadWeights();
+    document.querySelectorAll('.weight-input').forEach(inp=>{
+      const id = inp.dataset.weightId;
+      if(weights[id] !== undefined) inp.value = weights[id];
+      inp.addEventListener('input', ()=>{
+        const data = loadWeights();
+        data[id] = inp.value;
+        saveWeights(data);
+      });
+    });
+  }
+  initWeights();
 
   // ---- Checks + storage ----
   const STORAGE_KEY = 'gymPlanChecks';
