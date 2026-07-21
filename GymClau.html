@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu Plan — Recomposición Corporal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFDFB;
+    --ink:#2B2230;
+    --ink-soft:#8C7F87;
+    --rose:#B1667A;
+    --rose-deep:#7A3E52;
+    --rose-soft:#F6E9EC;
+    --line:rgba(43,34,48,0.10);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:70px;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    margin:0;
+    color:var(--ink);
+  }
+  a{color:inherit;}
+  ol,ul{margin:0;}
+  p{margin:0;}
+
+  /* HEADER */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(255,253,251,0.90);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    max-width:640px;
+    margin:0 auto;
+    padding:18px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .wordmark{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:17px;
+    color:var(--rose-deep);
+    white-space:nowrap;
+  }
+  .tabs{
+    display:flex;
+    gap:22px;
+  }
+  .tab-btn{
+    background:none;
+    border:none;
+    padding:4px 0;
+    cursor:pointer;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border-bottom:1.5px solid transparent;
+    transition:all .18s ease;
+  }
+  .tab-btn.active{color:var(--rose-deep);border-bottom-color:var(--rose);}
+
+  main{max-width:640px;margin:0 auto;padding:0 24px;}
+
+  /* HERO */
+  .hero{padding:44px 0 8px 0;}
+  .hero-eyebrow{
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--rose);
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .hero h1{font-size:32px;line-height:1.15;font-style:italic;margin-bottom:14px;}
+  .hero p{color:var(--ink-soft);font-size:15px;line-height:1.7;max-width:52ch;}
+
+  /* DAY PANEL */
+  .day-panel{display:none;}
+  .day-panel.active{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+
+  .day-focus{
+    margin:40px 0 6px 0;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--line);
+  }
+  .day-focus-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .day-focus h2{font-size:24px;font-style:italic;}
+  .day-progress{
+    font-size:13px;
+    color:var(--rose);
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .day-focus .muscle-tag{
+    color:var(--ink-soft);
+    font-size:13px;
+    margin-top:6px;
+    letter-spacing:0.02em;
+  }
+
+  /* EXERCISE ENTRY */
+  .exercise{
+    padding:30px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .exercise:last-of-type{border-bottom:none;}
+  .ex-top{
+    display:flex;
+    align-items:flex-start;
+    gap:14px;
+  }
+  .ex-num{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:20px;
+    color:var(--rose);
+    width:28px;
+    flex-shrink:0;
+    line-height:1.3;
+  }
+  .ex-icon{
+    width:38px;height:38px;
+    border-radius:50%;
+    background:var(--rose-soft);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .ex-icon svg{width:20px;height:20px;stroke:var(--rose-deep);}
+  .ex-info{flex:1;min-width:0;}
+  .ex-title-row{display:flex;align-items:center;gap:8px;}
+  .ex-title-row h3{font-size:18px;font-weight:500;font-style:normal;line-height:1.3;}
+  .img-toggle{
+    flex-shrink:0;
+    width:22px;height:22px;
+    border-radius:50%;
+    border:1.3px solid var(--rose);
+    background:var(--rose-soft);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    padding:0;
+    transition:transform .25s ease, background .18s ease;
+  }
+  .img-toggle svg{width:11px;height:11px;stroke:var(--rose-deep);}
+  .exercise.img-open .img-toggle{transform:rotate(90deg);background:var(--rose);}
+  .exercise.img-open .img-toggle svg{stroke:#FFFFFF;}
+  .ex-meta{color:var(--ink-soft);font-size:12.5px;margin-top:4px;letter-spacing:0.02em;}
+
+  .ex-image{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .32s ease;
+  }
+  .ex-image-inner{
+    margin:16px 0 0 42px;
+    background:var(--rose-soft);
+    border-radius:16px;
+    overflow:hidden;
+    line-height:0;
+  }
+  .ex-image-inner img{
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit:cover;
+    max-height:340px;
+    min-height:120px;
+    color:var(--ink-soft);
+    font-size:12px;
+  }
+  .photo-credit{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin:6px 0 0 42px;
+  }
+
+  .ex-check{
+    width:26px;height:26px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:all .18s ease;
+  }
+  .ex-check svg{width:12px;height:12px;stroke:var(--bg);opacity:0;transition:opacity .15s ease;}
+  .ex-check.done{background:var(--rose);border-color:var(--rose);}
+  .ex-check.done svg{opacity:1;}
+
+  .ex-body{padding-left:42px;margin-top:16px;}
+  .ex-stats{
+    font-size:13px;
+    color:var(--rose-deep);
+    font-weight:500;
+    margin-bottom:14px;
+  }
+  .ex-steps{list-style:none;padding:0;margin:0 0 14px 0;}
+  .ex-steps li{
+    display:flex;gap:10px;
+    font-size:14.5px;line-height:1.65;color:var(--ink);
+    margin-bottom:8px;
+  }
+  .ex-steps li .n{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    color:var(--rose);
+    flex-shrink:0;
+    font-size:14px;
+  }
+  .ex-note{
+    display:flex;
+    gap:8px;
+    font-size:13.5px;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+    font-style:italic;
+  }
+  .ex-note b{color:var(--rose-deep);font-style:normal;}
+  .ex-note .mark{color:var(--rose);flex-shrink:0;}
+
+  /* SECTION HEADER */
+  .section-title{margin:56px 0 4px 0;}
+  .section-title h2{font-size:22px;font-style:italic;}
+  .section-title .sub{color:var(--ink-soft);font-size:13px;margin-top:6px;}
+
+  /* STREAK */
+  .streak-block{padding:26px 0 34px 0;border-bottom:1px solid var(--line);}
+  .streak-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;}
+  .streak-top h3{font-size:16px;font-style:italic;font-weight:500;}
+  .streak-total{font-size:12.5px;color:var(--rose);font-weight:600;}
+  .week-row{display:flex;justify-content:space-between;gap:8px;}
+  .day-cell{
+    flex:1;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+  }
+  .day-cell .lbl{font-size:11px;color:var(--ink-soft);letter-spacing:0.04em;text-transform:uppercase;}
+  .day-cell .dot{
+    width:30px;height:30px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:var(--bg);
+  }
+  .day-cell.stamped .dot{background:var(--rose);border-color:var(--rose);}
+  .streak-hint{font-size:12.5px;color:var(--ink-soft);margin-top:18px;line-height:1.6;}
+
+  /* GENERAL NOTES */
+  .note-block{padding:26px 0;border-bottom:1px solid var(--line);}
+  .note-block:last-of-type{border-bottom:none;}
+  .note-block h3{font-size:16.5px;font-style:italic;font-weight:500;margin-bottom:12px;}
+  .note-block ul{padding-left:18px;}
+  .note-block li{
+    font-size:14.5px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    margin-bottom:9px;
+  }
+  .note-block li::marker{color:var(--rose);}
+  .note-block b{color:var(--ink);}
+
+  footer{
+    text-align:center;
+    color:var(--ink-soft);
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:14px;
+    padding:44px 24px 10px 24px;
+  }
+
+  ::selection{background:var(--rose-soft);color:var(--rose-deep);}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="wordmark">tu plan</div>
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" data-day="A">Día A</button>
+      <button class="tab-btn" data-day="B">Día B</button>
+      <button class="tab-btn" data-day="C">Día C</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-eyebrow">Recomposición corporal · Nivel principiante</div>
+    <h1>Fuerza, con calma y constancia</h1>
+    <p>Rutina de cuerpo completo para tonificar, ganar músculo y perder grasa poco a poco. Ningún ejercicio requiere apoyar el pecho. Marca el círculo de cada ejercicio a medida que lo completes.</p>
+  </section>
+
+  <!-- DÍA A -->
+  <div class="day-panel active" id="panel-A">
+    <div class="day-focus">
+      <div class="day-focus-top">
+        <h2>Piernas y espalda</h2>
+        <span class="day-progress"><span class="done-A">0</span>/6 completados</span>
+      </div>
+      <div class="muscle-tag">Cuádriceps · isquiotibiales · gemelos · espalda · core</div>
+    </div>
+
+    <div class="exercise" data-day="A">
+      <div class="ex-top">
+        <span class="ex-num">01</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v5"/><path d="M9 8h6"/><path d="M12 11l-3 6"/><path d="M12 11l3 6"/><path d="M8.5 19h1.5"/><path d="M14 19h1.5"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Prensa de piernas</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Máquina · cuádriceps y glúteo</div>
+        </div>
+        <div class="ex-check" data-id="A1"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/prensa-piernas.jpg" alt="Foto de una prensa de piernas en el gimnasio" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 75 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Siéntate con la espalda bien apoyada, pies separados al ancho de la cadera.</span></li>
+          <li><span class="n">ii.</span><span>Empuja la plataforma estirando las piernas, sin bloquear del todo las rodillas.</span></li>
+          <li><span class="n">iii.</span><span>Baja de forma controlada hasta casi 90°. Exhala al empujar, inhala al bajar.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> mantén siempre la espalda pegada al respaldo.</span></p>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Evita:</b> que las rodillas se metan hacia adentro.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="A">
+      <div class="ex-top">
+        <span class="ex-num">02</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v5"/><path d="M9 8h6"/><path d="M9 11l6 1"/><path d="M15 12l1 6"/><path d="M9 11l-1 7"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Curl femoral</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Máquina · isquiotibiales</div>
+        </div>
+        <div class="ex-check" data-id="A2"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/curl-femoral.jpg" alt="Foto de una máquina de curl femoral" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Ajusta la máquina para que el rodillo quede justo sobre el talón.</span></li>
+          <li><span class="n">ii.</span><span>Flexiona la rodilla llevando el talón hacia el glúteo, controlada.</span></li>
+          <li><span class="n">iii.</span><span>Aguanta un segundo arriba y vuelve lento, sin soltar de golpe.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> el movimiento lento trabaja mejor el músculo que hacerlo rápido.</span></p>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Evita:</b> levantar la cadera del asiento para impulsarte.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="A">
+      <div class="ex-top">
+        <span class="ex-num">03</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v6"/><path d="M12 12l0 6"/><path d="M9 20l3-2 3 2"/><path d="M9 9l6 0"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Gemelos en máquina</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Máquina · pantorrilla</div>
+        </div>
+        <div class="ex-check" data-id="A3"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/gemelos.jpg" alt="Foto de una máquina de gemelos sentada" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 15 repeticiones · 45 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Puntas de los pies en la plataforma, talones al aire.</span></li>
+          <li><span class="n">ii.</span><span>Sube los talones al máximo, notando el trabajo en la pantorrilla.</span></li>
+          <li><span class="n">iii.</span><span>Baja despacio hasta sentir un buen estiramiento, sin rebotar.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> aguanta 1 segundo arriba antes de bajar.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="A">
+      <div class="ex-top">
+        <span class="ex-num">04</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v5"/><path d="M12 8l-6 -2"/><path d="M12 8l6 -2"/><path d="M12 11l-2 8"/><path d="M12 11l2 8"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Jalón al pecho</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Polea · dorsal y bíceps</div>
+        </div>
+        <div class="ex-check" data-id="A4"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/jalon-pecho.jpg" alt="Foto de una mujer haciendo jalón al pecho en polea" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 75 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Siéntate y sujeta la barra con las manos algo más abiertas que los hombros.</span></li>
+          <li><span class="n">ii.</span><span>Tira hacia la parte alta del pecho, llevando los codos abajo y atrás.</span></li>
+          <li><span class="n">iii.</span><span>Sube controlando el peso, sin dejar que "tire" de ti de golpe.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> lleva los codos hacia los bolsillos de atrás.</span></p>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Evita:</b> echar el cuerpo muy atrás para ayudarte con el peso.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="A">
+      <div class="ex-top">
+        <span class="ex-num">05</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v5"/><path d="M9 9l3 -1 3 1"/><path d="M12 11l-2 8"/><path d="M12 11l2 8"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Remo sentado</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Polea · espalda media</div>
+        </div>
+        <div class="ex-check" data-id="A5"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/remo-sentado.jpg" alt="Foto de una mujer usando la máquina de remo sentado" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 75 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Rodillas algo flexionadas, espalda recta, sujeta el asa.</span></li>
+          <li><span class="n">ii.</span><span>Tira hacia el abdomen, juntando los omóplatos al final.</span></li>
+          <li><span class="n">iii.</span><span>Vuelve despacio dejando que los brazos se estiren, sin redondear la espalda baja.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> el pecho va hacia arriba y adelante al tirar, no hacia abajo.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="A">
+      <div class="ex-top">
+        <span class="ex-num">06</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="6" r="1.6"/><path d="M7 8v3"/><path d="M4 18l14 -3"/><path d="M7 11l4 4"/><path d="M11 15l3 -1"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Plancha abdominal</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Peso corporal · core</div>
+        </div>
+        <div class="ex-check" data-id="A6"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/plancha.jpg" alt="Foto de una mujer haciendo plancha abdominal" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 20–30 segundos · 45 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Apóyate en los antebrazos y puntas de los pies, codos bajo los hombros.</span></li>
+          <li><span class="n">ii.</span><span>Aprieta abdomen y glúteos, línea recta de cabeza a talones.</span></li>
+          <li><span class="n">iii.</span><span>Mantén la postura respirando con normalidad.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Evita:</b> levantar demasiado la cadera o dejarla caer.</span></p>
+      </div>
+    </div>
+
+    <p class="ex-note" style="padding:24px 0 8px 0;"><span class="mark">✦</span><span>Cierra el día con 5 minutos de estiramiento suave de piernas y espalda.</span></p>
+  </div>
+
+  <!-- DÍA B -->
+  <div class="day-panel" id="panel-B">
+    <div class="day-focus">
+      <div class="day-focus-top">
+        <h2>Glúteo, hombros y brazos</h2>
+        <span class="day-progress"><span class="done-B">0</span>/6 completados</span>
+      </div>
+      <div class="muscle-tag">Glúteo · cuádriceps · hombros · bíceps · tríceps</div>
+    </div>
+
+    <div class="exercise" data-day="B">
+      <div class="ex-top">
+        <span class="ex-num">01</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v4"/><path d="M9 7h6"/><path d="M9 10l-1.5 5"/><path d="M15 10l1.5 5"/><path d="M7.5 15h9"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Sentadilla guiada</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Smith o goblet · pierna completa</div>
+        </div>
+        <div class="ex-check" data-id="B1"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/sentadilla.jpg" alt="Foto de una mujer haciendo sentadilla en el gimnasio" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 90 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Pies al ancho de los hombros. Si usas mancuerna, sujétala frente al pecho.</span></li>
+          <li><span class="n">ii.</span><span>Baja como si te fueras a sentar, cadera hacia atrás y abajo.</span></li>
+          <li><span class="n">iii.</span><span>Baja hasta donde te sientas cómoda y sube empujando con los talones.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> mira al frente y mantén el pecho "orgulloso".</span></p>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Evita:</b> que las rodillas se junten hacia adentro.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="B">
+      <div class="ex-top">
+        <span class="ex-num">02</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="14" r="1.6"/><path d="M6 16l0 4"/><path d="M4 20h9"/><path d="M11 12h7"/><path d="M16 10l2 2 -2 2"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Hip thrust</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Banco + barra o mancuerna · glúteo</div>
+        </div>
+        <div class="ex-check" data-id="B2"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/hip-thrust.jpg" alt="Foto de una mujer entrenando piernas y glúteo en el gimnasio" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 90 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Omóplatos en el borde del banco, pies en el suelo, rodillas flexionadas.</span></li>
+          <li><span class="n">ii.</span><span>Coloca el peso sobre la cadera, o usa la máquina si el gym la tiene.</span></li>
+          <li><span class="n">iii.</span><span>Empuja la cadera arriba apretando el glúteo, línea recta hombros–rodillas.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> aprieta fuerte el glúteo arriba, como sujetando una moneda.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="B">
+      <div class="ex-top">
+        <span class="ex-num">03</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v5"/><path d="M9 8h6"/><path d="M12 11l-2.5 7"/><path d="M12 11l2.5 3"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Extensión de cuádriceps</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Máquina · cuádriceps</div>
+        </div>
+        <div class="ex-check" data-id="B3"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/extension-cuadriceps.jpg" alt="Foto de una máquina de extensión de cuádriceps" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Espalda apoyada, rodillo justo sobre el tobillo.</span></li>
+          <li><span class="n">ii.</span><span>Estira las piernas arriba sin bloquear del todo la rodilla.</span></li>
+          <li><span class="n">iii.</span><span>Baja despacio controlando el peso todo el recorrido.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> no necesitas mucho peso aquí — controla mejor que cargar de más.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="B">
+      <div class="ex-top">
+        <span class="ex-num">04</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v6"/><path d="M12 8l-6 -1"/><path d="M12 8l6 -1"/><path d="M12 12l-2 6"/><path d="M12 12l2 6"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Elevaciones laterales</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Mancuernas · hombro</div>
+        </div>
+        <div class="ex-check" data-id="B4"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/elevaciones-laterales.jpg" alt="Foto de una mujer haciendo elevaciones laterales" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>De pie, una mancuerna ligera en cada mano, brazos a los lados.</span></li>
+          <li><span class="n">ii.</span><span>Levanta los brazos a los lados hasta la altura del hombro.</span></li>
+          <li><span class="n">iii.</span><span>Baja despacio y controlada. Empieza con poco peso.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Evita:</b> usar impulso del cuerpo; si lo necesitas, baja el peso.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="B">
+      <div class="ex-top">
+        <span class="ex-num">05</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v6"/><path d="M10 8l-3 3"/><path d="M14 8l3 3"/><path d="M12 12l0 7"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Curl de bíceps</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Mancuernas o máquina · bíceps</div>
+        </div>
+        <div class="ex-check" data-id="B5"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/curl-biceps.jpg" alt="Foto de una mujer haciendo curl de bíceps con mancuernas" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>De pie o sentada, mancuernas a los lados, palmas hacia adelante.</span></li>
+          <li><span class="n">ii.</span><span>Flexiona los codos llevando el peso hacia los hombros, sin moverlos del cuerpo.</span></li>
+          <li><span class="n">iii.</span><span>Baja despacio hasta estirar el brazo casi del todo.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> los codos se quedan "pegados" a las costillas todo el rato.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="B">
+      <div class="ex-top">
+        <span class="ex-num">06</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v6"/><path d="M10 8l-2 4"/><path d="M14 8l2 4"/><path d="M12 12l0 7"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Extensión de tríceps</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Polea · tríceps</div>
+        </div>
+        <div class="ex-check" data-id="B6"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/extension-triceps.jpg" alt="Foto de una mujer haciendo extensión de tríceps con mancuerna" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>De pie frente a la polea alta, codos pegados a las costillas.</span></li>
+          <li><span class="n">ii.</span><span>Estira los brazos hacia abajo sin mover los codos.</span></li>
+          <li><span class="n">iii.</span><span>Vuelve despacio, sin dejar que el peso "tire" de golpe.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Evita:</b> abrir los codos hacia los lados.</span></p>
+      </div>
+    </div>
+
+    <p class="ex-note" style="padding:24px 0 8px 0;"><span class="mark">✦</span><span>Cierra el día con 5 minutos de estiramiento de hombros, brazos y glúteo.</span></p>
+  </div>
+
+  <!-- DÍA C -->
+  <div class="day-panel" id="panel-C">
+    <div class="day-focus">
+      <div class="day-focus-top">
+        <h2>Full body de refuerzo</h2>
+        <span class="day-progress"><span class="done-C">0</span>/6 completados</span>
+      </div>
+      <div class="muscle-tag">Glúteo · isquiotibiales · espalda alta · piernas · postura</div>
+    </div>
+
+    <div class="exercise" data-day="C">
+      <div class="ex-top">
+        <span class="ex-num">01</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v3"/><path d="M12 9l-3 2"/><path d="M9 11l0 4"/><path d="M12 9l0 10"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Peso muerto rumano</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Mancuernas · glúteo e isquios</div>
+        </div>
+        <div class="ex-check" data-id="C1"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/peso-muerto.jpg" alt="Foto de un peso muerto con mancuernas" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 10–12 repeticiones · 90 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>De pie, mancuernas frente a los muslos, rodillas casi rectas.</span></li>
+          <li><span class="n">ii.</span><span>Empuja la cadera atrás mientras bajas las mancuernas pegadas a las piernas.</span></li>
+          <li><span class="n">iii.</span><span>Baja hasta donde te lo permita la flexibilidad y sube apretando el glúteo.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> es un movimiento de cadera, no de espalda.</span></p>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Evita:</b> redondear la espalda baja al bajar el peso.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="C">
+      <div class="ex-top">
+        <span class="ex-num">02</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v5"/><path d="M12 11l-4 3"/><path d="M8 14l0 5"/><path d="M12 11l3 8"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Zancadas o step-ups</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Peso corporal · pierna y glúteo</div>
+        </div>
+        <div class="ex-check" data-id="C2"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/zancadas.jpg" alt="Foto de una persona haciendo una zancada en el gimnasio" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 10–12 repeticiones por pierna · 90 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span><b>Zancada:</b> paso adelante, baja doblando ambas rodillas a 90°, vuelve al inicio.</span></li>
+          <li><span class="n">ii.</span><span><b>Step-up (más fácil):</b> sube a un banco con una pierna, empuja con el talón y baja controlada.</span></li>
+          <li><span class="n">iii.</span><span>Completa todas las reps de un lado y luego el otro.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> si es novata, empieza con step-ups — es más fácil de equilibrar.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="C">
+      <div class="ex-top">
+        <span class="ex-num">03</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v5"/><path d="M12 8l-5 1"/><path d="M12 8l5 1"/><path d="M12 11l-1.5 8"/><path d="M12 11l1.5 8"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Face pull</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Polea · espalda alta y postura</div>
+        </div>
+        <div class="ex-check" data-id="C3"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/face-pull.jpg" alt="Foto de una mujer entrenando hombros en el gimnasio" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 15 repeticiones · 45 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Polea a la altura de la cara, agarra la cuerda con ambas manos.</span></li>
+          <li><span class="n">ii.</span><span>Tira hacia tu cara separando las manos al final, codos altos.</span></li>
+          <li><span class="n">iii.</span><span>Vuelve despacio a la posición inicial.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> excelente para la postura — usa poco peso y prioriza técnica.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="C">
+      <div class="ex-top">
+        <span class="ex-num">04</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v6"/><path d="M12 12l0 6"/><path d="M9 20l3-2 3 2"/><path d="M9 9l6 0"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Gemelos</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Máquina o prensa · pantorrilla</div>
+        </div>
+        <div class="ex-check" data-id="C4"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/gemelos.jpg" alt="Foto de una máquina de gemelos sentada" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 15 repeticiones · 45 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Igual que el Día A: sube los talones al máximo, aguanta 1 segundo, baja despacio.</span></li>
+          <li><span class="n">ii.</span><span>Si usas la prensa, apoya solo la punta de los pies y empuja con los tobillos.</span></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="C">
+      <div class="ex-top">
+        <span class="ex-num">05</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><path d="M12 6v6"/><path d="M10 8l-3 3"/><path d="M14 8l3 3"/><path d="M12 12l0 7"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Curl martillo</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Mancuernas · bíceps y antebrazo</div>
+        </div>
+        <div class="ex-check" data-id="C5"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/curl-martillo.jpg" alt="Foto de una mujer haciendo curl con mancuerna" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 12–15 repeticiones · 60 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Igual que el curl normal, palmas mirándose entre sí, como sujetando un martillo.</span></li>
+          <li><span class="n">ii.</span><span>Sube y baja controlado, codos pegados al cuerpo.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> esta variante también trabaja el antebrazo.</span></p>
+      </div>
+    </div>
+
+    <div class="exercise" data-day="C">
+      <div class="ex-top">
+        <span class="ex-num">06</span>
+        <div class="ex-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="6" r="1.6"/><path d="M7 8v3"/><path d="M4 18l14 -3"/><path d="M7 11l4 4"/><path d="M11 15l3 -1"/></svg></div>
+        <div class="ex-info">
+          <div class="ex-title-row"><h3>Plancha lateral</h3><button class="img-toggle" aria-label="Ver imagen del ejercicio"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>
+          <div class="ex-meta">Peso corporal · core y oblicuos</div>
+        </div>
+        <div class="ex-check" data-id="C6"><svg viewBox="0 0 24 24" fill="none" stroke-width="3"><path d="M4 12l5 5L20 6"/></svg></div>
+      </div>
+      
+      <div class="ex-image"><div class="ex-image-inner"><img src="images/plancha-lateral.jpg" alt="Foto de una mujer haciendo plancha lateral" loading="lazy"></div></div>
+      <div class="ex-body">
+        <div class="ex-stats">3 series · 15–20 seg por lado · 45 seg de descanso</div>
+        <ol class="ex-steps">
+          <li><span class="n">i.</span><span>Túmbate de lado, apóyate en el antebrazo y el lateral del pie.</span></li>
+          <li><span class="n">ii.</span><span>Eleva la cadera formando una línea recta de cabeza a pies.</span></li>
+          <li><span class="n">iii.</span><span>Mantén y luego cambia de lado.</span></li>
+        </ol>
+        <p class="ex-note"><span class="mark">✦</span><span><b>Tip:</b> si es muy difícil, apoya también la rodilla de abajo.</span></p>
+      </div>
+    </div>
+
+    <p class="ex-note" style="padding:24px 0 8px 0;"><span class="mark">✦</span><span>Cierra el día con 5 minutos de estiramiento general de cuerpo completo.</span></p>
+  </div>
+
+  <!-- STREAK -->
+  <div class="section-title">
+    <h2>Tu progreso</h2>
+    <div class="sub">Se marca un día como activo cuando completas al menos un ejercicio.</div>
+  </div>
+  <div class="streak-block">
+    <div class="streak-top">
+      <h3>Esta semana</h3>
+      <span class="streak-total"><span id="weekCount">0</span>/7 días activos</span>
+    </div>
+    <div class="week-row" id="weekRow"></div>
+    <div class="streak-hint">El progreso se guarda en este navegador — abre siempre la página desde el mismo móvil para no perderlo.</div>
+  </div>
+
+  <!-- GENERAL NOTES -->
+  <div class="section-title">
+    <h2>Antes de empezar</h2>
+  </div>
+
+  <div class="note-block">
+    <h3>Cómo usar este plan</h3>
+    <ul>
+      <li>3 series de cada ejercicio, descansando el tiempo indicado entre series.</li>
+      <li>Si vas solo 2 días a la semana, alterna: semana 1 → Día A y B, semana 2 → Día C y A. Así todos los días rotan.</li>
+      <li>Calienta 5–10 minutos antes (caminar rápido, bici suave o movilidad articular).</li>
+      <li>Cuando completes las repeticiones sintiéndolo fácil, sube un poco el peso la próxima vez.</li>
+      <li>Ningún ejercicio de este plan requiere apoyar el pecho — está pensado así a propósito.</li>
+    </ul>
+  </div>
+
+  <div class="note-block">
+    <h3>Progresión semana a semana</h3>
+    <ul>
+      <li><b>Semanas 1–2:</b> foco 100% en aprender la técnica. Peso ligero, sin prisa.</li>
+      <li><b>Semanas 3–4:</b> sube un poco el peso en los ejercicios que ya notes fáciles.</li>
+      <li><b>A partir del mes 2:</b> baja algo las repeticiones (8–10) y sube el peso en piernas y espalda, manteniendo brazos y hombros en 12–15.</li>
+      <li>Es normal tener agujetas los primeros días — si el dolor es articular, descansa un día extra.</li>
+    </ul>
+  </div>
+
+  <div class="note-block">
+    <h3>Alimentación: lo básico que más importa</h3>
+    <ul>
+      <li>Para recomposición corporal, la proteína suficiente en cada comida es clave: carnes, pescado, huevo, lácteos, legumbres.</li>
+      <li>Un déficit calórico moderado ayuda a perder grasa sin perder el músculo que está ganando.</li>
+      <li>Hidratación: agua suficiente durante el día, especialmente en días de entreno.</li>
+      <li>Entrenamiento y cardio son la mitad del trabajo — la constancia con la comida es la otra mitad.</li>
+    </ul>
+  </div>
+
+  <div class="note-block">
+    <h3>Seguridad y buenas prácticas</h3>
+    <ul>
+      <li>Prioriza siempre la técnica antes que el peso. Mejor levantar poco y bien que mucho y mal.</li>
+      <li>Si un ejercicio causa dolor articular, párate y prueba con menos peso o pide ayuda al staff del gimnasio.</li>
+      <li>Deja al menos 1 día de descanso entre sesiones de fuerza para permitir la recuperación.</li>
+      <li>No dudes en pedir que revisen tu postura en los primeros días.</li>
+    </ul>
+  </div>
+
+  <div class="note-block">
+    <h3>Sobre las fotos</h3>
+    <ul>
+      <li>Las fotografías de cada ejercicio proceden de Wikimedia Commons y se usan bajo licencia libre (Creative Commons). El equipo o el agarre pueden variar un poco según el gimnasio, pero sirven como referencia visual del movimiento.</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer>hecho con cariño para tu recomposición corporal</footer>
+
+<script>
+  // ---- Tabs ----
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.day-panel');
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-'+btn.dataset.day).classList.add('active');
+    });
+  });
+
+  // ---- Image toggle ----
+  document.querySelectorAll('.img-toggle').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const ex = btn.closest('.exercise');
+      const panel = ex.querySelector('.ex-image');
+      ex.classList.toggle('img-open');
+      panel.style.maxHeight = ex.classList.contains('img-open') ? panel.scrollHeight+'px' : null;
+    });
+  });
+
+  // ---- Checks + storage ----
+  const STORAGE_KEY = 'gymPlanChecks';
+  const STREAK_KEY = 'gymPlanStreak';
+
+  function loadChecks(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }catch(e){ return {}; } }
+  function saveChecks(data){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+  function loadStreak(){ try{ return JSON.parse(localStorage.getItem(STREAK_KEY)) || {}; }catch(e){ return {}; } }
+  function saveStreak(data){ localStorage.setItem(STREAK_KEY, JSON.stringify(data)); }
+  function markTodayActive(){
+    const streak = loadStreak();
+    streak[todayStr()] = true;
+    saveStreak(streak);
+    renderStreak();
+  }
+
+  function updateDayCounts(){
+    ['A','B','C'].forEach(day=>{
+      const checked = document.querySelectorAll('.exercise[data-day="'+day+'"] .ex-check.done').length;
+      document.querySelectorAll('.done-'+day).forEach(el=> el.textContent = checked);
+    });
+  }
+
+  function initChecks(){
+    const checks = loadChecks();
+    document.querySelectorAll('.ex-check').forEach(chk=>{
+      const id = chk.dataset.id;
+      if(checks[id]) chk.classList.add('done');
+      chk.addEventListener('click', ()=>{
+        chk.classList.toggle('done');
+        const data = loadChecks();
+        data[id] = chk.classList.contains('done');
+        saveChecks(data);
+        updateDayCounts();
+        if(chk.classList.contains('done')) markTodayActive();
+      });
+    });
+    updateDayCounts();
+  }
+
+  // ---- Week streak row ----
+  const DAY_LABELS = ['L','M','X','J','V','S','D'];
+  function renderStreak(){
+    const row = document.getElementById('weekRow');
+    row.innerHTML = '';
+    const streak = loadStreak();
+    const now = new Date();
+    const dow = (now.getDay()+6)%7;
+    const monday = new Date(now);
+    monday.setDate(now.getDate()-dow);
+
+    let activeCount = 0;
+    for(let i=0;i<7;i++){
+      const d = new Date(monday);
+      d.setDate(monday.getDate()+i);
+      const key = d.toISOString().slice(0,10);
+      const cell = document.createElement('div');
+      cell.className = 'day-cell';
+      if(streak[key]){ cell.classList.add('stamped'); activeCount++; }
+      cell.innerHTML = '<span class="lbl">'+DAY_LABELS[i]+'</span><span class="dot"></span>';
+      row.appendChild(cell);
+    }
+    document.getElementById('weekCount').textContent = activeCount;
+  }
+
+  initChecks();
+  renderStreak();
+</script>
+
+</body>
+</html>
