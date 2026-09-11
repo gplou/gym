@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="only light">
 <title>Recomposición · Tren superior</title>
 <meta name="description" content="Plan de recomposición corporal de tren superior: 3 días por semana (rotación A · B · C), con máquinas y poleas y el hombro protegido (lesión de Bankart).">
@@ -28,7 +28,7 @@
     --mono:"IBM Plex Mono", ui-monospace, monospace;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
   @media (prefers-reduced-motion: reduce){
     html{scroll-behavior:auto;}
     *{transition:none !important; animation:none !important;}
@@ -43,9 +43,10 @@
     background-size:28px 28px;
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
   a{color:inherit;}
-  .wrap{max-width:920px; margin:0 auto; padding:0 16px;}
+  .wrap{max-width:920px; margin:0 auto; padding:0 16px; padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right));}
 
   /* ---------- Cabecera ---------- */
   .masthead{padding:34px 0 18px; border-bottom:3px solid var(--ink);}
@@ -74,6 +75,7 @@
     background:var(--paper);
     border-bottom:1.5px solid var(--ink);
     box-shadow:0 6px 14px -12px rgba(28,43,58,.45);
+    padding-top:env(safe-area-inset-top);
   }
   .controls .wrap{
     display:flex; align-items:center; justify-content:space-between;
@@ -85,6 +87,8 @@
     text-transform:uppercase; letter-spacing:.04em;
     border:2px solid var(--ink); background:transparent; color:var(--ink);
     border-radius:8px; padding:6px 18px; cursor:pointer;
+    min-height:44px; display:inline-flex; align-items:center; justify-content:center;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
     transition:background .15s, color .15s;
   }
   .tab[aria-selected="true"]{background:var(--ink); color:var(--card);}
@@ -211,15 +215,21 @@
   }
   .kg{display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px;}
   .kg input{
-    width:84px; padding:7px 9px; font-family:var(--mono); font-size:15px;
+    width:96px; padding:10px 10px; font-family:var(--mono); font-size:16px; min-height:44px;
     border:1.5px solid var(--ink); border-radius:7px; background:var(--paper);
     color:var(--ink);
   }
+  .sets{display:flex; align-items:center; gap:6px; flex-wrap:wrap; flex-basis:100%; margin:0 0 2px;}
+  .sets-label{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-right:2px;}
+  .rep{width:3.5em; padding:9px 4px; text-align:center; font-family:var(--mono); font-size:16px; min-height:44px; border:1.5px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink); -webkit-appearance:none; appearance:none;}
+  .rep:focus{outline:none; border-color:var(--ink);}
   .done-btn{
     font-family:var(--display); font-size:18px; font-weight:700;
     text-transform:uppercase; letter-spacing:.05em;
     border:2px solid var(--ink); background:var(--ink); color:var(--card);
     border-radius:8px; padding:9px 20px; cursor:pointer;
+    min-height:44px; display:inline-flex; align-items:center; justify-content:center;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
     transition:background .15s, border-color .15s;
   }
   .done-btn:hover{background:#2c4257;}
@@ -247,7 +257,8 @@
   .reset-btn{
     font-family:var(--mono); font-size:12.5px; letter-spacing:.06em;
     background:transparent; border:1.5px solid var(--muted); color:var(--muted);
-    border-radius:7px; padding:7px 14px; cursor:pointer;
+    border-radius:7px; padding:10px 16px; cursor:pointer;
+    min-height:44px; touch-action:manipulation; -webkit-tap-highlight-color:transparent;
   }
   .reset-btn:hover{border-color:var(--ink); color:var(--ink);}
 
@@ -272,10 +283,42 @@
 
   .footer{
     margin-top:46px; border-top:3px solid var(--ink);
-    padding:22px 0 40px; color:var(--muted); font-size:13.5px;
+    padding:22px 0 calc(40px + env(safe-area-inset-bottom)); color:var(--muted); font-size:13.5px;
   }
   .footer p{max-width:720px; margin-bottom:8px;}
   .footer .mono{font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;}
+
+  /* ---------- Optimización móvil (iPhone) ---------- */
+  @media (max-width:560px){
+    .masthead{padding:22px 0 14px;}
+    h1{font-size:clamp(32px, 10.5vw, 50px);}
+    .lead{font-size:15.5px;}
+    .specs{gap:6px 14px; font-size:12.5px;}
+    section{padding:24px 0 4px;}
+
+    .controls .wrap{flex-direction:column; align-items:stretch; gap:10px;}
+    .tabs{gap:6px;}
+    .tab{flex:1 1 0; padding:10px 4px; font-size:16px; letter-spacing:.02em;}
+    .progress{justify-content:space-between; gap:10px;}
+    .barbell{height:30px;}
+    .sleeve{min-width:0;}
+
+    .sec-head{flex-wrap:wrap; gap:2px 12px; margin-bottom:12px;}
+    .card{margin-bottom:20px; box-shadow:3px 3px 0 rgba(28,43,58,.16);}
+    .card-head{padding:12px 14px; gap:10px;}
+    .card-body{padding:14px 14px 16px;}
+    .figure{padding:14px 12px 10px;}
+    .figure svg{max-width:230px;}
+
+    .card-foot{gap:12px;}
+    .kg{width:100%; justify-content:space-between; font-size:14px;}
+    .done-btn{width:100%; font-size:19px;}
+    .reset-row{margin-bottom:30px;}
+    .reset-btn{width:100%; text-align:center;}
+
+    .session-done{font-size:18px; padding:14px;}
+    .info h3{font-size:20px;}
+  }
 </style>
 </head>
 <body>
@@ -351,6 +394,7 @@
     <div class="sec-head"><h2>Día A — Tren superior</h2><span class="ref">7 ejercicios · ~55&ndash;60 min</span></div>
     <p class="panel-note">Rota A &rarr; B &rarr; C a lo largo de la semana, dejando al menos un día de descanso cuando puedas. Apunta el peso en cada ficha: lo necesitarás para progresar.</p>
     <div class="session-done" data-day="A">Día A completo — alterna con B y C esta semana.</div>
+    <div class="reset-row"><button class="reset-btn" type="button" data-reset="A">Reiniciar Día A</button></div>
 
     <!-- M-01 · Jalón al pecho, agarre neutro -->
     <article class="card" data-ex="a1">
@@ -401,6 +445,7 @@
             <p>Agarre neutro y recorrido por delante: de los tirones verticales más seguros para ti. Controla el final de la subida sin dejar que el peso te estire el hombro del todo.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -454,6 +499,7 @@
             <p>Muy seguro: el pecho apoyado estabiliza el tronco y el hombro trabaja en un rango corto y controlado. Mantén los codos pegados, sin abrirlos en exceso.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -507,6 +553,7 @@
             <p>Punto clave: recorrido limitado atrás. Los codos no pasan del plano del torso y el asiento se sube si notas tirón. Nada de estiramientos profundos de pecho.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -560,6 +607,7 @@
             <p>Sube solo hasta la horizontal, nunca por encima. Movimiento limpio y sin rotar el hombro; si notas pinzamiento, reduce el rango.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -615,6 +663,7 @@
             <p>El ejercicio con más precaución del plan. La posición por encima de la cabeza es la más delicada para tu inestabilidad anterior: usa agarre neutro, NO bloquees arriba, mantén un rango cómodo y para ante cualquier aprensión. Si notas inseguridad, cámbialo por más elevaciones laterales y coméntalo con tu fisio.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -668,6 +717,7 @@
             <p>Seguro: con el codo fijo al costado, el hombro queda quieto. Solo trabaja el codo.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -723,6 +773,7 @@
             <p>Seguro: hombros estables y quietos; todo el movimiento es de codo.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -730,7 +781,6 @@
       </div>
     </article>
 
-    <div class="reset-row"><button class="reset-btn" type="button" data-reset="A">Reiniciar Día A</button></div>
   </section>
 
   <!-- ===================== DÍA B ===================== -->
@@ -739,6 +789,7 @@
     <div class="sec-head"><h2>Día B — Tren superior</h2><span class="ref">7 ejercicios · ~55&ndash;60 min</span></div>
     <p class="panel-note">Rota A &rarr; B &rarr; C a lo largo de la semana, dejando al menos un día de descanso cuando puedas. Apunta el peso en cada ficha: lo necesitarás para progresar.</p>
     <div class="session-done" data-day="B">Día B completo — sigue rotando con el Día C.</div>
+    <div class="reset-row"><button class="reset-btn" type="button" data-reset="B">Reiniciar Día B</button></div>
 
     <!-- M-08 · Remo en polea sentado, agarre neutro -->
     <article class="card" data-ex="b1">
@@ -785,6 +836,7 @@
             <p>Agarre neutro y codos pegados: recorrido seguro. Evita estirar el brazo del todo con tirón al volver.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -838,6 +890,7 @@
             <p>Precaución media: la posición de brazos arriba estira la cápsula anterior. Empieza con los brazos por delante, no muy atrás, y no fuerces el estiramiento. Si notas tirón arriba, acorta el rango alto.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -891,6 +944,7 @@
             <p>Mismas reglas que el press plano: codos sin pasar el plano del torso y asiento arriba si hay tirón. Sin estiramientos profundos.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -944,6 +998,7 @@
             <p>Sube solo hasta la horizontal. La trayectoria guiada es cómoda para el hombro siempre que no fuerces por encima.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -997,6 +1052,7 @@
             <p>Seguro: el brazo queda apoyado y el hombro no interviene. Trabaja solo el codo.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1050,6 +1106,7 @@
             <p>Precaución media: los brazos van por encima de la cabeza. Mantén los codos al frente, un rango cómodo y sin forzar el estiramiento profundo. Si notas aprensión, cámbialo por pushdown.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1104,6 +1161,7 @@
             <p>Muy recomendable para ti: refuerza los estabilizadores del hombro. Mantén el movimiento por delante y controlado, sin tirones.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1111,7 +1169,6 @@
       </div>
     </article>
 
-    <div class="reset-row"><button class="reset-btn" type="button" data-reset="B">Reiniciar Día B</button></div>
   </section>
 
   <!-- ===================== DÍA C ===================== -->
@@ -1119,6 +1176,7 @@
     <div class="sec-head"><h2>Día C — Tren superior</h2><span class="ref">7 ejercicios · ~55&ndash;60 min</span></div>
     <p class="panel-note">Rota A &rarr; B &rarr; C a lo largo de la semana, dejando al menos un día de descanso cuando puedas. Apunta el peso en cada ficha: lo necesitarás para progresar.</p>
     <div class="session-done" data-day="C">Día C completo — semana redonda, a recuperar.</div>
+    <div class="reset-row"><button class="reset-btn" type="button" data-reset="C">Reiniciar Día C</button></div>
 
     <!-- M-15 · Jalón al pecho -->
     <article class="card" data-ex="c1">
@@ -1169,6 +1227,7 @@
             <p>Recorrido siempre por delante, nunca tras nuca. Controla el final de la subida sin dejar que el peso te estire el hombro del todo.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1222,6 +1281,7 @@
             <p>Muy seguro: el pecho apoyado estabiliza el tronco y el hombro trabaja en un rango corto y controlado.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1281,6 +1341,7 @@
             <p>Clave para ti: <strong>rango limitado</strong>. La apertura profunda estira la cápsula anterior justo en la dirección de tu inestabilidad, así que no lleves los brazos por detrás de la línea de los hombros. Si notas tirón, reduce aún más la apertura o sáltalo.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1334,6 +1395,7 @@
             <p>Sube solo hasta la horizontal, nunca por encima. Sin rotar el hombro; reduce el rango si notas pinzamiento.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1388,6 +1450,7 @@
             <p>Muy recomendable para ti: refuerza los estabilizadores del hombro. Mantén el movimiento por delante y controlado, sin tirones.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1441,6 +1504,7 @@
             <p>Seguro: agarre neutro y codo fijo mantienen el hombro quieto.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1493,6 +1557,7 @@
             <p>Seguro: hombros estables. Si la versión por encima de la cabeza te incomoda, quédate con una extensión a dos manos por delante.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1500,7 +1565,6 @@
       </div>
     </article>
 
-    <div class="reset-row"><button class="reset-btn" type="button" data-reset="C">Reiniciar Día C</button></div>
   </section>
 
   <!-- ===================== TRABAJO EN CASA ===================== -->
@@ -1508,6 +1572,7 @@
     <div class="sec-head"><h2>Trabajo en casa — Pared abdominal</h2><span class="ref">3 ejercicios · ~6 min · 3–4 días/semana</span></div>
     <p class="panel-note">Rutina para la sensación de "pared floja": entrena el transverso del abdomen, la faja natural que sujeta la tripa. Sin material de gimnasio, también en los días de descanso. La piel sobrante no se corrige con ejercicio, pero una pared firme por debajo cambia mucho la foto.</p>
     <div class="session-done" data-day="D">Pared completa por hoy — repítelo 3–4 veces esta semana</div>
+    <div class="reset-row"><button class="reset-btn" type="button" data-reset="D">Reiniciar sesión de casa</button></div>
 
     <div class="info warn" style="margin-bottom:22px;">
       <h3>Comprueba tu línea media antes de empezar</h3>
@@ -1566,6 +1631,7 @@
             <p>Sin ninguna implicación del hombro: apto incluso los días de molestias.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"></div>
             <span class="mono" style="font-size:13px; color:var(--muted);">Sin carga</span>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1626,6 +1692,7 @@
             <p>El brazo baja por detrás de la cabeza sin carga, un recorrido seguro. Si aun así notas molestia al final, baja el brazo solo hasta la vertical de la frente.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"></div>
             <span class="mono" style="font-size:13px; color:var(--muted);">Sin carga</span>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1687,6 +1754,7 @@
             <p>Apto: el brazo cuelga pegado al cuerpo en posición neutra, una de las más seguras para un hombro con inestabilidad anterior. Eso sí, no balancees el peso ni lo levantes con impulso.</p>
           </div>
           <footer class="card-foot">
+            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"></div>
             <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="—" aria-label="Peso usado en kg">&nbsp;kg</label>
             <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
           </footer>
@@ -1694,7 +1762,6 @@
       </div>
     </article>
 
-    <div class="reset-row"><button class="reset-btn" type="button" data-reset="D">Reiniciar sesión de casa</button></div>
   </section>
 
   <!-- ===================== PROGRESIÓN Y NUTRICIÓN ===================== -->
@@ -1756,6 +1823,7 @@
   var state = load();
   if(!state.done){ state.done = {}; }
   if(!state.kg){ state.kg = {}; }
+  if(!state.reps){ state.reps = {}; }
   if(["A","B","C","D"].indexOf(state.day) === -1){ state.day = "A"; }
 
   var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
@@ -1780,6 +1848,13 @@
     var input = card.querySelector(".kg input");
     if(input && state.kg[id] != null && input.value === ""){
       input.value = state.kg[id];
+    }
+    var repInputs = card.querySelectorAll(".rep");
+    if(repInputs.length && state.reps[id]){
+      Array.prototype.forEach.call(repInputs, function(inp){
+        var s = parseInt(inp.getAttribute("data-set"), 10);
+        if(inp.value === "" && state.reps[id][s] != null){ inp.value = state.reps[id][s]; }
+      });
     }
   }
 
@@ -1831,6 +1906,13 @@
         save(state);
       });
     }
+    Array.prototype.forEach.call(card.querySelectorAll(".rep"), function(inp){
+      inp.addEventListener("change", function(){
+        if(!state.reps[id]){ state.reps[id] = []; }
+        state.reps[id][parseInt(inp.getAttribute("data-set"), 10)] = inp.value;
+        save(state);
+      });
+    });
   });
 
   Array.prototype.slice.call(document.querySelectorAll(".reset-btn")).forEach(function(btn){
