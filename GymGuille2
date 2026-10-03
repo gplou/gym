@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Push Pull Pierna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  [hidden]{display:none!important}
+  body{margin:0;font-size:14px}
+
+  /* Layout: app de registro en una columna — cabecera fija con pestañas de día, tarjetas de ejercicio con registro por serie, calendario semanal al pie */
+  :root{
+    --bg:#14161b; --surface:#1d2026; --surface-2:#262a32; --input:#2d323c;
+    --line:#343a45; --line-soft:#272c35;
+    --fg:#f1eee8; --fg-soft:#a6abb6; --fg-dim:#6d737e;
+    --accent:#ef8a3b; --accent-ink:#1a1206; --accent-soft:rgba(239,138,59,.14);
+    --done:#56c07d; --done-soft:rgba(86,192,125,.16);
+    --warn:#e3b341;
+    --r:14px; --r-sm:9px;
+    --disp:"Barlow Condensed",Impact,sans-serif;
+    --body:"Barlow","Segoe UI",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+    color-scheme:dark;
+  }
+  @media (prefers-color-scheme:light){
+    :root:not([data-theme="dark"]){
+      --bg:#f2f0ea; --surface:#ffffff; --surface-2:#f4f1ea; --input:#ffffff;
+      --line:#e2ddd2; --line-soft:#ece7dc;
+      --fg:#21242a; --fg-soft:#5b616c; --fg-dim:#949aa4;
+      --accent:#d9731f; --accent-ink:#fff; --accent-soft:rgba(217,115,31,.12);
+      --done:#2f9c5a; --done-soft:rgba(47,156,90,.12);
+      --warn:#b4871a;
+      color-scheme:light;
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#f2f0ea; --surface:#ffffff; --surface-2:#f4f1ea; --input:#ffffff;
+    --line:#e2ddd2; --line-soft:#ece7dc;
+    --fg:#21242a; --fg-soft:#5b616c; --fg-dim:#949aa4;
+    --accent:#d9731f; --accent-ink:#fff; --accent-soft:rgba(217,115,31,.12);
+    --done:#2f9c5a; --done-soft:rgba(47,156,90,.12);
+    --warn:#b4871a;
+    color-scheme:light;
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.45;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:0 40px}
+
+  /* ---- header ---- */
+  header{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+    background:linear-gradient(var(--bg) 72%,transparent);
+    padding-top:18px;
+  }
+  .brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand h1{
+    font-family:var(--disp);font-weight:600;letter-spacing:.5px;
+    font-size:clamp(28px,8vw,40px);line-height:.95;margin:0;text-transform:uppercase;
+  }
+  .brand h1 .slash{color:var(--accent)}
+  .brand .sub{font-size:12.5px;color:var(--fg-dim);letter-spacing:.4px;margin-top:3px}
+  .theme-btn{
+    flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
+    background:var(--surface);color:var(--fg-soft);cursor:pointer;display:grid;place-items:center;
+  }
+  .theme-btn:hover{color:var(--accent);border-color:var(--accent)}
+  .theme-btn svg{width:18px;height:18px}
+
+  .tabs{display:flex;gap:6px;margin-top:16px;padding-bottom:12px}
+  .tab{
+    flex:1;border:1px solid var(--line);background:var(--surface);color:var(--fg-soft);
+    border-radius:var(--r-sm);padding:10px 4px 9px;cursor:pointer;text-align:center;
+    font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:17px;font-weight:600;
+    transition:background .12s,color .12s,border-color .12s;
+  }
+  .tab small{display:block;font-family:var(--body);text-transform:none;letter-spacing:0;
+    font-size:10px;font-weight:500;color:var(--fg-dim);margin-top:1px;line-height:1.2}
+  .tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .tab[aria-selected="true"] small{color:var(--accent-ink);opacity:.8}
+
+  /* ---- day meta ---- */
+  .day-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:6px 0 14px}
+  .day-head .focus{font-size:13px;color:var(--fg-soft)}
+  .progress{font-family:var(--mono);font-size:12px;color:var(--fg-dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .progress b{color:var(--accent)}
+
+  /* ---- exercise card ---- */
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+    margin-bottom:11px;overflow:hidden;transition:border-color .15s;
+  }
+  .card.done{border-color:var(--done)}
+  .card-head{display:flex;gap:12px;align-items:flex-start;padding:13px 14px}
+  .card-head .info{min-width:0;flex:1}
+  .ex-name{font-family:var(--disp);font-size:20px;font-weight:600;letter-spacing:.3px;line-height:1.05;text-wrap:balance}
+  .ex-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+  .pill{font-size:11px;font-family:var(--mono);color:var(--fg-soft);background:var(--surface-2);
+    border:1px solid var(--line-soft);border-radius:999px;padding:2px 8px;font-variant-numeric:tabular-nums}
+  .pill.zone{color:var(--accent);background:var(--accent-soft);border-color:transparent}
+  .pill.care{color:var(--warn)}
+  .last{font-size:11.5px;color:var(--fg-dim);margin-top:7px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .last b{color:var(--fg-soft);font-weight:600}
+
+  .check{
+    flex:none;width:34px;height:34px;border-radius:50%;cursor:pointer;
+    border:2px solid var(--line);background:transparent;color:transparent;
+    display:grid;place-items:center;transition:all .14s;
+  }
+  .check svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+  .check:hover{border-color:var(--done)}
+  .card.done .check{background:var(--done);border-color:var(--done);color:#0e1711}
+
+  /* ---- set log ---- */
+  .sets{border-top:1px solid var(--line-soft);padding:4px 14px 12px}
+  .set-row{display:grid;grid-template-columns:30px 1fr 1fr;gap:9px;align-items:center;padding-top:9px}
+  .set-row .n{font-family:var(--mono);font-size:12px;color:var(--fg-dim);text-align:center;font-variant-numeric:tabular-nums}
+  .field{position:relative}
+  .field input{
+    width:100%;background:var(--input);border:1px solid var(--line);border-radius:var(--r-sm);
+    color:var(--fg);font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;
+    padding:9px 34px 9px 11px;text-align:left;
+  }
+  .field input:focus{outline:none;border-color:var(--accent)}
+  .field input::placeholder{color:var(--fg-dim);opacity:.6}
+  .field .unit{position:absolute;right:10px;top:50%;transform:translateY(-50%);
+    font-size:11px;color:var(--fg-dim);font-family:var(--body);pointer-events:none}
+  .set-head{display:grid;grid-template-columns:30px 1fr 1fr;gap:9px;padding-top:9px}
+  .set-head span{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--fg-dim);text-align:center}
+  .set-head span:first-child{visibility:hidden}
+  .add-set{
+    margin-top:10px;width:100%;background:transparent;border:1px dashed var(--line);
+    color:var(--fg-soft);border-radius:var(--r-sm);padding:8px;cursor:pointer;
+    font-family:var(--body);font-size:13px;
+  }
+  .add-set:hover{border-color:var(--accent);color:var(--accent)}
+
+
+  /* ---- how-to ---- */
+  .howto{border-top:1px solid var(--line-soft)}
+  .howto summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+    padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.9px;color:var(--fg-soft);font-weight:600}
+  .howto summary::-webkit-details-marker{display:none}
+  .howto summary:hover{color:var(--accent)}
+  .howto summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .howto summary svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;transition:transform .15s}
+  .howto[open] summary svg{transform:rotate(180deg)}
+  .howto[open] summary{color:var(--accent)}
+  .howto-body{padding:0 14px 12px;display:grid;gap:12px}
+  .howto-sec h4{margin:0 0 6px;font-family:var(--disp);font-size:15px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--fg)}
+  .howto-sec ul{margin:0;padding-left:18px;display:grid;gap:5px}
+  .howto-sec li{font-size:13.5px;color:var(--fg-soft);line-height:1.5;max-width:65ch}
+  .howto-sec li::marker{color:var(--accent)}
+  @media (prefers-reduced-motion:reduce){.howto summary svg{transition:none}}
+
+
+  /* ---- rest ---- */
+  button.pill.rest{cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:var(--fg)}
+  button.pill.rest svg{width:12px;height:12px;fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linecap:round}
+  button.pill.rest:hover{border-color:var(--accent)}
+  button.pill.rest:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .rest-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface-2);
+    border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);overflow:hidden}
+  .rest-fill{position:absolute;left:0;top:0;height:3px;width:0;background:var(--accent);transition:width .25s linear}
+  .rest-bar.finished .rest-fill{background:var(--done)}
+  .rest-inner{max-width:560px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
+  .rest-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+  .rest-lbl{font-size:11px;color:var(--fg-dim);text-transform:uppercase;letter-spacing:.7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rest-time{font-family:var(--disp);font-size:30px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--fg)}
+  .rest-bar.finished .rest-time{color:var(--done);font-size:24px}
+  .rest-btn{flex:none;background:var(--surface);border:1px solid var(--line);color:var(--fg-soft);border-radius:var(--r-sm);
+    padding:9px 12px;cursor:pointer;font-family:var(--body);font-size:13px}
+  .rest-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .wrap{padding-bottom:110px}
+
+  /* ---- week tracker ---- */
+  .section-label{display:flex;align-items:center;gap:10px;margin:26px 0 12px}
+  .section-label h2{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:16px;font-weight:600;margin:0;color:var(--fg-soft)}
+  .section-label .rule{flex:1;height:1px;background:var(--line)}
+  .week{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px}
+  .week-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:13px}
+  .week-top h3{font-family:var(--disp);font-size:18px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin:0}
+  .week-top .count{font-family:var(--mono);font-size:12px;color:var(--fg-dim);font-variant-numeric:tabular-nums}
+  .week-top .count b{color:var(--accent);font-size:15px}
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+  .day-cell{aspect-ratio:1;border-radius:var(--r-sm);border:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    font-family:var(--disp);font-size:15px;font-weight:600;color:var(--fg-dim)}
+  .day-cell .dn{font-family:var(--mono);font-size:9px;font-weight:400;color:var(--fg-dim);font-variant-numeric:tabular-nums}
+  .day-cell.trained{background:var(--done-soft);border-color:var(--done);color:var(--done)}
+  .day-cell.trained .dn{color:var(--done);opacity:.75}
+  .day-cell.today{border-color:var(--accent)}
+  .hint{font-size:11.5px;color:var(--fg-dim);margin-top:12px;line-height:1.5}
+  .hint code{font-family:var(--mono);color:var(--fg-soft)}
+
+  footer{margin-top:22px;text-align:center}
+  .reset{background:transparent;border:1px solid var(--line);color:var(--fg-dim);
+    border-radius:var(--r-sm);padding:8px 16px;cursor:pointer;font-family:var(--body);font-size:12px}
+  .reset:hover{border-color:var(--warn);color:var(--warn)}
+  .foot-note{font-size:10.5px;color:var(--fg-dim);margin-top:14px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div>
+        <h1>Push<span class="slash">/</span>Pull<span class="slash">/</span>Pierna</h1>
+        <div class="sub">REGISTRO DE ENTRENO · 3 DÍAS / SEMANA</div>
+      </div>
+      <button class="theme-btn" id="themeBtn" aria-label="Cambiar tema"></button>
+    </div>
+    <div class="tabs" id="tabs" role="tablist"></div>
+  </header>
+
+  <div class="day-head">
+    <span class="focus" id="dayFocus"></span>
+    <span class="progress" id="dayProgress"></span>
+  </div>
+
+  <main id="exList"></main>
+
+  <div class="section-label"><h2>Esta semana</h2><span class="rule"></span></div>
+  <div class="week">
+    <div class="week-top">
+      <h3>Días entrenados</h3>
+      <span class="count"><b id="weekCount">0</b>/3 objetivo</span>
+    </div>
+    <div class="week-grid" id="weekGrid"></div>
+    <p class="hint">Un día cuenta como entrenado cuando marcas <code>✓</code> en al menos un ejercicio. Toca cada ejercicio para marcarlo y apunta peso y reps serie a serie. Toca el reloj de cada ejercicio al terminar una serie para lanzar el descanso. Todo se guarda en este dispositivo.</p>
+  </div>
+
+  <footer>
+    <button class="reset" id="resetBtn">Borrar todos los datos</button>
+    <p class="foot-note">El progreso vive solo en este navegador. Para no perderlo, usa siempre el mismo móvil. La mejora semana a semana (subir peso o reps sobre el "último") es lo que te hará crecer.</p>
+  </footer>
+</div>
+
+
+<div class="rest-bar" id="restBar" hidden>
+  <div class="rest-fill" id="restFill"></div>
+  <div class="rest-inner">
+    <div class="rest-txt"><span class="rest-lbl">Descanso · <span id="restName"></span></span><span class="rest-time" id="restTime">0:00</span></div>
+    <button class="rest-btn" id="restAdd">+30 s</button>
+    <button class="rest-btn" id="restStop" aria-label="Cerrar temporizador">✕</button>
+  </div>
+</div>
+
+<script>
+/* ---------------- datos de la rutina ---------------- */
+const PLAN = {
+  push:{ label:"Push", tab:"Pecho · Hombros · Tríceps", focus:"Pecho, hombros y tríceps",
+    ex:[
+      {id:"pu1",rest:180,name:"Press de pecho en máquina",zone:"Pecho",series:3,reps:"8–12",care:true,
+        setup:["Ajusta el asiento para que las asas queden a la altura de la mitad del pecho (línea de los pezones o un poco por debajo).",
+               "Si la máquina tiene ajuste de posición inicial, ponlo para que al empezar las asas estén justo delante del pecho y no por detrás.",
+               "Espalda bien apoyada en el respaldo y pies firmes en el suelo."],
+        how:["Antes de empujar, lleva los hombros hacia atrás y abajo y saca pecho. Mantén esa posición toda la serie.",
+             "Codos a unos 45–60° del torso. No los abras en cruz a 90°.",
+             "Empuja sin llegar a bloquear del todo los codos y baja en 2–3 segundos.",
+             "Para cuando las manos lleguen a la altura del pecho. Si los codos pasan por detrás de la línea del cuerpo, estás estresando la parte delantera del hombro."]},
+      {id:"pu2",rest:180,name:"Press inclinado con mancuernas",zone:"Pecho",series:3,reps:"8–12",care:true,
+        setup:["Banco a unos 30° (segundo o tercer agujero). Por encima de 45° el ejercicio pasa a ser casi de hombro.",
+               "Para subir las mancuernas, apóyalas en los muslos, túmbate y súbelas ayudándote con un pequeño empujón de las rodillas."],
+        how:["Agarre semineutro: palmas giradas unos 30–45° hacia ti en vez de mirando al frente. Es bastante más amable para un Bankart.",
+             "Omóplatos juntos y pegados al banco, pecho arriba.",
+             "Baja controlado hasta que los codos queden más o menos a la altura del torso. No busques un estiramiento máximo.",
+             "Sube en un arco suave hacia la línea del cuello, sin chocar las mancuernas arriba.",
+             "Al terminar, lleva las mancuernas al pecho y luego a los muslos. Nunca las dejes caer abiertas hacia los lados con los brazos estirados: es la posición de más riesgo para tu hombro."]},
+      {id:"pu3",rest:120,name:"Cruces en polea / pec deck",zone:"Pecho",series:3,reps:"12–15",care:true,
+        setup:["Polea: coloca las dos poleas a la altura del hombro o un poco por encima y da un paso adelante, con un pie delante del otro.",
+               "Pec deck: ajusta el asiento para que las asas queden a la altura del pecho. Si tiene ajuste de recorrido, ponlo para que los brazos no se abran por detrás de la línea del pecho."],
+        how:["Codos ligeramente flexionados y siempre igual de flexionados. Imagina que abrazas un árbol.",
+             "Junta las manos delante del pecho y aprieta 1 segundo.",
+             "Vuelve despacio y para cuando las manos estén a la altura del pecho, o un poco antes. No dejes que los brazos se vayan hacia atrás.",
+             "Ante cualquier sensación de inestabilidad, quítalo. Es opcional."]},
+      {id:"pu4",rest:150,name:"Press de hombro en máquina",zone:"Hombro",series:2,reps:"10–12",care:true,
+        setup:["Ajusta el asiento para que, sentado, las asas queden a la altura de los hombros o de la barbilla.",
+               "Si la máquina tiene agarre neutro (palmas enfrentadas), úsalo: carga menos la parte delantera del hombro."],
+        how:["Espalda pegada al respaldo, sin arquear la zona lumbar.",
+             "Empuja hacia arriba sin llegar a bloquear los codos.",
+             "Baja hasta que las manos estén más o menos a la altura de la barbilla, no más abajo.",
+             "Empieza ligero. Si notas molestia en la parte delantera del hombro, acorta el recorrido o quítalo."]},
+      {id:"pu5",rest:90,name:"Elevaciones laterales",zone:"Hombro",series:4,reps:"12–20",
+        setup:["Polea: ponla en la posición más baja y colócate de lado a ella. Agarra el asa con la mano del lado más alejado, con el cable pasando por delante del cuerpo. Si hay muñequera o tobillera, úsala en la muñeca.",
+               "Máquina: ajusta el asiento para que el eje de giro quede alineado con tu hombro y las almohadillas apoyen en la parte externa del brazo, cerca del codo."],
+        how:["Inclina el torso un poco hacia el lado contrario a la polea.",
+             "Sube llevando el codo hacia fuera: el codo guía y la mano lo sigue. Codo ligeramente flexionado.",
+             "Sube hasta la altura del hombro y no más.",
+             "No gires la mano como si vaciaras una jarra. Mantén la muñeca neutra.",
+             "Baja en 2–3 segundos, sin balanceo. Aquí el peso importa menos que hacerlo limpio."]},
+      {id:"pu6",rest:90,name:"Face pulls",zone:"Hombro",series:3,reps:"15–20",care:true,
+        setup:["Polea a la altura del pecho o del cuello (algo más baja de lo habitual, por tu hombro) y accesorio de cuerda.",
+               "Da uno o dos pasos atrás hasta que haya tensión con los brazos estirados."],
+        how:["Agarra la cuerda con los pulgares hacia ti.",
+             "Tira hacia la barbilla o el cuello separando los extremos de la cuerda, con los codos algo por debajo de la línea de los hombros.",
+             "Junta los omóplatos al final y aguanta 1 segundo.",
+             "Por tu Bankart, no termines con las manos por detrás de la cabeza ni fuerces el giro de los brazos hacia atrás. Para cuando las manos queden a los lados de la cara.",
+             "Peso ligero y controlado. Es un ejercicio de calidad, no de carga."]},
+      {id:"pu7",rest:120,name:"Pushdown en polea",zone:"Tríceps",series:3,reps:"10–15",
+        setup:["Polea en la posición más alta, con barra recta, barra en V o cuerda.",
+               "Ponte a un paso de la polea, con el torso ligeramente inclinado hacia delante."],
+        how:["Codos pegados a los costados y quietos: solo se mueven los antebrazos.",
+             "Extiende hasta estirar del todo y aprieta el tríceps abajo. Con cuerda, separa los extremos al final.",
+             "Sube hasta que el antebrazo quede más o menos paralelo al suelo, sin que los codos se vayan hacia delante."]},
+      {id:"pu8",rest:120,name:"Extensión sobre la cabeza",zone:"Tríceps",series:3,reps:"10–15",
+        setup:["Polea a la altura del pecho o un poco más baja, con cuerda.",
+               "Ponte de espaldas a la polea, con la cuerda por encima de la cabeza, y da una zancada hacia delante. Inclina el torso un poco hacia delante."],
+        how:["Codos apuntando al frente y cerca de la cabeza. No los abras hacia los lados.",
+             "Solo se mueven los antebrazos: estira hacia delante y arriba hasta extender del todo.",
+             "Vuelve despacio dejando que la cuerda vaya detrás de la cabeza hasta notar un buen estiramiento.",
+             "Abdomen firme para no arquear la espalda. Si el hombro molesta, inclina más el torso hacia delante para que el brazo no quede tan vertical."]},
+    ]},
+  pull:{ label:"Pull", tab:"Espalda · Bíceps", focus:"Espalda y bíceps",
+    ex:[
+      {id:"pl1",rest:150,name:"Jalón al pecho",zone:"Espalda",series:3,reps:"8–12",
+        setup:["Ajusta el rodillo para que te bloquee los muslos firmemente al sentarte.",
+               "Usa un agarre neutro (palmas enfrentadas), a la anchura de los hombros. Siempre al pecho, nunca por detrás de la nuca."],
+        how:["Saca pecho e inclínate hacia atrás unos 10–15°.",
+             "Empieza bajando los omóplatos (hombros lejos de las orejas) y luego tira llevando los codos hacia abajo y hacia los costados.",
+             "Lleva el agarre hasta la parte alta del pecho y aprieta la espalda 1 segundo.",
+             "Sube controlado hasta tener los brazos casi estirados, sin dejar que el peso te suba los hombros de golpe."]},
+      {id:"pl2",rest:150,name:"Remo en máquina con apoyo de pecho",zone:"Espalda",series:3,reps:"10–12",
+        setup:["Ajusta el asiento para que las asas queden a la altura de la parte baja del pecho.",
+               "Coloca el apoyo de pecho a una distancia en la que llegues a las asas con los brazos estirados y notes un ligero estiramiento en la espalda."],
+        how:["Pecho pegado al apoyo durante toda la serie. Si se despega, estás usando impulso.",
+             "Tira llevando los codos hacia atrás, cerca del cuerpo, y junta los omóplatos 1 segundo.",
+             "Vuelve despacio hasta estirar los brazos, dejando que los omóplatos se separen."]},
+      {id:"pl3",rest:120,name:"Remo en polea sentado",zone:"Espalda",series:3,reps:"10–12",
+        setup:["Asa de agarre neutro (en V o estrecha).",
+               "Pies en la plataforma, rodillas ligeramente flexionadas."],
+        how:["Espalda recta y torso casi vertical. Un balanceo pequeño está bien, pero no tires con la espalda baja.",
+             "Tira hacia el ombligo con los codos pegados al cuerpo y junta los omóplatos.",
+             "Al volver, estira los brazos y deja que los hombros vayan un poco hacia delante, sin redondear la zona lumbar."]},
+      {id:"pl4",rest:120,name:"Pull-over en polea",zone:"Espalda",series:3,reps:"12–15",
+        setup:["Polea en la posición más alta, con barra recta o cuerda.",
+               "Da dos pasos atrás e inclínate desde la cadera unos 30–45°, con las rodillas un poco flexionadas."],
+        how:["Brazos casi rectos y codos ligeramente flexionados, siempre igual.",
+             "Lleva la barra en arco hasta los muslos apretando los dorsales. No conviertas el ejercicio en un pushdown.",
+             "Vuelve hasta que los brazos queden más o menos a la altura de la cabeza y notes el estiramiento en la espalda. No hace falta pasar más allá."]},
+      {id:"pl5",rest:90,name:"Curl en polea a un brazo",zone:"Bíceps",series:3,reps:"10–12",
+        setup:["Polea en la posición más baja, con asa individual.",
+               "Ponte de cara a la polea, a un paso de distancia."],
+        how:["Codo pegado al costado y quieto.",
+             "Al subir, gira la palma hacia arriba (meñique hacia arriba al final) y aprieta el bíceps.",
+             "Baja despacio hasta casi estirar el brazo.",
+             "Empieza por el brazo más débil y haz las mismas repeticiones con el otro.",
+             "El descanso cuenta desde que terminas los dos brazos: mientras trabaja uno, el otro ya está descansando."]},
+      {id:"pl6",rest:120,name:"Curl martillo con mancuernas",zone:"Bíceps",series:3,reps:"10–12",
+        setup:["De pie, o sentado en un banco con el respaldo vertical para evitar balanceos.",
+               "Agarre neutro, con las palmas mirándose entre sí."],
+        how:["Codos pegados a los costados y quietos.",
+             "Sube hasta que el pulgar quede cerca del hombro, sin girar la muñeca.",
+             "Baja en 2–3 segundos. Puedes hacerlo a un brazo o alternando, como te resulte más cómodo."]},
+    ]},
+  pierna:{ label:"Pierna", tab:"Cuádriceps · Femoral · Gemelo", focus:"Tren inferior, todo en máquina",
+    ex:[
+      {id:"lg1",rest:180,name:"Prensa hack (hack squat)",zone:"Cuádriceps",series:3,reps:"8–12",
+        setup:["Ajusta las hombreras para que encajen bien sobre los hombros con la espalda totalmente apoyada.",
+               "Pies en el centro de la plataforma, a la anchura de la cadera, con las puntas un poco hacia fuera. Más abajo en la plataforma, más cuádriceps; más arriba, más glúteo."],
+        how:["Agarra las asas con las manos relajadas. No empujes con los brazos ni tenses los hombros.",
+             "Quita los seguros y baja controlado hasta que los muslos queden al menos paralelos a la plataforma, o más abajo si la espalda sigue pegada.",
+             "Las rodillas van en la misma dirección que las puntas de los pies.",
+             "Empuja con toda la planta del pie y no bloquees las rodillas arriba."]},
+      {id:"lg2",rest:180,name:"Prensa de pierna (leg press)",zone:"Cuádriceps",series:3,reps:"10–15",
+        setup:["Ajusta el respaldo para poder bajar bastante sin que el glúteo se despegue del asiento.",
+               "Pies a la anchura de los hombros, en el centro de la plataforma.",
+               "Comprueba dónde están los seguros antes de empezar."],
+        how:["Baja controlado hasta que las rodillas formen 90° o un poco más.",
+             "Si notas que la pelvis se levanta y la zona lumbar se redondea, has bajado demasiado.",
+             "Empuja con el talón y la mitad del pie, sin bloquear las rodillas arriba."]},
+      {id:"lg3",rest:120,name:"Extensión de cuádriceps",zone:"Cuádriceps",series:3,reps:"12–15",
+        setup:["Ajusta el respaldo para que la parte trasera de la rodilla quede justo en el borde del asiento y el eje de la máquina alineado con la rodilla.",
+               "Coloca el rodillo sobre la parte baja de la espinilla, justo por encima del tobillo."],
+        how:["Sujeta las asas laterales para que la cadera no se levante.",
+             "Sube hasta estirar la pierna y aprieta el cuádriceps 1 segundo arriba.",
+             "Baja en 2–3 segundos. No des patadas."]},
+      {id:"lg4",rest:120,name:"Curl femoral en máquina",zone:"Femoral",series:3,reps:"10–15",
+        setup:["Tumbado: las rodillas justo pasado el borde del banco, eje alineado con la rodilla y rodillo por encima del talón.",
+               "Sentado: eje alineado con la rodilla, rodillo detrás del tobillo y la almohadilla superior bien apretada sobre los muslos. Si tienes las dos, el sentado estira más el femoral y suele dar mejor resultado."],
+        how:["Cadera pegada al banco o al asiento durante toda la serie.",
+             "Flexiona la rodilla hasta el final y aprieta 1 segundo.",
+             "Baja despacio, en 2–3 segundos, hasta casi estirar la pierna."]},
+      {id:"lg5",rest:90,name:"Elevación de gemelo",zone:"Gemelo",series:4,reps:"12–20",
+        setup:["Apoya solo la parte delantera del pie (la zona bajo los dedos) en el borde, con los talones en el aire.",
+               "En la máquina de pie, ajusta las hombreras para empezar con las piernas casi estiradas. También puedes hacerlo en la prensa."],
+        how:["Baja hasta el máximo estiramiento y aguanta 1–2 segundos abajo, sin rebotar.",
+             "Sube todo lo alto que puedas, apretando 1 segundo arriba.",
+             "Piernas casi rectas: el movimiento es solo en el tobillo."]},
+    ]},
+};
+
+/* ---------------- estado / persistencia ---------------- */
+const KEY="ppl_tracker_v1";
+let state={entries:{},pref:null};
+try{const raw=localStorage.getItem(KEY);if(raw)state=Object.assign(state,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+function todayKey(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+const TODAY=todayKey();
+
+function entriesFor(id){return state.entries[id]||(state.entries[id]=[]);}
+function getToday(id,series){
+  const arr=entriesFor(id);
+  let e=arr.find(x=>x.date===TODAY);
+  if(!e){e={date:TODAY,done:false,sets:Array.from({length:series},()=>({w:"",r:""}))};arr.push(e);}
+  return e;
+}
+function lastBefore(id){
+  const arr=entriesFor(id).filter(x=>x.date!==TODAY && x.sets.some(s=>s.w||s.r));
+  arr.sort((a,b)=>a.date<b.date?1:-1);
+  return arr[0]||null;
+}
+function fmtDate(key){const[,m,d]=key.split("-");const M=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];return parseInt(d)+" "+M[parseInt(m)-1];}
+function topSet(e){
+  let best=null;
+  e.sets.forEach(s=>{const w=parseFloat(s.w);if(!isNaN(w)&&(!best||w>parseFloat(best.w)))best=s;});
+  return best;
+}
+
+/* ---------------- render ---------------- */
+let current="push";
+
+function buildTabs(){
+  const t=document.getElementById("tabs");t.innerHTML="";
+  Object.keys(PLAN).forEach(k=>{
+    const b=document.createElement("button");
+    b.className="tab";b.role="tab";b.setAttribute("aria-selected",k===current);
+    b.innerHTML=PLAN[k].label+"<small>"+PLAN[k].tab+"</small>";
+    b.onclick=()=>{current=k;buildTabs();renderDay();};
+    t.appendChild(b);
+  });
+}
+
+function renderDay(){
+  const day=PLAN[current];
+  document.getElementById("dayFocus").textContent=day.focus;
+  const list=document.getElementById("exList");list.innerHTML="";
+  day.ex.forEach(ex=>list.appendChild(card(ex)));
+  updateProgress();
+}
+
+function card(ex){
+  const e=getToday(ex.id,ex.series);
+  const el=document.createElement("article");
+  el.className="card"+(e.done?" done":"");
+  el.dataset.id=ex.id;
+
+  const head=document.createElement("div");head.className="card-head";
+  const info=document.createElement("div");info.className="info";
+  const last=lastBefore(ex.id);
+  const ts=last?topSet(last):null;
+  info.innerHTML=
+    '<div class="ex-name">'+ex.name+'</div>'+
+    '<div class="ex-meta">'+
+      '<span class="pill zone">'+ex.zone+'</span>'+
+      '<span class="pill">'+ex.series+' × '+ex.reps+'</span>'+
+      '<button class="pill rest" data-rest="'+ex.rest+'" aria-label="Iniciar descanso de '+fmtRest(ex.rest)+'"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg>'+fmtRest(ex.rest)+'</button>'+
+      (ex.care?'<span class="pill care">cuida el rango</span>':'')+
+    '</div>'+
+    '<div class="last">'+(last
+        ? 'Último ('+fmtDate(last.date)+') · <b>'+(ts&&ts.w?ts.w+' kg':'—')+(ts&&ts.r?' × '+ts.r:'')+'</b>'
+        : 'Primera vez — marca tu referencia')+'</div>';
+  info.querySelector(".rest").onclick=()=>startRest(ex.rest,ex.name);
+  const chk=document.createElement("button");
+  chk.className="check";chk.setAttribute("aria-label","Marcar como hecho");
+  chk.innerHTML='<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+  chk.onclick=()=>{e.done=!e.done;el.classList.toggle("done",e.done);save();updateProgress();renderWeek();};
+  head.appendChild(info);head.appendChild(chk);
+
+  const sets=document.createElement("div");sets.className="sets";
+  const sh=document.createElement("div");sh.className="set-head";
+  sh.innerHTML="<span>Serie</span><span>Peso</span><span>Reps</span>";
+  sets.appendChild(sh);
+  const rowsWrap=document.createElement("div");
+  e.sets.forEach((s,i)=>rowsWrap.appendChild(setRow(e,s,i)));
+  sets.appendChild(rowsWrap);
+  const add=document.createElement("button");add.className="add-set";add.textContent="+ añadir serie";
+  add.onclick=()=>{const s={w:"",r:""};e.sets.push(s);rowsWrap.appendChild(setRow(e,s,e.sets.length-1));save();};
+  sets.appendChild(add);
+
+  const det=document.createElement("details");det.className="howto";
+  det.innerHTML='<summary><span>Cómo hacerlo</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>'+
+    '<div class="howto-body">'+
+      '<div class="howto-sec"><h4>Configuración</h4><ul>'+ex.setup.map(t=>'<li>'+t+'</li>').join('')+'</ul></div>'+
+      '<div class="howto-sec"><h4>Ejecución</h4><ul>'+ex.how.map(t=>'<li>'+t+'</li>').join('')+'</ul></div>'+
+    '</div>';
+  el.appendChild(head);el.appendChild(det);el.appendChild(sets);
+  return el;
+}
+
+function setRow(entry,s,i){
+  const row=document.createElement("div");row.className="set-row";
+  const n=document.createElement("div");n.className="n";n.textContent=i+1;
+  const fw=document.createElement("div");fw.className="field";
+  const iw=document.createElement("input");iw.type="number";iw.step="0.5";iw.min="0";iw.inputMode="decimal";
+  iw.placeholder="–";iw.value=s.w;iw.setAttribute("aria-label","Peso serie "+(i+1));
+  iw.oninput=()=>{s.w=iw.value;save();};
+  const uw=document.createElement("span");uw.className="unit";uw.textContent="kg";
+  fw.appendChild(iw);fw.appendChild(uw);
+  const fr=document.createElement("div");fr.className="field";
+  const ir=document.createElement("input");ir.type="number";ir.step="1";ir.min="0";ir.inputMode="numeric";
+  ir.placeholder="–";ir.value=s.r;ir.setAttribute("aria-label","Reps serie "+(i+1));
+  ir.oninput=()=>{s.r=ir.value;save();};
+  const ur=document.createElement("span");ur.className="unit";ur.textContent="reps";
+  fr.appendChild(ir);fr.appendChild(ur);
+  row.appendChild(n);row.appendChild(fw);row.appendChild(fr);
+  return row;
+}
+
+function updateProgress(){
+  const day=PLAN[current];
+  let done=0;
+  day.ex.forEach(ex=>{const e=(state.entries[ex.id]||[]).find(x=>x.date===TODAY);if(e&&e.done)done++;});
+  document.getElementById("dayProgress").innerHTML="Hoy · <b>"+done+"</b>/"+day.ex.length+" hechos";
+}
+
+/* ---------------- semana ---------------- */
+function trainedDates(){
+  const set=new Set();
+  Object.values(state.entries).forEach(arr=>arr.forEach(e=>{if(e.done)set.add(e.date);}));
+  return set;
+}
+function renderWeek(){
+  const grid=document.getElementById("weekGrid");grid.innerHTML="";
+  const trained=trainedDates();
+  const now=new Date();
+  const dow=(now.getDay()+6)%7; // lunes=0
+  const monday=new Date(now);monday.setDate(now.getDate()-dow);
+  const labels=["L","M","X","J","V","S","D"];
+  let count=0;
+  for(let i=0;i<7;i++){
+    const d=new Date(monday);d.setDate(monday.getDate()+i);
+    const key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    const cell=document.createElement("div");cell.className="day-cell";
+    cell.innerHTML=labels[i]+'<span class="dn">'+d.getDate()+'</span>';
+    if(trained.has(key)){cell.classList.add("trained");count++;}
+    if(key===TODAY)cell.classList.add("today");
+    grid.appendChild(cell);
+  }
+  document.getElementById("weekCount").textContent=count;
+}
+
+/* ---------------- tema ---------------- */
+const SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/></svg>';
+const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>';
+function applyTheme(){
+  const btn=document.getElementById("themeBtn");
+  if(state.pref==="light"){document.documentElement.setAttribute("data-theme","light");btn.innerHTML=MOON;}
+  else if(state.pref==="dark"){document.documentElement.setAttribute("data-theme","dark");btn.innerHTML=SUN;}
+  else{document.documentElement.removeAttribute("data-theme");
+    const dark=window.matchMedia("(prefers-color-scheme:dark)").matches;btn.innerHTML=dark?SUN:MOON;}
+}
+document.getElementById("themeBtn").onclick=()=>{
+  const dark=state.pref? state.pref==="dark" : window.matchMedia("(prefers-color-scheme:dark)").matches;
+  state.pref=dark?"light":"dark";save();applyTheme();
+};
+
+document.getElementById("resetBtn").onclick=()=>{
+  const b=document.getElementById("resetBtn");
+  if(b.dataset.armed){state.entries={};save();renderDay();renderWeek();b.textContent="Borrar todos los datos";delete b.dataset.armed;}
+  else{b.dataset.armed="1";b.textContent="Toca de nuevo para confirmar";setTimeout(()=>{if(b.dataset.armed){b.textContent="Borrar todos los datos";delete b.dataset.armed;}},3500);}
+};
+
+
+/* ---------------- descanso ---------------- */
+function fmtRest(s){const m=Math.floor(s/60),r=s%60;return m+":"+String(r).padStart(2,"0");}
+let restTimer=null,restEnd=0,restTotal=0;
+function startRest(sec,name){
+  restTotal=sec;restEnd=Date.now()+sec*1000;
+  const bar=document.getElementById("restBar");
+  document.getElementById("restName").textContent=name;
+  bar.hidden=false;bar.classList.remove("finished");
+  clearInterval(restTimer);tickRest();restTimer=setInterval(tickRest,250);
+}
+function tickRest(){
+  const left=Math.max(0,Math.round((restEnd-Date.now())/1000));
+  document.getElementById("restTime").textContent=fmtRest(left);
+  document.getElementById("restFill").style.width=(100*(1-left/restTotal))+"%";
+  if(left<=0){clearInterval(restTimer);const bar=document.getElementById("restBar");bar.classList.add("finished");
+    document.getElementById("restTime").textContent="¡A por la serie!";
+    try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(e){}}
+}
+document.getElementById("restAdd").onclick=()=>{restEnd+=30000;restTotal+=30;document.getElementById("restBar").classList.remove("finished");clearInterval(restTimer);tickRest();restTimer=setInterval(tickRest,250);};
+document.getElementById("restStop").onclick=()=>{clearInterval(restTimer);document.getElementById("restBar").hidden=true;};
+
+/* ---------------- init ---------------- */
+applyTheme();
+buildTabs();
+renderDay();
+renderWeek();
+</script>
+</body>
+</html>
