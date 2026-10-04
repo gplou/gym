@@ -1,1934 +1,672 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="only light">
-<title>Recomposición · Tren superior</title>
-<meta name="description" content="Plan de recomposición corporal de tren superior: 3 días por semana (rotación A · B · C), con máquinas y poleas y el hombro protegido (lesión de Bankart).">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<title>Full Body A·B·C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
+  [hidden]{display:none!important}
+  body{margin:0;font-size:14px}
+
+  /* Layout: app de registro en una columna — cabecera fija con pestañas de día, tarjetas de ejercicio con registro por serie, calendario semanal al pie */
   :root{
-    color-scheme: only light;
-    --paper:#F3F5F6;
-    --grid:#DAE3E9;
-    --card:#FCFDFD;
-    --ink:#1C2B3A;
-    --muted:#5C6B7A;
-    --line:#C7D2DA;
-    --warn:#C8401F;
-    --warn-bg:#FBEEEA;
-    --ok:#157A53;
-    --ok-bg:#E9F5EF;
-    --radius:10px;
-    --display:"Barlow Condensed", "Arial Narrow", sans-serif;
-    --body:"Barlow", system-ui, sans-serif;
-    --mono:"IBM Plex Mono", ui-monospace, monospace;
+    --bg:#14161b; --surface:#1d2026; --surface-2:#262a32; --input:#2d323c;
+    --line:#343a45; --line-soft:#272c35;
+    --fg:#f1eee8; --fg-soft:#a6abb6; --fg-dim:#6d737e;
+    --accent:#ef8a3b; --accent-ink:#1a1206; --accent-soft:rgba(239,138,59,.14);
+    --done:#56c07d; --done-soft:rgba(86,192,125,.16);
+    --warn:#e3b341;
+    --r:14px; --r-sm:9px;
+    --disp:"Barlow Condensed",Impact,sans-serif;
+    --body:"Barlow","Segoe UI",system-ui,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+    color-scheme:dark;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%;}
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    *{transition:none !important; animation:none !important;}
+  @media (prefers-color-scheme:light){
+    :root:not([data-theme="dark"]){
+      --bg:#f2f0ea; --surface:#ffffff; --surface-2:#f4f1ea; --input:#ffffff;
+      --line:#e2ddd2; --line-soft:#ece7dc;
+      --fg:#21242a; --fg-soft:#5b616c; --fg-dim:#949aa4;
+      --accent:#d9731f; --accent-ink:#fff; --accent-soft:rgba(217,115,31,.12);
+      --done:#2f9c5a; --done-soft:rgba(47,156,90,.12);
+      --warn:#b4871a;
+      color-scheme:light;
+    }
   }
-  body{
-    font-family:var(--body);
-    color:var(--ink);
-    background-color:var(--paper);
-    background-image:
-      linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size:28px 28px;
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+  :root[data-theme="light"]{
+    --bg:#f2f0ea; --surface:#ffffff; --surface-2:#f4f1ea; --input:#ffffff;
+    --line:#e2ddd2; --line-soft:#ece7dc;
+    --fg:#21242a; --fg-soft:#5b616c; --fg-dim:#949aa4;
+    --accent:#d9731f; --accent-ink:#fff; --accent-soft:rgba(217,115,31,.12);
+    --done:#2f9c5a; --done-soft:rgba(47,156,90,.12);
+    --warn:#b4871a;
+    color-scheme:light;
   }
-  a{color:inherit;}
-  .wrap{max-width:920px; margin:0 auto; padding:0 16px; padding-left:max(16px, env(safe-area-inset-left)); padding-right:max(16px, env(safe-area-inset-right));}
 
-  /* ---------- Cabecera ---------- */
-  .masthead{padding:34px 0 18px; border-bottom:3px solid var(--ink);}
-  .kicker{
-    font-family:var(--mono); font-size:12px; letter-spacing:.12em;
-    text-transform:uppercase; color:var(--muted);
-  }
-  h1{
-    font-family:var(--display); font-weight:700; text-transform:uppercase;
-    font-size:clamp(40px, 8vw, 72px); line-height:.95; letter-spacing:.01em;
-    margin:8px 0 10px;
-  }
-  h1 .thin{color:var(--warn);}
-  .lead{max-width:620px; color:var(--muted); font-size:16px;}
-  .specs{
-    display:flex; flex-wrap:wrap; gap:8px 18px; margin-top:16px;
-    font-family:var(--mono); font-size:13px;
-  }
-  .specs span{display:inline-flex; align-items:center; gap:7px;}
-  .specs b{font-weight:600;}
-  .dot{width:8px; height:8px; border-radius:50%; background:var(--ink); display:inline-block;}
+  *{box-sizing:border-box}
+  body{background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.45;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:560px;margin:0 auto;padding-inline:16px;padding-block:0 40px}
 
-  /* ---------- Barra fija: pestañas + progreso ---------- */
-  .controls{
-    position:sticky; top:0; z-index:50;
-    background:var(--paper);
-    border-bottom:1.5px solid var(--ink);
-    box-shadow:0 6px 14px -12px rgba(28,43,58,.45);
-    padding-top:env(safe-area-inset-top);
+  /* ---- header ---- */
+  header{
+    position:sticky;top:env(safe-area-inset-top,0px);z-index:20;
+    background:linear-gradient(var(--bg) 72%,transparent);
+    padding-top:18px;
   }
-  .controls .wrap{
-    display:flex; align-items:center; justify-content:space-between;
-    gap:12px; padding-top:10px; padding-bottom:10px;
+  .brand{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand h1{
+    font-family:var(--disp);font-weight:600;letter-spacing:.5px;
+    font-size:clamp(28px,8vw,40px);line-height:.95;margin:0;text-transform:uppercase;
   }
-  .tabs{display:flex; gap:8px;}
+  .brand h1 .slash{color:var(--accent)}
+  .brand .sub{font-size:12.5px;color:var(--fg-dim);letter-spacing:.4px;margin-top:3px}
+  .theme-btn{
+    flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
+    background:var(--surface);color:var(--fg-soft);cursor:pointer;display:grid;place-items:center;
+  }
+  .theme-btn:hover{color:var(--accent);border-color:var(--accent)}
+  .theme-btn svg{width:18px;height:18px}
+
+  .tabs{display:flex;gap:6px;margin-top:16px;padding-bottom:12px}
   .tab{
-    font-family:var(--display); font-size:20px; font-weight:700;
-    text-transform:uppercase; letter-spacing:.04em;
-    border:2px solid var(--ink); background:transparent; color:var(--ink);
-    border-radius:8px; padding:6px 18px; cursor:pointer;
-    min-height:44px; display:inline-flex; align-items:center; justify-content:center;
-    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
-    transition:background .15s, color .15s;
+    flex:1;border:1px solid var(--line);background:var(--surface);color:var(--fg-soft);
+    border-radius:var(--r-sm);padding:10px 4px 9px;cursor:pointer;text-align:center;
+    font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:17px;font-weight:600;
+    transition:background .12s,color .12s,border-color .12s;
   }
-  .tab[aria-selected="true"]{background:var(--ink); color:var(--card);}
-  .tab:focus-visible, button:focus-visible, input:focus-visible{
-    outline:3px solid var(--warn); outline-offset:2px;
-  }
-  .progress{display:flex; align-items:center; gap:12px;}
-  .progress-label{font-family:var(--mono); font-size:13px; white-space:nowrap;}
-  /* Barra cargable: una "barra" en la que se van añadiendo discos */
-  .barbell{display:flex; align-items:center; height:34px;}
-  .bar-end{width:14px; height:5px; background:var(--ink); border-radius:2px;}
-  .sleeve{
-    display:flex; align-items:center; gap:3px; padding:0 4px;
-    height:5px; background:var(--ink); min-width:120px; justify-content:center;
-  }
-  .plate{
-    width:13px; height:30px; border-radius:4px;
-    border:2px dashed var(--muted); background:transparent;
-    transition:background .2s, border-color .2s, transform .2s;
-  }
-  .plate.full{background:var(--ink); border:2px solid var(--ink);}
-  .plate.full.ok{background:var(--ok); border-color:var(--ok);}
+  .tab small{display:block;font-family:var(--body);text-transform:none;letter-spacing:0;
+    font-size:10px;font-weight:500;color:var(--fg-dim);margin-top:1px;line-height:1.2}
+  .tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .tab[aria-selected="true"] small{color:var(--accent-ink);opacity:.8}
 
-  /* ---------- Secciones ---------- */
-  section{padding:34px 0 6px;}
-  .sec-head{display:flex; align-items:baseline; gap:12px; margin-bottom:14px;}
-  .sec-head h2{
-    font-family:var(--display); font-weight:700; text-transform:uppercase;
-    font-size:clamp(26px, 4.5vw, 36px); letter-spacing:.02em;
-  }
-  .sec-head .ref{font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:.1em;}
-  .panel-note{color:var(--muted); margin:-6px 0 18px; max-width:640px;}
-  .opt{font-weight:400; color:var(--muted); font-size:.82em;}
+  /* ---- day meta ---- */
+  .day-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:6px 0 14px}
+  .day-head .focus{font-size:13px;color:var(--fg-soft)}
+  .progress{font-family:var(--mono);font-size:12px;color:var(--fg-dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .progress b{color:var(--accent)}
 
-  /* ---------- Tarjeta de ejercicio (ficha) ---------- */
+  /* ---- exercise card ---- */
   .card{
-    position:relative;
-    background:var(--card);
-    border:1.5px solid var(--ink);
-    border-radius:var(--radius);
-    box-shadow:4px 4px 0 rgba(28,43,58,.16);
-    margin-bottom:26px;
-    overflow:hidden;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+    margin-bottom:11px;overflow:hidden;transition:border-color .15s;
   }
-  .card-head{
-    display:flex; align-items:center; gap:14px;
-    padding:14px 18px; border-bottom:1.5px solid var(--ink);
-  }
-  .mtag{
-    font-family:var(--mono); font-weight:600; font-size:13px;
-    border:1.5px solid var(--ink); border-radius:6px; padding:4px 8px;
-    background:var(--paper); white-space:nowrap;
-  }
-  .card-head h3{
-    font-family:var(--display); font-weight:700; text-transform:uppercase;
-    font-size:clamp(22px, 4vw, 28px); line-height:1.05; letter-spacing:.02em;
-  }
-  .muscles{font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:3px;}
+  .card.done{border-color:var(--done)}
+  .card-head{display:flex;gap:12px;align-items:flex-start;padding:13px 14px}
+  .card-head .info{min-width:0;flex:1}
+  .ex-name{font-family:var(--disp);font-size:20px;font-weight:600;letter-spacing:.3px;line-height:1.05;text-wrap:balance}
+  .ex-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+  .pill{font-size:11px;font-family:var(--mono);color:var(--fg-soft);background:var(--surface-2);
+    border:1px solid var(--line-soft);border-radius:999px;padding:2px 8px;font-variant-numeric:tabular-nums}
+  .pill.zone{color:var(--accent);background:var(--accent-soft);border-color:transparent}
+  .pill.care{color:var(--warn)}
+  .last{font-size:11.5px;color:var(--fg-dim);margin-top:7px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .last b{color:var(--fg-soft);font-weight:600}
 
-  .card-grid{display:grid; grid-template-columns:300px 1fr;}
-  @media (max-width:720px){ .card-grid{grid-template-columns:1fr;} }
+  .check{
+    flex:none;width:34px;height:34px;border-radius:50%;cursor:pointer;
+    border:2px solid var(--line);background:transparent;color:transparent;
+    display:grid;place-items:center;transition:all .14s;
+  }
+  .check svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+  .check:hover{border-color:var(--done)}
+  .card.done .check{background:var(--done);border-color:var(--done);color:#0e1711}
 
-  .figure{
-    border-right:1.5px dashed var(--line);
-    padding:18px 16px 12px; text-align:center;
-    background:
-      linear-gradient(var(--grid) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size:14px 14px; background-color:#F7FAFB;
+  /* ---- set log ---- */
+  .sets{border-top:1px solid var(--line-soft);padding:4px 14px 12px}
+  .set-row{display:grid;grid-template-columns:30px 1fr 1fr;gap:9px;align-items:center;padding-top:9px}
+  .set-row .n{font-family:var(--mono);font-size:12px;color:var(--fg-dim);text-align:center;font-variant-numeric:tabular-nums}
+  .field{position:relative}
+  .field input{
+    width:100%;background:var(--input);border:1px solid var(--line);border-radius:var(--r-sm);
+    color:var(--fg);font-family:var(--mono);font-size:15px;font-variant-numeric:tabular-nums;
+    padding:9px 34px 9px 11px;text-align:left;
   }
-  @media (max-width:720px){ .figure{border-right:none; border-bottom:1.5px dashed var(--line);} }
-  .figure svg{width:100%; max-width:280px; height:auto; display:block; margin:0 auto;}
-  .figure .caption{
-    font-family:var(--mono); font-size:11.5px; color:var(--muted);
-    margin-top:8px; line-height:1.45;
+  .field input:focus{outline:none;border-color:var(--accent)}
+  .field input::placeholder{color:var(--fg-dim);opacity:.6}
+  .field .unit{position:absolute;right:10px;top:50%;transform:translateY(-50%);
+    font-size:11px;color:var(--fg-dim);font-family:var(--body);pointer-events:none}
+  .set-head{display:grid;grid-template-columns:30px 1fr 1fr;gap:9px;padding-top:9px}
+  .set-row.single,.set-head.single{grid-template-columns:30px 1fr}
+  .set-head span{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--fg-dim);text-align:center}
+  .set-head span:first-child{visibility:hidden}
+  .add-set{
+    margin-top:10px;width:100%;background:transparent;border:1px dashed var(--line);
+    color:var(--fg-soft);border-radius:var(--r-sm);padding:8px;cursor:pointer;
+    font-family:var(--body);font-size:13px;
   }
-  /* Trazos de las ilustraciones */
-  .m{stroke:var(--ink); stroke-width:3; fill:none; stroke-linecap:round; stroke-linejoin:round;}
-  .m-thin{stroke:var(--ink); stroke-width:1.6; fill:none; stroke-linecap:round;}
-  .m-fill{fill:var(--ink); stroke:none;}
-  .mv{stroke:var(--warn); stroke-width:3.4; fill:none; stroke-linecap:round; stroke-linejoin:round;}
-  .m-dash{stroke:var(--muted); stroke-width:1.6; fill:none; stroke-dasharray:4 5; stroke-linecap:round;}
+  .add-set:hover{border-color:var(--accent);color:var(--accent)}
 
-  .card-body{padding:16px 18px 18px;}
-  .meta{
-    list-style:none; display:grid; grid-template-columns:repeat(4, 1fr);
-    gap:8px; margin-bottom:16px;
-  }
-  @media (max-width:480px){ .meta{grid-template-columns:repeat(2, 1fr);} }
-  .meta li{
-    border:1.5px solid var(--line); border-radius:8px; padding:8px 10px;
-    background:var(--paper); text-align:center;
-  }
-  .meta span{
-    display:block; font-family:var(--mono); font-size:10.5px;
-    letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
-  }
-  .meta strong{font-family:var(--mono); font-size:16px; font-weight:600;}
 
-  .block{margin-bottom:14px;}
-  .block h4{
-    font-family:var(--display); text-transform:uppercase; font-weight:700;
-    font-size:17px; letter-spacing:.05em; margin-bottom:6px;
-  }
-  .block ol{padding-left:22px;}
-  .block ol li{margin-bottom:5px;}
-  .block ul{padding-left:20px;}
-  .block ul li{margin-bottom:4px;}
-  .block li::marker{color:var(--warn); font-family:var(--mono); font-weight:600;}
+  /* ---- how-to ---- */
+  .howto{border-top:1px solid var(--line-soft)}
+  .howto summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+    padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.9px;color:var(--fg-soft);font-weight:600}
+  .howto summary::-webkit-details-marker{display:none}
+  .howto summary:hover{color:var(--accent)}
+  .howto summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .howto summary svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;transition:transform .15s}
+  .howto[open] summary svg{transform:rotate(180deg)}
+  .howto[open] summary{color:var(--accent)}
+  .howto-body{padding:0 14px 12px;display:grid;gap:12px}
+  .howto-sec h4{margin:0 0 6px;font-family:var(--disp);font-size:15px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--fg)}
+  .howto-sec ul{margin:0;padding-left:18px;display:grid;gap:5px}
+  .howto-sec li{font-size:13.5px;color:var(--fg-soft);line-height:1.5;max-width:65ch}
+  .howto-sec li::marker{color:var(--accent)}
+  @media (prefers-reduced-motion:reduce){.howto summary svg{transition:none}}
 
-  .bankart{
-    border:1.5px solid var(--warn); background:var(--warn-bg);
-    border-radius:8px; padding:12px 14px; margin-bottom:16px;
-  }
-  .bankart h4{
-    font-family:var(--mono); font-size:12px; letter-spacing:.1em;
-    text-transform:uppercase; color:var(--warn); margin-bottom:5px;
-  }
-  .bankart p{font-size:14.5px;}
 
-  .card-foot{
-    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
-    gap:12px; border-top:1.5px dashed var(--line); padding-top:14px;
-  }
-  .kg{display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:13px;}
-  .kg input{
-    width:96px; padding:10px 10px; font-family:var(--mono); font-size:16px; min-height:44px;
-    border:1.5px solid var(--ink); border-radius:7px; background:var(--paper);
-    color:var(--ink);
-  }
-  .sets{display:flex; align-items:center; gap:6px; flex-wrap:wrap; flex-basis:100%; margin:0 0 2px;}
-  .sets-label{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-right:2px;}
-  .rep{width:3.5em; padding:9px 4px; text-align:center; font-family:var(--mono); font-size:16px; min-height:44px; border:1.5px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink); -webkit-appearance:none; appearance:none;}
-  .rep:focus{outline:none; border-color:var(--ink);}
-  .done-btn{
-    font-family:var(--display); font-size:18px; font-weight:700;
-    text-transform:uppercase; letter-spacing:.05em;
-    border:2px solid var(--ink); background:var(--ink); color:var(--card);
-    border-radius:8px; padding:9px 20px; cursor:pointer;
-    min-height:44px; display:inline-flex; align-items:center; justify-content:center;
-    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
-    transition:background .15s, border-color .15s;
-  }
-  .done-btn:hover{background:#2c4257;}
-  .card.is-done{border-color:var(--ok); box-shadow:4px 4px 0 rgba(21,122,83,.22);}
-  .card.is-done .card-head{border-bottom-color:var(--ok);}
-  .card.is-done .done-btn{background:var(--ok-bg); color:var(--ok); border-color:var(--ok);}
-  .stamp{
-    position:absolute; top:14px; right:-6px; transform:rotate(8deg);
-    font-family:var(--display); font-weight:700; font-size:26px;
-    text-transform:uppercase; letter-spacing:.1em;
-    color:var(--ok); border:3px solid var(--ok); border-radius:8px;
-    padding:2px 14px; background:var(--ok-bg);
-    display:none; pointer-events:none;
-  }
-  .card.is-done .stamp{display:block;}
+  /* ---- rest ---- */
+  button.pill.rest{cursor:pointer;display:inline-flex;align-items:center;gap:4px;color:var(--fg)}
+  button.pill.rest svg{width:12px;height:12px;fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linecap:round}
+  button.pill.rest:hover{border-color:var(--accent)}
+  button.pill.rest:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .rest-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface-2);
+    border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);overflow:hidden}
+  .rest-fill{position:absolute;left:0;top:0;height:3px;width:0;background:var(--accent);transition:width .25s linear}
+  .rest-bar.finished .rest-fill{background:var(--done)}
+  .rest-inner{max-width:560px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:10px}
+  .rest-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+  .rest-lbl{font-size:11px;color:var(--fg-dim);text-transform:uppercase;letter-spacing:.7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rest-time{font-family:var(--disp);font-size:30px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--fg)}
+  .rest-bar.finished .rest-time{color:var(--done);font-size:24px}
+  .rest-btn{flex:none;background:var(--surface);border:1px solid var(--line);color:var(--fg-soft);border-radius:var(--r-sm);
+    padding:9px 12px;cursor:pointer;font-family:var(--body);font-size:13px}
+  .rest-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .wrap{padding-bottom:110px}
 
-  .session-done{
-    display:none; border:2px solid var(--ok); background:var(--ok-bg);
-    color:var(--ok); border-radius:var(--radius); padding:16px 18px;
-    font-family:var(--display); text-transform:uppercase; font-weight:700;
-    font-size:22px; letter-spacing:.04em; text-align:center; margin-bottom:26px;
-  }
-  .session-done.show{display:block;}
-  .reset-row{display:flex; justify-content:flex-end; margin-bottom:40px;}
-  .reset-btn{
-    font-family:var(--mono); font-size:12.5px; letter-spacing:.06em;
-    background:transparent; border:1.5px solid var(--muted); color:var(--muted);
-    border-radius:7px; padding:10px 16px; cursor:pointer;
-    min-height:44px; touch-action:manipulation; -webkit-tap-highlight-color:transparent;
-  }
-  .reset-btn:hover{border-color:var(--ink); color:var(--ink);}
+  /* ---- week tracker ---- */
+  .section-label{display:flex;align-items:center;gap:10px;margin:26px 0 12px}
+  .section-label h2{font-family:var(--disp);text-transform:uppercase;letter-spacing:1px;font-size:16px;font-weight:600;margin:0;color:var(--fg-soft)}
+  .section-label .rule{flex:1;height:1px;background:var(--line)}
+  .week{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 14px}
+  .week-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:13px}
+  .week-top h3{font-family:var(--disp);font-size:18px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin:0}
+  .week-top .count{font-family:var(--mono);font-size:12px;color:var(--fg-dim);font-variant-numeric:tabular-nums}
+  .week-top .count b{color:var(--accent);font-size:15px}
+  .week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+  .day-cell{aspect-ratio:1;border-radius:var(--r-sm);border:1px solid var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    font-family:var(--disp);font-size:15px;font-weight:600;color:var(--fg-dim)}
+  .day-cell .dn{font-family:var(--mono);font-size:9px;font-weight:400;color:var(--fg-dim);font-variant-numeric:tabular-nums}
+  .day-cell.trained{background:var(--done-soft);border-color:var(--done);color:var(--done)}
+  .day-cell.trained .dn{color:var(--done);opacity:.75}
+  .day-cell.today{border-color:var(--accent)}
+  .hint{font-size:11.5px;color:var(--fg-dim);margin-top:12px;line-height:1.5}
+  .hint code{font-family:var(--mono);color:var(--fg-soft)}
 
-  /* ---------- Bloques informativos ---------- */
-  .info-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
-  @media (max-width:720px){ .info-grid{grid-template-columns:1fr;} }
-  .info{
-    background:var(--card); border:1.5px solid var(--ink); border-radius:var(--radius);
-    box-shadow:4px 4px 0 rgba(28,43,58,.16); padding:18px;
-  }
-  .info h3{
-    font-family:var(--display); text-transform:uppercase; font-weight:700;
-    font-size:22px; letter-spacing:.03em; margin-bottom:8px;
-  }
-  .info ul{padding-left:20px;}
-  .info li{margin-bottom:7px;}
-  .info li::marker{color:var(--warn);}
-  .info p{margin-bottom:8px;}
-  .info .mono{font-family:var(--mono); font-size:13px;}
-  .info.warn{border-color:var(--warn); background:var(--warn-bg);}
-  .info.warn h3{color:var(--warn);}
-
-  .footer{
-    margin-top:46px; border-top:3px solid var(--ink);
-    padding:22px 0 calc(40px + env(safe-area-inset-bottom)); color:var(--muted); font-size:13.5px;
-  }
-  .footer p{max-width:720px; margin-bottom:8px;}
-  .footer .mono{font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase;}
-
-  /* ---------- Optimización móvil (iPhone) ---------- */
-  @media (max-width:560px){
-    .masthead{padding:22px 0 14px;}
-    h1{font-size:clamp(32px, 10.5vw, 50px);}
-    .lead{font-size:15.5px;}
-    .specs{gap:6px 14px; font-size:12.5px;}
-    section{padding:24px 0 4px;}
-
-    .controls .wrap{flex-direction:column; align-items:stretch; gap:10px;}
-    .tabs{gap:6px;}
-    .tab{flex:1 1 0; padding:10px 4px; font-size:16px; letter-spacing:.02em;}
-    .progress{justify-content:space-between; gap:10px;}
-    .barbell{height:30px;}
-    .sleeve{min-width:0;}
-
-    .sec-head{flex-wrap:wrap; gap:2px 12px; margin-bottom:12px;}
-    .card{margin-bottom:20px; box-shadow:3px 3px 0 rgba(28,43,58,.16);}
-    .card-head{padding:12px 14px; gap:10px;}
-    .card-body{padding:14px 14px 16px;}
-    .figure{padding:14px 12px 10px;}
-    .figure svg{max-width:230px;}
-
-    .card-foot{gap:12px;}
-    .kg{width:100%; justify-content:space-between; font-size:14px;}
-    .done-btn{width:100%; font-size:19px;}
-    .reset-row{margin-bottom:30px;}
-    .reset-btn{width:100%; text-align:center;}
-
-    .session-done{font-size:18px; padding:14px;}
-    .info h3{font-size:20px;}
-  }
+  footer{margin-top:22px;text-align:center}
+  .reset{background:transparent;border:1px solid var(--line);color:var(--fg-dim);
+    border-radius:var(--r-sm);padding:8px 16px;cursor:pointer;font-family:var(--body);font-size:12px}
+  .reset:hover{border-color:var(--warn);color:var(--warn)}
+  .foot-note{font-size:10.5px;color:var(--fg-dim);margin-top:14px;line-height:1.5}
 </style>
 </head>
 <body>
-
-<header class="masthead">
-  <div class="wrap">
-    <p class="kicker">Cuaderno de entrenamiento · Ficha personal</p>
-    <h1>Recomposición<br><span class="thin">Tren superior</span></h1>
-    <p class="lead">Plan de 3 días por semana (rotación A · B · C) para ganar músculo y reducir grasa en el tren superior. Cada ejercicio está adaptado para proteger un hombro con <strong>lesión de Bankart</strong>.</p>
-    <div class="specs">
-      <span><i class="dot"></i><b>3 días/semana</b> (rotación A · B · C)</span>
-      <span><i class="dot"></i><b>~55–60 min</b> por sesión</span>
-      <span><i class="dot"></i><b>7 ejercicios</b> por día</span>
-      <span><i class="dot"></i><b>RIR 0–2</b> según el ejercicio</span>
-      <span><i class="dot"></i><b>+ Casa:</b> pared abdominal, ~6 min, 3–4 días/semana</span>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div>
+        <h1>Full<span class="slash">/</span>Body</h1>
+        <div class="sub">REGISTRO DE ENTRENO · A · B · C + CASA</div>
+      </div>
+      <button class="theme-btn" id="themeBtn" aria-label="Cambiar tema"></button>
     </div>
+    <div class="tabs" id="tabs" role="tablist"></div>
+  </header>
+
+  <div class="day-head">
+    <span class="focus" id="dayFocus"></span>
+    <span class="progress" id="dayProgress"></span>
   </div>
-</header>
 
-<nav class="controls" aria-label="Selector de día y progreso">
-  <div class="wrap">
-    <div class="tabs" role="tablist" aria-label="Días de entrenamiento">
-      <button class="tab" id="tab-A" role="tab" aria-selected="true" aria-controls="panel-A" data-day="A">Día A</button>
-      <button class="tab" id="tab-B" role="tab" aria-selected="false" aria-controls="panel-B" data-day="B">Día B</button>
-      <button class="tab" id="tab-C" role="tab" aria-selected="false" aria-controls="panel-C" data-day="C">Día C</button>
-      <button class="tab" id="tab-D" role="tab" aria-selected="false" aria-controls="panel-D" data-day="D">Casa</button>
+  <main id="exList"></main>
+
+  <div class="section-label"><h2>Esta semana</h2><span class="rule"></span></div>
+  <div class="week">
+    <div class="week-top">
+      <h3>Días entrenados</h3>
+      <span class="count"><b id="weekCount">0</b>/3 objetivo</span>
     </div>
-    <div class="progress" aria-live="polite">
-      <span class="progress-label" id="progress-label">0 / 7</span>
-      <div class="barbell" aria-hidden="true">
-        <span class="bar-end"></span>
-        <span class="sleeve" id="sleeve">
-          <span class="plate"></span><span class="plate"></span><span class="plate"></span><span class="plate"></span><span class="plate"></span><span class="plate"></span><span class="plate"></span>
-        </span>
-        <span class="bar-end"></span>
-      </div>
-    </div>
+    <div class="week-grid" id="weekGrid"></div>
+    <p class="hint">Un día de gimnasio cuenta cuando marcas <code>✓</code> en al menos un ejercicio de los días A, B o C. Rota A → B → C; las semanas de 2 días, sigue la rotación donde la dejaste. Toca cada ejercicio para marcarlo y apunta peso y reps serie a serie. Toca el reloj de cada ejercicio al terminar una serie para lanzar el descanso. Todo se guarda en este dispositivo.</p>
   </div>
-</nav>
 
-<main class="wrap">
+  <footer>
+    <button class="reset" id="resetBtn">Borrar todos los datos</button>
+    <p class="foot-note">El progreso vive solo en este navegador. Para no perderlo, usa siempre el mismo móvil. La mejora semana a semana (subir peso o reps sobre el "último") es lo que te hará crecer.</p>
+  </footer>
+</div>
 
-  <!-- ===================== CALENTAMIENTO ===================== -->
-  <section id="calentamiento">
-    <div class="sec-head"><h2>Antes de empezar</h2><span class="ref">6–8 min · obligatorio con Bankart</span></div>
-    <div class="info-grid">
-      <div class="info">
-        <h3>Calentamiento del hombro</h3>
-        <ul>
-          <li><strong>2–3 min de cardio suave</strong> (remo o bici) para subir temperatura.</li>
-          <li><strong>Rotaciones externas con banda elástica:</strong> 2×15 por brazo, codo pegado al costado.</li>
-          <li><strong>Band pull-apart:</strong> 2×15, separando la banda a la altura del pecho.</li>
-          <li><strong>Retracciones escapulares:</strong> 1×15, juntando y bajando los omóplatos.</li>
-          <li><strong>Serie de aproximación:</strong> en el primer empuje y la primera tracción del día, haz 1 serie con ~50&nbsp;% del peso antes de las series efectivas.</li>
-        </ul>
-      </div>
-      <div class="info warn">
-        <h3>Señales de alarma · Bankart</h3>
-        <p>Para el ejercicio inmediatamente si notas:</p>
-        <ul>
-          <li>Dolor agudo o punzante en el hombro (no confundir con la fatiga muscular normal).</li>
-          <li>Sensación de <strong>aprensión</strong>: que el hombro "se va a salir".</li>
-          <li>Chasquidos acompañados de dolor.</li>
-        </ul>
-        <p><strong>Prohibido siempre:</strong> press o jalón tras nuca, fondos en paralelas, aperturas profundas (pec deck con gran estiramiento) y cualquier recorrido donde el codo viaje muy por detrás del torso con el brazo abierto.</p>
-      </div>
-    </div>
-  </section>
 
-  <!-- ===================== DÍA A ===================== -->
-  <!-- ===================== DÍA A ===================== -->
-  <section id="panel-A" class="day-panel" role="tabpanel" aria-labelledby="tab-A">
-    <div class="sec-head"><h2>Día A — Tren superior</h2><span class="ref">7 ejercicios · ~55&ndash;60 min</span></div>
-    <p class="panel-note">Rota A &rarr; B &rarr; C a lo largo de la semana, dejando al menos un día de descanso cuando puedas. Apunta el peso en cada ficha: lo necesitarás para progresar.</p>
-    <div class="session-done" data-day="A">Día A completo — alterna con B y C esta semana.</div>
-    <div class="reset-row"><button class="reset-btn" type="button" data-reset="A">Reiniciar Día A</button></div>
-
-    <!-- M-01 · Jalón al pecho, agarre neutro -->
-    <article class="card" data-ex="a1">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-01</span>
-        <div>
-          <h3>Jalón al pecho, agarre neutro</h3>
-          <p class="muscles">Dorsal ancho · Redondo mayor</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de jalón al pecho con maneral neutro">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M198 18 V142"/>
-            <path class="m" d="M198 22 H150"/>
-            <circle class="m" cx="150" cy="24" r="4"/>
-            <path class="m" d="M150 28 V50"/>
-            <path class="m" d="M143 50 H157"/>
-            <circle class="m" cx="112" cy="66" r="7"/>
-            <path class="m" d="M112 73 L114 106"/>
-            <path class="m" d="M98 106 H126"/>
-            <path class="m" d="M114 106 H140 M140 106 V130"/>
-            <path class="m" d="M114 80 L147 52"/>
-            <path class="m" d="M114 80 L153 52"/>
-            <path class="mv" d="M150 32 V50 M150 50 l-4 -6 M150 50 l4 -6"/>
-          </svg>
-          <p class="caption">Máquina de polea alta con maneral neutro (palmas enfrentadas). Si solo hay barra, usa un agarre estrecho en paralelo.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>8–12</strong></li>
-            <li><span>Descanso</span><strong>90 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Agarra el maneral neutro y fija los muslos bajo el rodillo.</li><li>Sin balancearte, tira hacia la parte alta del pecho llevando los codos abajo y atrás.</li><li>Aprieta la espalda abajo 1 s y sube controlando, sin encoger los hombros al final.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>El agarre neutro es el más amable con el hombro y muy potente para el dorsal.</li><li>Baja siempre por delante, nunca tras la nuca.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Agarre neutro y recorrido por delante: de los tirones verticales más seguros para ti. Controla el final de la subida sin dejar que el peso te estire el hombro del todo.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-02 · Remo en máquina con apoyo de pecho -->
-    <article class="card" data-ex="a2">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-02</span>
-        <div>
-          <h3>Remo en máquina con apoyo de pecho</h3>
-          <p class="muscles">Dorsal · Romboides · Trapecio medio · Deltoides posterior</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de remo en máquina con apoyo de pecho">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <rect class="m" x="150" y="58" width="16" height="80" rx="3"/>
-            <path class="m-thin" d="M150 72 h16 M150 86 h16 M150 100 h16 M150 114 h16"/>
-            <circle class="m" cx="140" cy="50" r="7"/>
-            <path class="m" d="M140 57 L138 100"/>
-            <path class="m" d="M124 100 H150 M136 100 V138"/>
-            <path class="m" d="M138 70 L100 78"/>
-            <path class="m" d="M100 78 L118 94"/>
-            <circle class="m-fill" cx="98" cy="78" r="3.5"/>
-            <path class="mv" d="M84 78 H108 M84 78 l7 -5 M84 78 l7 5"/>
-          </svg>
-          <p class="caption">Máquina de remo con apoyo de pecho ("chest-supported row"). Alternativa: remo sentado con soporte para el torso.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–12</strong></li>
-            <li><span>Descanso</span><strong>90 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Ajusta el asiento para que el pad quede sobre el esternón; pecho apoyado.</li><li>Tira de los manerales hacia atrás llevando los codos junto al cuerpo.</li><li>Junta los omóplatos 1 s y vuelve estirando sin despegar el pecho del pad.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>El apoyo en el pecho anula la espalda baja: puro trabajo de espalda media.</li><li>No des tirones; que el recorrido lo marque la espalda, no el impulso.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Muy seguro: el pecho apoyado estabiliza el tronco y el hombro trabaja en un rango corto y controlado. Mantén los codos pegados, sin abrirlos en exceso.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-03 · Press de pecho en máquina (convergente) -->
-    <article class="card" data-ex="a3">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-03</span>
-        <div>
-          <h3>Press de pecho en máquina (convergente)</h3>
-          <p class="muscles">Pectoral · Deltoides anterior · Tríceps</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de máquina de press de pecho plano">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <rect class="m" x="34" y="52" width="24" height="86" rx="3"/>
-            <path class="m-thin" d="M34 66 h24 M34 80 h24 M34 94 h24 M34 108 h24"/>
-            <circle class="m" cx="70" cy="58" r="7"/>
-            <path class="m" d="M70 65 L72 104"/>
-            <path class="m" d="M58 104 H86 M84 104 V132"/>
-            <path class="m" d="M72 78 L118 74"/>
-            <path class="m" d="M104 74 L120 88"/>
-            <rect class="m-fill" x="118" y="70" width="8" height="20" rx="2"/>
-            <path class="mv" d="M138 80 H160 M160 80 l-6 -5 M160 80 l-6 5"/>
-          </svg>
-          <p class="caption">Máquina de press de pecho convergente: los manerales se juntan hacia el centro al empujar. Agarre neutro si es posible.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>8–12</strong></li>
-            <li><span>Descanso</span><strong>90 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Ajusta el asiento para que los manerales queden a la altura del pecho medio.</li><li>Empuja al frente sin bloquear de golpe los codos; hombros bajos y atrás.</li><li>Vuelve controlando hasta que las manos lleguen a la línea del pecho, sin ir más atrás.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>No lleves los codos por detrás del plano del torso: ahí el hombro es más vulnerable.</li><li>Aprieta el pecho al empujar, no solo el tríceps.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Punto clave: recorrido limitado atrás. Los codos no pasan del plano del torso y el asiento se sube si notas tirón. Nada de estiramientos profundos de pecho.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-04 · Elevaciones laterales en polea -->
-    <article class="card" data-ex="a4">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-04</span>
-        <div>
-          <h3>Elevaciones laterales en polea</h3>
-          <p class="muscles">Deltoides lateral</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de elevación lateral en polea a un brazo">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M40 18 V142"/>
-            <path class="m-thin" d="M40 122 L94 96"/>
-            <circle class="m" cx="118" cy="34" r="8"/>
-            <path class="m" d="M118 42 V96"/>
-            <path class="m" d="M118 96 L108 138 M118 96 L128 138"/>
-            <path class="m" d="M118 56 L96 96"/>
-            <path class="m" d="M118 56 L138 74"/>
-            <circle class="m-fill" cx="96" cy="96" r="3.5"/>
-            <path class="mv" d="M84 96 Q78 66 98 52 M98 52 l-8 1 M98 52 l1 8"/>
-          </svg>
-          <p class="caption">Elevación lateral en polea baja, a un brazo. Cambia de lado en cada serie o alterna.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>12–20</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>0–1</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>De pie junto a la torre; el cable de la polea baja cruza por delante hasta la mano.</li><li>Con el codo casi recto, sube el brazo hacia el lado hasta la altura del hombro.</li><li>Baja despacio resistiendo; sin impulso de piernas.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>La polea mantiene tensión constante en todo el recorrido, mejor que la mancuerna abajo.</li><li>Sube "llevando el codo", no la mano; el meñique nunca más alto que el pulgar.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Sube solo hasta la horizontal, nunca por encima. Movimiento limpio y sin rotar el hombro; si notas pinzamiento, reduce el rango.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-05 · Press de hombro en máquina -->
-    <article class="card" data-ex="a5">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-05</span>
-        <div>
-          <h3>Press de hombro en máquina</h3>
-          <p class="muscles">Deltoides anterior y lateral · Tríceps</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de máquina de press de hombro">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <rect class="m" x="150" y="40" width="22" height="98" rx="3"/>
-            <path class="m-thin" d="M150 56 h22 M150 72 h22 M150 88 h22 M150 104 h22"/>
-            <circle class="m" cx="118" cy="66" r="7"/>
-            <path class="m" d="M118 73 L120 106"/>
-            <path class="m" d="M106 106 H132 M128 106 V132"/>
-            <path class="m" d="M118 78 L104 52"/>
-            <path class="m" d="M118 78 L132 52"/>
-            <rect class="m-fill" x="100" y="46" width="7" height="10" rx="2"/>
-            <rect class="m-fill" x="129" y="46" width="7" height="10" rx="2"/>
-            <path class="mv" d="M104 40 V26 M104 26 l-4 6 M104 26 l4 6"/>
-            <path class="mv" d="M132 40 V26 M132 26 l-4 6 M132 26 l4 6"/>
-          </svg>
-          <p class="caption">Máquina de press de hombro, preferible de agarre neutro. Es el ejercicio a vigilar más de cerca con tu lesión.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>2</strong></li>
-            <li><span>Reps</span><strong>10–12</strong></li>
-            <li><span>Descanso</span><strong>90 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Elige la máquina de press de hombro con agarre neutro si es posible; asiento alto.</li><li>Empuja hacia arriba SIN bloquear del todo ni llevar los codos muy atrás.</li><li>Detente antes de la extensión completa por encima de la cabeza y baja a la altura de las orejas.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Rango parcial a propósito: la fuerza está en la parte media, no en el bloqueo alto.</li><li>La versión de agarre neutro es mucho más amable con el hombro.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>El ejercicio con más precaución del plan. La posición por encima de la cabeza es la más delicada para tu inestabilidad anterior: usa agarre neutro, NO bloquees arriba, mantén un rango cómodo y para ante cualquier aprensión. Si notas inseguridad, cámbialo por más elevaciones laterales y coméntalo con tu fisio.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-06 · Curl en polea a un brazo -->
-    <article class="card" data-ex="a6">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-06</span>
-        <div>
-          <h3>Curl en polea a un brazo</h3>
-          <p class="muscles">Bíceps</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de curl de bíceps en polea a un brazo">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M40 18 V142"/>
-            <path class="m-thin" d="M40 132 L92 94"/>
-            <circle class="m" cx="110" cy="30" r="8"/>
-            <path class="m" d="M110 38 V96"/>
-            <path class="m" d="M110 96 L100 138 M110 96 L120 138"/>
-            <path class="m" d="M110 52 L96 90"/>
-            <path class="m" d="M96 90 L92 94"/>
-            <circle class="m-fill" cx="92" cy="94" r="3.5"/>
-            <path class="mv" d="M98 100 Q116 80 100 58 M100 58 l-2 8 M100 58 l7 3"/>
-          </svg>
-          <p class="caption">Curl de bíceps en polea baja, a un brazo. Alterna brazos por serie.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–12</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>De pie frente a la polea baja, maneral en una mano, codo pegado al costado.</li><li>Flexiona el codo llevando la mano hacia el hombro sin mover el codo ni el cuerpo.</li><li>Baja controlando hasta casi estirar del todo.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>La polea da tensión constante y un pico de contracción muy limpio.</li><li>Un brazo cada vez ayuda a igualar diferencias entre lados.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Seguro: con el codo fijo al costado, el hombro queda quieto. Solo trabaja el codo.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-07 · Pushdown en polea (barra o cuerda) -->
-    <article class="card" data-ex="a7">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-07</span>
-        <div>
-          <h3>Pushdown en polea (barra o cuerda)</h3>
-          <p class="muscles">Tríceps</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de pushdown de tríceps en polea alta">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M180 18 V142"/>
-            <path class="m" d="M180 22 H150"/>
-            <circle class="m" cx="150" cy="24" r="4"/>
-            <path class="m" d="M150 28 V68"/>
-            <path class="m" d="M138 68 H162"/>
-            <circle class="m" cx="110" cy="34" r="8"/>
-            <path class="m" d="M110 42 V96"/>
-            <path class="m" d="M110 96 L100 138 M110 96 L120 138"/>
-            <path class="m" d="M110 54 L138 56"/>
-            <path class="m" d="M138 56 L150 68"/>
-            <path class="mv" d="M150 82 V104 M150 104 l-4 -6 M150 104 l4 -6"/>
-          </svg>
-          <p class="caption">Pushdown de tríceps en polea alta, con barra o cuerda.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–15</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>0–1</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Frente a la polea alta, codos pegados al cuerpo.</li><li>Extiende los codos hacia abajo hasta estirar del todo, sin mover los hombros.</li><li>Sube controlando solo hasta que el antebrazo llegue a la horizontal.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Codos como bisagras fijas: si se van hacia delante, baja el peso.</li><li>Con cuerda, separa las manos abajo para apretar más el tríceps.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Seguro: hombros estables y quietos; todo el movimiento es de codo.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-  </section>
-
-  <!-- ===================== DÍA B ===================== -->
-  <!-- ===================== DÍA B ===================== -->
-  <section id="panel-B" class="day-panel" role="tabpanel" aria-labelledby="tab-B" hidden>
-    <div class="sec-head"><h2>Día B — Tren superior</h2><span class="ref">7 ejercicios · ~55&ndash;60 min</span></div>
-    <p class="panel-note">Rota A &rarr; B &rarr; C a lo largo de la semana, dejando al menos un día de descanso cuando puedas. Apunta el peso en cada ficha: lo necesitarás para progresar.</p>
-    <div class="session-done" data-day="B">Día B completo — sigue rotando con el Día C.</div>
-    <div class="reset-row"><button class="reset-btn" type="button" data-reset="B">Reiniciar Día B</button></div>
-
-    <!-- M-08 · Remo en polea sentado, agarre neutro -->
-    <article class="card" data-ex="b1">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-08</span>
-        <div>
-          <h3>Remo en polea sentado, agarre neutro</h3>
-          <p class="muscles">Dorsal · Romboides · Trapecio medio · Deltoides posterior</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de remo sentado en polea con maneral neutro">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M190 70 V142"/>
-            <path class="m-thin" d="M190 112 L150 100"/>
-            <circle class="m-fill" cx="148" cy="100" r="3.5"/>
-            <circle class="m" cx="80" cy="62" r="7"/>
-            <path class="m" d="M80 69 L88 100"/>
-            <path class="m" d="M66 108 H130 M124 108 V96"/>
-            <path class="m" d="M88 82 L148 100"/>
-            <path class="mv" d="M110 120 H84 M84 120 l7 -5 M84 120 l7 5"/>
-          </svg>
-          <p class="caption">Remo sentado en polea baja con maneral neutro/en V.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–12</strong></li>
-            <li><span>Descanso</span><strong>90 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Sentado, pies apoyados y rodillas algo flexionadas; agarra el maneral en V.</li><li>Con la espalda recta, tira hacia el ombligo llevando los codos junto al cuerpo.</li><li>Aprieta atrás 1 s y vuelve estirando sin dejar caer el pecho ni redondear la espalda.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Poco balanceo del tronco: que tire la espalda, no la cadera.</li><li>Saca pecho al final del tirón para activar bien la espalda media.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Agarre neutro y codos pegados: recorrido seguro. Evita estirar el brazo del todo con tirón al volver.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-09 · Pull-over en polea -->
-    <article class="card" data-ex="b2">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-09</span>
-        <div>
-          <h3>Pull-over en polea</h3>
-          <p class="muscles">Dorsal (anchura) · Redondo mayor</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de pull-over en polea alta de pie">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M188 14 V142"/>
-            <path class="m" d="M188 20 H160"/>
-            <circle class="m" cx="160" cy="22" r="4"/>
-            <path class="m-thin" d="M160 26 L122 46"/>
-            <circle class="m" cx="96" cy="40" r="8"/>
-            <path class="m" d="M96 48 V100"/>
-            <path class="m" d="M96 100 L86 138 M96 100 L106 138"/>
-            <path class="m" d="M96 56 L124 46"/>
-            <path class="mv" d="M134 60 Q120 92 92 96 M92 96 l8 -3 M92 96 l-1 -8"/>
-          </svg>
-          <p class="caption">Pull-over en polea alta con barra o cuerda, de pie. Trabaja la anchura del dorsal.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>12–15</strong></li>
-            <li><span>Descanso</span><strong>75 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>De pie frente a la polea alta, brazos casi rectos por delante y arriba.</li><li>Con el codo ligeramente fijo, baja los brazos en arco hacia los muslos usando el dorsal.</li><li>Vuelve controlando sin llevar los brazos a un estiramiento profundo por encima de la cabeza.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Piensa en "empujar la barra hacia abajo con los codos rectos": es dorsal, no tríceps.</li><li>Rango cómodo arriba: no busques el estiramiento máximo.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Precaución media: la posición de brazos arriba estira la cápsula anterior. Empieza con los brazos por delante, no muy atrás, y no fuerces el estiramiento. Si notas tirón arriba, acorta el rango alto.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-10 · Press inclinado en máquina -->
-    <article class="card" data-ex="b3">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-10</span>
-        <div>
-          <h3>Press inclinado en máquina</h3>
-          <p class="muscles">Pectoral superior · Deltoides · Tríceps</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de máquina de press inclinado">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M40 138 L72 58"/>
-            <path class="m-thin" d="M47 130 L74 64"/>
-            <path class="m" d="M50 118 V138"/>
-            <circle class="m" cx="76" cy="52" r="7"/>
-            <path class="m" d="M76 59 L98 96"/>
-            <path class="m" d="M80 66 L120 60"/>
-            <path class="m" d="M104 60 L122 74"/>
-            <rect class="m-fill" x="118" y="54" width="8" height="18" rx="2"/>
-            <path class="mv" d="M138 64 L158 48 M158 48 l-2 8 M158 48 l-8 1"/>
-          </svg>
-          <p class="caption">Máquina de press inclinado ("incline chest press").</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>8–12</strong></li>
-            <li><span>Descanso</span><strong>90 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Asiento de la máquina de press inclinado; manerales a la altura del pecho alto.</li><li>Empuja arriba y al frente sin bloquear de golpe; hombros bajos.</li><li>Baja controlando hasta la línea del pecho alto, sin pasar los codos por detrás.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>El ángulo inclinado carga la parte alta del pecho, el "estante" bajo la clavícula.</li><li>Recorrido limitado atrás, como en todos tus presses.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Mismas reglas que el press plano: codos sin pasar el plano del torso y asiento arriba si hay tirón. Sin estiramientos profundos.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-11 · Elevaciones laterales en polea o máquina -->
-    <article class="card" data-ex="b4">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-11</span>
-        <div>
-          <h3>Elevaciones laterales en polea o máquina</h3>
-          <p class="muscles">Deltoides lateral</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de máquina de elevaciones laterales">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <rect class="m" x="148" y="70" width="16" height="68" rx="3"/>
-            <circle class="m" cx="110" cy="48" r="8"/>
-            <path class="m" d="M110 56 V104"/>
-            <path class="m" d="M98 104 H122 M110 104 V132"/>
-            <path class="m" d="M110 66 L84 70"/>
-            <path class="m" d="M110 66 L148 74"/>
-            <rect class="m-fill" x="79" y="66" width="7" height="10" rx="2"/>
-            <path class="mv" d="M78 58 Q70 44 86 36 M86 36 l-8 1 M86 36 l1 8"/>
-            <path class="mv" d="M150 58 Q160 44 146 36 M146 36 l1 8 M146 36 l8 0"/>
-          </svg>
-          <p class="caption">En polea baja a un brazo o en máquina de elevaciones laterales: usa lo que tengas libre.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>12–20</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>0–1</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>En máquina, los pads apoyan en la parte externa de los brazos; en polea, un brazo cada vez con el cable cruzando por delante.</li><li>Sube hacia el lado hasta la altura del hombro empujando con el codo.</li><li>Baja despacio resistiendo el peso.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>La máquina fija la trayectoria: ideal para sentir bien el deltoides lateral.</li><li>Hombros lejos de las orejas; no encojas el trapecio.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Sube solo hasta la horizontal. La trayectoria guiada es cómoda para el hombro siempre que no fuerces por encima.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-12 · Curl predicador a un brazo -->
-    <article class="card" data-ex="b6">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-12</span>
-        <div>
-          <h3>Curl predicador a un brazo</h3>
-          <p class="muscles">Bíceps</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de curl predicador a un brazo">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M118 138 L150 96"/>
-            <path class="m-thin" d="M124 138 L152 100"/>
-            <circle class="m" cx="94" cy="46" r="8"/>
-            <path class="m" d="M94 54 V96"/>
-            <path class="m" d="M94 96 L84 138 M94 96 L104 138"/>
-            <path class="m" d="M94 60 L138 100"/>
-            <path class="m" d="M138 100 L120 70"/>
-            <rect class="m-fill" x="113" y="62" width="14" height="7" rx="2"/>
-            <path class="mv" d="M150 96 Q140 74 118 66 M118 66 l8 -1 M118 66 l-1 8"/>
-          </svg>
-          <p class="caption">Curl predicador a un brazo (banco Scott o máquina de predicador).</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–12</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Apoya la parte de atrás del brazo en el pupitre del predicador, un brazo cada vez.</li><li>Sube el peso flexionando el codo sin despegar el brazo del apoyo.</li><li>Baja controlando hasta casi estirar; no rebotes abajo.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>El apoyo elimina el impulso: bíceps aislado de verdad.</li><li>No estires el codo con tirón brusco al final; controla la bajada.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Seguro: el brazo queda apoyado y el hombro no interviene. Trabaja solo el codo.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-13 · Extensión por encima de la cabeza en polea -->
-    <article class="card" data-ex="b7">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-13</span>
-        <div>
-          <h3>Extensión por encima de la cabeza en polea</h3>
-          <p class="muscles">Tríceps (cabeza larga)</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de extensión de tríceps por encima de la cabeza en polea">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M40 58 V142"/>
-            <path class="m-thin" d="M40 120 L86 70"/>
-            <circle class="m" cx="120" cy="52" r="8"/>
-            <path class="m" d="M120 60 V104"/>
-            <path class="m" d="M120 104 L110 138 M120 104 L130 138"/>
-            <path class="m" d="M120 66 L96 44"/>
-            <path class="m" d="M120 66 L112 40"/>
-            <path class="m" d="M96 44 L86 70"/>
-            <path class="mv" d="M100 34 L114 22 M114 22 l-8 0 M114 22 l3 7"/>
-          </svg>
-          <p class="caption">Extensión de tríceps por encima de la cabeza en polea con cuerda.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–15</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>De espaldas a la polea, cuerda por detrás de la cabeza y codos apuntando al frente y arriba.</li><li>Extiende los codos hacia arriba sin abrirlos ni mover los hombros bruscamente.</li><li>Baja a una flexión cómoda, sin forzar el estiramiento por detrás.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Codos al frente y quietos: el movimiento es solo de antebrazo.</li><li>Con cuerda, separa las manos arriba para apretar el tríceps.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Precaución media: los brazos van por encima de la cabeza. Mantén los codos al frente, un rango cómodo y sin forzar el estiramiento profundo. Si notas aprensión, cámbialo por pushdown.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-14 · Face pulls -->
-    <article class="card" data-ex="b5">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-14</span>
-        <div>
-          <h3>Face pulls</h3>
-          <p class="muscles">Deltoides posterior · Rotadores · Trapecio</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de face pull en polea alta con cuerda">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M188 18 V142"/>
-            <path class="m" d="M188 30 H160"/>
-            <circle class="m" cx="160" cy="32" r="4"/>
-            <path class="m-thin" d="M160 34 L128 46"/>
-            <circle class="m" cx="96" cy="44" r="8"/>
-            <path class="m" d="M96 52 V100"/>
-            <path class="m" d="M96 100 L86 138 M96 100 L106 138"/>
-            <path class="m" d="M96 60 L124 46"/>
-            <path class="m" d="M96 60 L120 40"/>
-            <path class="mv" d="M132 40 H108 M108 40 l7 -5 M108 40 l7 5"/>
-          </svg>
-          <p class="caption">Face pull en polea alta con cuerda, a la altura de la cara.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>15&ndash;20</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>1&ndash;2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Polea alta con cuerda a la altura de la cara; agárrala con los pulgares hacia atrás.</li><li>Tira hacia la frente separando las manos y llevando los codos altos y atrás.</li><li>Aprieta 1 s la parte alta de la espalda y vuelve controlando.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Recupera el trabajo de deltoides posterior y rotadores que se fue con el pec deck invertido.</li><li>Peso ligero-moderado y muchas reps; prioriza sentir la espalda alta.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Muy recomendable para ti: refuerza los estabilizadores del hombro. Mantén el movimiento por delante y controlado, sin tirones.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-  </section>
-
-  <!-- ===================== DÍA C ===================== -->
-  <section id="panel-C" class="day-panel" role="tabpanel" aria-labelledby="tab-C" hidden>
-    <div class="sec-head"><h2>Día C — Tren superior</h2><span class="ref">7 ejercicios · ~55&ndash;60 min</span></div>
-    <p class="panel-note">Rota A &rarr; B &rarr; C a lo largo de la semana, dejando al menos un día de descanso cuando puedas. Apunta el peso en cada ficha: lo necesitarás para progresar.</p>
-    <div class="session-done" data-day="C">Día C completo — semana redonda, a recuperar.</div>
-    <div class="reset-row"><button class="reset-btn" type="button" data-reset="C">Reiniciar Día C</button></div>
-
-    <!-- M-15 · Jalón al pecho -->
-    <article class="card" data-ex="c1">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-15</span>
-        <div>
-          <h3>Jalón al pecho</h3>
-          <p class="muscles">Dorsal ancho · Redondo mayor</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de jalón al pecho con maneral">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M198 18 V142"/>
-            <path class="m" d="M198 22 H150"/>
-            <circle class="m" cx="150" cy="24" r="4"/>
-            <path class="m" d="M150 28 V50"/>
-            <path class="m" d="M143 50 H157"/>
-            <circle class="m" cx="112" cy="66" r="7"/>
-            <path class="m" d="M112 73 L114 106"/>
-            <path class="m" d="M98 106 H126"/>
-            <path class="m" d="M114 106 H140 M140 106 V130"/>
-            <path class="m" d="M114 80 L147 52"/>
-            <path class="m" d="M114 80 L153 52"/>
-            <path class="mv" d="M150 32 V50 M150 50 l-4 -6 M150 50 l4 -6"/>
-          </svg>
-          <p class="caption">Máquina de polea alta, jalón al pecho (agarre neutro o prono, a tu gusto).</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>8–12</strong></li>
-            <li><span>Descanso</span><strong>90 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Fija los muslos bajo el rodillo y agarra la barra o el maneral al pecho.</li><li>Tira llevando los codos abajo y atrás hasta el pecho alto, por delante.</li><li>Sube controlando sin encoger los hombros al final.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Varía el agarre (neutro o prono) entre sesiones para atacar la espalda desde varios ángulos.</li><li>Baja siempre por delante, nunca tras la nuca.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Recorrido siempre por delante, nunca tras nuca. Controla el final de la subida sin dejar que el peso te estire el hombro del todo.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-16 · Remo en máquina con apoyo de pecho -->
-    <article class="card" data-ex="c2">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-16</span>
-        <div>
-          <h3>Remo en máquina con apoyo de pecho</h3>
-          <p class="muscles">Dorsal · Romboides · Trapecio medio · Deltoides posterior</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de remo en máquina con apoyo de pecho">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <rect class="m" x="150" y="58" width="16" height="80" rx="3"/>
-            <path class="m-thin" d="M150 72 h16 M150 86 h16 M150 100 h16 M150 114 h16"/>
-            <circle class="m" cx="140" cy="50" r="7"/>
-            <path class="m" d="M140 57 L138 100"/>
-            <path class="m" d="M124 100 H150 M136 100 V138"/>
-            <path class="m" d="M138 70 L100 78"/>
-            <path class="m" d="M100 78 L118 94"/>
-            <circle class="m-fill" cx="98" cy="78" r="3.5"/>
-            <path class="mv" d="M84 78 H108 M84 78 l7 -5 M84 78 l7 5"/>
-          </svg>
-          <p class="caption">Máquina de remo con apoyo de pecho ("chest-supported row").</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–12</strong></li>
-            <li><span>Descanso</span><strong>90 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Ajusta el asiento para que el pad quede sobre el esternón; pecho apoyado.</li><li>Tira de los manerales hacia atrás llevando los codos junto al cuerpo.</li><li>Junta los omóplatos 1 s y vuelve estirando sin despegar el pecho del pad.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Con el pecho apoyado, la espalda baja descansa: puro trabajo de espalda media.</li><li>No des tirones; controla también la bajada.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Muy seguro: el pecho apoyado estabiliza el tronco y el hombro trabaja en un rango corto y controlado.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-17 · Cruces en polea o pec deck (rango limitado, opcional) -->
-    <article class="card" data-ex="c3">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-17</span>
-        <div>
-          <h3>Cruces en polea o pec deck, rango limitado <span class="opt">(opcional)</span></h3>
-          <p class="muscles">Pectoral (contracción)</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de cruces en polea juntando las manos por delante del pecho">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M26 14 V142"/>
-            <path class="m" d="M194 14 V142"/>
-            <circle class="m" cx="26" cy="26" r="4"/>
-            <circle class="m" cx="194" cy="26" r="4"/>
-            <path class="m-thin" d="M26 30 L92 74"/>
-            <path class="m-thin" d="M194 30 L128 74"/>
-            <circle class="m" cx="110" cy="40" r="8"/>
-            <path class="m" d="M110 48 V96"/>
-            <path class="m" d="M110 96 L100 138 M110 96 L120 138"/>
-            <path class="m" d="M110 58 L92 74"/>
-            <path class="m" d="M110 58 L128 74"/>
-            <circle class="m-fill" cx="92" cy="74" r="3.5"/>
-            <circle class="m-fill" cx="128" cy="74" r="3.5"/>
-            <path class="mv" d="M96 90 H112 M112 90 l-6 -4 M112 90 l-6 4"/>
-            <path class="mv" d="M124 90 H108 M108 90 l6 -4 M108 90 l6 4"/>
-          </svg>
-          <p class="caption">Cruces en polea (crossover) o pec deck. Rango limitado: no lleves los brazos por detrás de la línea de los hombros. Ejercicio opcional de aislamiento.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>12&ndash;15</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>1&ndash;2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>En crossover, coge un maneral de cada polea alta; en pec deck, siéntate con el pecho apoyado.</li><li>Junta las manos por delante del pecho con los codos ligeramente fijos.</li><li>Aprieta el pecho 1 s y vuelve SOLO hasta notar tensión, sin abrir los brazos en exceso.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Es opcional: úsalo para rematar el pecho si te queda energía al final.</li><li>Prioriza sentir el pectoral apretando, no mover mucho peso.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Clave para ti: <strong>rango limitado</strong>. La apertura profunda estira la cápsula anterior justo en la dirección de tu inestabilidad, así que no lleves los brazos por detrás de la línea de los hombros. Si notas tirón, reduce aún más la apertura o sáltalo.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-18 · Elevaciones laterales en polea -->
-    <article class="card" data-ex="c4">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-18</span>
-        <div>
-          <h3>Elevaciones laterales en polea</h3>
-          <p class="muscles">Deltoides lateral</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de elevación lateral en polea a un brazo">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M40 18 V142"/>
-            <path class="m-thin" d="M40 122 L94 96"/>
-            <circle class="m" cx="118" cy="34" r="8"/>
-            <path class="m" d="M118 42 V96"/>
-            <path class="m" d="M118 96 L108 138 M118 96 L128 138"/>
-            <path class="m" d="M118 56 L96 96"/>
-            <path class="m" d="M118 56 L138 74"/>
-            <circle class="m-fill" cx="96" cy="96" r="3.5"/>
-            <path class="mv" d="M84 96 Q78 66 98 52 M98 52 l-8 1 M98 52 l1 8"/>
-          </svg>
-          <p class="caption">Elevación lateral en polea baja, a un brazo. Alterna lados.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>12–20</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>0–1</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>De pie junto a la torre; el cable de la polea baja cruza por delante hasta la mano.</li><li>Con el codo casi recto, sube el brazo hacia el lado hasta la altura del hombro.</li><li>Baja despacio resistiendo el peso.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Tensión constante de principio a fin, mejor que con mancuerna.</li><li>Sube llevando el codo, no la mano.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Sube solo hasta la horizontal, nunca por encima. Sin rotar el hombro; reduce el rango si notas pinzamiento.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-19 · Face pulls -->
-    <article class="card" data-ex="c5">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-19</span>
-        <div>
-          <h3>Face pulls</h3>
-          <p class="muscles">Deltoides posterior · Rotadores · Trapecio</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de face pull en polea alta con cuerda">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M188 18 V142"/>
-            <path class="m" d="M188 30 H160"/>
-            <circle class="m" cx="160" cy="32" r="4"/>
-            <path class="m-thin" d="M160 34 L128 46"/>
-            <circle class="m" cx="96" cy="44" r="8"/>
-            <path class="m" d="M96 52 V100"/>
-            <path class="m" d="M96 100 L86 138 M96 100 L106 138"/>
-            <path class="m" d="M96 60 L124 46"/>
-            <path class="m" d="M96 60 L120 40"/>
-            <path class="mv" d="M132 40 H108 M108 40 l7 -5 M108 40 l7 5"/>
-          </svg>
-          <p class="caption">Face pull en polea alta con cuerda.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>15–20</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Polea alta con cuerda a la altura de la cara; agárrala con los pulgares hacia atrás.</li><li>Tira hacia la frente separando las manos y llevando los codos altos y atrás.</li><li>Aprieta 1 s la parte alta de la espalda y vuelve controlando.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Salud de hombro en estado puro: fortalece deltoides posterior y rotadores.</li><li>Peso ligero-moderado y muchas reps; prioriza sentir la espalda alta.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Muy recomendable para ti: refuerza los estabilizadores del hombro. Mantén el movimiento por delante y controlado, sin tirones.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-20 · Curl martillo en polea a un brazo -->
-    <article class="card" data-ex="c6">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-20</span>
-        <div>
-          <h3>Curl martillo en polea a un brazo</h3>
-          <p class="muscles">Bíceps braquial · Braquial · Antebrazo</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de curl martillo en polea a un brazo">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <path class="m" d="M40 18 V142"/>
-            <path class="m-thin" d="M40 132 L92 94"/>
-            <circle class="m" cx="110" cy="30" r="8"/>
-            <path class="m" d="M110 38 V96"/>
-            <path class="m" d="M110 96 L100 138 M110 96 L120 138"/>
-            <path class="m" d="M110 52 L96 90"/>
-            <path class="m" d="M96 90 L92 94"/>
-            <circle class="m-fill" cx="92" cy="94" r="3.5"/>
-            <path class="mv" d="M98 100 Q116 80 100 58 M100 58 l-2 8 M100 58 l7 3"/>
-          </svg>
-          <p class="caption">Curl martillo en polea baja con cuerda, a un brazo (agarre neutro).</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–12</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>1–2</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Polea baja con cuerda; agarre neutro (pulgar arriba), codo pegado al costado.</li><li>Sube manteniendo el agarre neutro sin girar la muñeca.</li><li>Baja controlando hasta casi estirar.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>El agarre neutro engrosa braquial y antebrazo: brazo lleno desde cualquier ángulo.</li><li>Codo fijo al costado; sin balanceo.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Seguro: agarre neutro y codo fijo mantienen el hombro quieto.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- M-21 · Press francés en máquina o extensión a dos manos -->
-    <article class="card" data-ex="c7">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">M-21</span>
-        <div>
-          <h3>Press francés en máquina o extensión a dos manos</h3>
-          <p class="muscles">Tríceps</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de máquina de extensión de tríceps">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <rect class="m" x="150" y="66" width="16" height="72" rx="3"/>
-            <circle class="m" cx="112" cy="60" r="7"/>
-            <path class="m" d="M112 67 L114 104"/>
-            <path class="m" d="M100 104 H128 M124 104 V132"/>
-            <path class="m" d="M114 76 L140 72"/>
-            <path class="m" d="M140 72 L126 52"/>
-            <rect class="m-fill" x="120" y="46" width="14" height="7" rx="2"/>
-            <path class="mv" d="M150 60 Q150 84 132 92 M132 92 l8 -2 M132 92 l-2 -8"/>
-          </svg>
-          <p class="caption">Máquina de press francés / extensión de tríceps, o una extensión a dos manos (polea con cuerda o mancuerna).</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>3</strong></li>
-            <li><span>Reps</span><strong>10–15</strong></li>
-            <li><span>Descanso</span><strong>60 s</strong></li>
-            <li><span>RIR</span><strong>0–1</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol><li>Máquina de extensión de tríceps (press francés) o, en su defecto, una extensión a dos manos (polea con cuerda o mancuerna).</li><li>Extiende los codos por completo sin mover los hombros.</li><li>Vuelve controlando sin dejar caer el peso.</li></ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul><li>Elige la opción que mejor sientas y con la que no notes molestia de codo.</li><li>Codos fijos: todo el trabajo es de tríceps.</li></ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Seguro: hombros estables. Si la versión por encima de la cabeza te incomoda, quédate con una extensión a dos manos por delante.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"><input class="rep" data-set="2" type="number" inputmode="numeric" min="0" placeholder="S3" aria-label="Repeticiones serie 3"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="&mdash;" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-  </section>
-
-  <!-- ===================== TRABAJO EN CASA ===================== -->
-  <section id="panel-D" class="day-panel" role="tabpanel" aria-labelledby="tab-D" hidden>
-    <div class="sec-head"><h2>Trabajo en casa — Pared abdominal</h2><span class="ref">3 ejercicios · ~6 min · 3–4 días/semana</span></div>
-    <p class="panel-note">Rutina para la sensación de "pared floja": entrena el transverso del abdomen, la faja natural que sujeta la tripa. Sin material de gimnasio, también en los días de descanso. La piel sobrante no se corrige con ejercicio, pero una pared firme por debajo cambia mucho la foto.</p>
-    <div class="session-done" data-day="D">Pared completa por hoy — repítelo 3–4 veces esta semana</div>
-    <div class="reset-row"><button class="reset-btn" type="button" data-reset="D">Reiniciar sesión de casa</button></div>
-
-    <div class="info warn" style="margin-bottom:22px;">
-      <h3>Comprueba tu línea media antes de empezar</h3>
-      <p>Tumbado boca arriba, levanta un poco la cabeza y palpa con dos dedos la línea media del abdomen, por encima y por debajo del ombligo. Si cabe un hueco de <strong>más de 2 dedos</strong>, o al incorporarte sobresale una cresta a lo largo de la línea media, puede haber <strong>diástasis de rectos</strong>: pide valoración a un fisioterapeuta y evita de momento los ejercicios de abdomen con carga hasta entonces; esta rutina de casa sí suele ser el punto de partida adecuado. Si notas un <strong>bulto localizado</strong> que aparece al toser o hacer fuerza, coméntaselo a tu médico antes de continuar.</p>
-    </div>
-
-    <!-- C1 · Vacío abdominal (hollowing) -->
-    <article class="card" data-ex="d1">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">C-01</span>
-        <div>
-          <h3>Vacío abdominal (hollowing)</h3>
-          <p class="muscles">Transverso del abdomen</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de persona tumbada llevando el ombligo hacia dentro">
-            <line class="m-thin" x1="8" y1="122" x2="212" y2="122"/>
-            <circle class="m" cx="40" cy="108" r="8"/>
-            <path class="m" d="M48 112 H118"/>
-            <path class="m-dash" d="M70 112 Q88 98 106 112"/>
-            <path class="m" d="M118 112 L142 82 L158 120"/>
-            <path class="m-thin" d="M154 120 h10"/>
-            <path class="m-thin" d="M56 112 L70 118"/>
-            <path class="mv" d="M88 66 V96 M88 96 l-6 -9 M88 96 l6 -9"/>
-          </svg>
-          <p class="caption">Tumbado, rodillas dobladas. La línea discontinua es la tripa: al exhalar, el ombligo baja hacia la columna.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>2</strong></li>
-            <li><span>Reps</span><strong>8</strong></li>
-            <li><span>Aguante</span><strong>10 s</strong></li>
-            <li><span>Descanso</span><strong>30 s</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol>
-              <li>Túmbate boca arriba con las rodillas dobladas y los pies apoyados.</li>
-              <li>Exhala despacio por la boca mientras llevas el ombligo hacia dentro y ligeramente hacia arriba, como si quisieras despegarlo de la cintura del pantalón.</li>
-              <li>Mantén 10 segundos respirando corto y superficial, sin apretar los glúteos ni bascular la pelvis.</li>
-              <li>Suelta, respira con normalidad y repite.</li>
-            </ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul>
-              <li>No es "meter tripa" aguantando el aire: el aire sigue entrando y saliendo.</li>
-              <li>Cuando lo domines tumbado, practícalo sentado o de pie en cualquier momento del día: es el mismo gesto que sujeta la tripa.</li>
-            </ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Sin ninguna implicación del hombro: apto incluso los días de molestias.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"></div>
-            <span class="mono" style="font-size:13px; color:var(--muted);">Sin carga</span>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- C2 · Dead bug -->
-    <article class="card" data-ex="d2">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">C-02</span>
-        <div>
-          <h3>Dead bug</h3>
-          <p class="muscles">Core profundo · Estabilidad lumbopélvica</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema del ejercicio dead bug tumbado boca arriba">
-            <line class="m-thin" x1="8" y1="122" x2="212" y2="122"/>
-            <circle class="m" cx="56" cy="108" r="8"/>
-            <path class="m" d="M64 112 H124"/>
-            <path class="m" d="M124 112 L124 84 L148 84"/>
-            <path class="m" d="M124 112 L182 100"/>
-            <path class="m" d="M70 112 L70 82"/>
-            <path class="m" d="M70 112 L30 92"/>
-            <path class="mv" d="M40 84 L26 76 M26 76 l10 0 M26 76 l4 9"/>
-            <path class="mv" d="M172 88 L188 94 M188 94 l-10 1 M188 94 l-5 -9"/>
-          </svg>
-          <p class="caption">Lumbar pegada al suelo. Un brazo baja por detrás de la cabeza mientras la pierna contraria se estira sin tocar el suelo.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>2</strong></li>
-            <li><span>Reps</span><strong>8/lado</strong></li>
-            <li><span>Tempo</span><strong>3 s</strong></li>
-            <li><span>Descanso</span><strong>45 s</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol>
-              <li>Boca arriba, brazos hacia el techo y rodillas dobladas a 90° sobre las caderas.</li>
-              <li>Haz un vacío abdominal suave y pega la zona lumbar al suelo: ese contacto no se pierde en todo el ejercicio.</li>
-              <li>Baja a la vez un brazo por detrás de la cabeza y estira la pierna contraria, dejándola a un palmo del suelo.</li>
-              <li>Vuelve al centro y cambia de lado. Si la lumbar se despega, acorta el recorrido.</li>
-            </ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul>
-              <li>Ve más lento de lo que crees: unos 3 segundos por repetición.</li>
-              <li>Progresión: cuando 2×8 por lado sea cómodo, sube a 2×12 antes de plantearte lastre.</li>
-            </ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>El brazo baja por detrás de la cabeza sin carga, un recorrido seguro. Si aun así notas molestia al final, baja el brazo solo hasta la vertical de la frente.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"></div>
-            <span class="mono" style="font-size:13px; color:var(--muted);">Sin carga</span>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-    <!-- C3 · Suitcase carry -->
-    <article class="card" data-ex="d3">
-      <span class="stamp">Hecho</span>
-      <header class="card-head">
-        <span class="mtag">C-03</span>
-        <div>
-          <h3>Paseo con peso a un brazo (suitcase carry)</h3>
-          <p class="muscles">Oblicuos · Cuadrado lumbar · Transverso</p>
-        </div>
-      </header>
-      <div class="card-grid">
-        <div class="figure">
-          <svg viewBox="0 0 220 150" role="img" aria-label="Esquema de persona caminando erguida con un peso en una sola mano">
-            <line class="m-thin" x1="8" y1="142" x2="212" y2="142"/>
-            <circle class="m" cx="100" cy="32" r="8"/>
-            <path class="m" d="M100 40 V92"/>
-            <path class="m-dash" d="M100 16 V112"/>
-            <path class="m" d="M100 92 L82 138 M100 92 L120 136"/>
-            <path class="m" d="M100 52 L78 76"/>
-            <path class="m" d="M100 52 L128 86"/>
-            <rect class="m" x="120" y="88" width="18" height="22" rx="2"/>
-            <path class="m-thin" d="M125 88 Q129 82 133 88"/>
-            <path class="mv" d="M156 128 H188 M188 128 l-9 -6 M188 128 l-9 6"/>
-          </svg>
-          <p class="caption">Garrafa de agua, mochila cargada o mancuerna en una sola mano. La línea discontinua es tu referencia: el tronco no se inclina.</p>
-        </div>
-        <div class="card-body">
-          <ul class="meta">
-            <li><span>Series</span><strong>2/lado</strong></li>
-            <li><span>Tiempo</span><strong>30–40 s</strong></li>
-            <li><span>Descanso</span><strong>45 s</strong></li>
-            <li><span>Carga</span><strong>La que rete</strong></li>
-          </ul>
-          <div class="block">
-            <h4>Ejecución</h4>
-            <ol>
-              <li>Coge una garrafa, una mochila cargada o una mancuerna con una sola mano.</li>
-              <li>Ponte totalmente recto: hombros nivelados, mirada al frente, abdomen ligeramente activado (el vacío que ya conoces).</li>
-              <li>Camina despacio 30–40 segundos; vale ir y volver por el pasillo.</li>
-              <li>Cambia de mano y repite. El trabajo consiste en impedir que el peso te tuerza.</li>
-            </ol>
-          </div>
-          <div class="block">
-            <h4>Consejos</h4>
-            <ul>
-              <li>Si no notas nada, la carga se queda corta: debe costar mantenerse recto los últimos segundos.</li>
-              <li>Brazo "largo": deja que cuelgue sin encoger el trapecio hacia la oreja.</li>
-            </ul>
-          </div>
-          <div class="bankart">
-            <h4>Precaución · Bankart</h4>
-            <p>Apto: el brazo cuelga pegado al cuerpo en posición neutra, una de las más seguras para un hombro con inestabilidad anterior. Eso sí, no balancees el peso ni lo levantes con impulso.</p>
-          </div>
-          <footer class="card-foot">
-            <div class="sets"><span class="sets-label">Reps por serie</span><input class="rep" data-set="0" type="number" inputmode="numeric" min="0" placeholder="S1" aria-label="Repeticiones serie 1"><input class="rep" data-set="1" type="number" inputmode="numeric" min="0" placeholder="S2" aria-label="Repeticiones serie 2"></div>
-            <label class="kg">Peso&nbsp;<input type="number" inputmode="decimal" step="0.5" min="0" placeholder="—" aria-label="Peso usado en kg">&nbsp;kg</label>
-            <button class="done-btn" type="button" aria-pressed="false">Marcar como hecho</button>
-          </footer>
-        </div>
-      </div>
-    </article>
-
-  </section>
-
-  <!-- ===================== PROGRESIÓN Y NUTRICIÓN ===================== -->
-  <section id="metodo">
-    <div class="sec-head"><h2>El método</h2><span class="ref">progresión · nutrición · expectativas</span></div>
-    <div class="info-grid">
-      <div class="info">
-        <h3>Cómo progresar (doble progresión)</h3>
-        <ul>
-          <li>Trabaja dentro del rango de repeticiones indicado, terminando cada serie con <strong>1–2 repeticiones en reserva (RIR)</strong>.</li>
-          <li>Cuando completes <strong>el tope del rango en todas las series</strong> (p. ej. 3×12), sube el peso al mínimo posible (una placa o 2,5&nbsp;kg) y vuelve al rango bajo.</li>
-          <li>Reparte los 3 días (A · B · C) a lo largo de la semana; cada músculo se entrena varias veces, así que prioriza recuperar entre sesiones.</li>
-          <li>Apunta el peso en cada ficha. Sin registro no hay progresión, y sin progresión no hay músculo nuevo.</li>
-          <li>Nunca subas peso a costa de acortar el recorrido seguro o de perder la técnica: con Bankart, la técnica es innegociable.</li>
-          <li>Cada 6–8 semanas, haz una semana suave (mismo peso, 2 series por ejercicio) para descargar.</li>
-        </ul>
-      </div>
-      <div class="info">
-        <h3>Nutrición para recomponer</h3>
-        <ul>
-          <li><strong>Proteína: 1,8–2,2 g por kg de peso corporal al día.</strong> Es el factor número uno de la recomposición.</li>
-          <li>Calorías en mantenimiento o déficit ligero (–200 a –300&nbsp;kcal/día). Déficits agresivos frenan la ganancia muscular.</li>
-          <li>7–9 horas de sueño: ahí se construye el músculo que rompes en el gimnasio.</li>
-          <li>Suma movimiento fuera del gimnasio (8–10&nbsp;000 pasos/día): quema grasa sin restar recuperación.</li>
-        </ul>
-        <p class="mono" style="margin-top:10px; color:var(--muted);">Nota honesta: la grasa no se pierde "por zonas" entrenando esa zona. Se reduce el porcentaje graso global y el músculo nuevo del tren superior es el que da la forma que buscas.</p>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer class="footer">
-  <div class="wrap">
-    <p class="mono">Aviso</p>
-    <p>Este plan es orientativo y no sustituye el consejo de un profesional sanitario. Con una lesión de Bankart (especialmente si ha habido luxaciones recientes o cirugía), consulta a tu traumatólogo o fisioterapeuta antes de empezar y ante cualquier dolor o sensación de inestabilidad. Las ilustraciones son esquemas: el nombre y la forma exacta de cada máquina varían según el gimnasio.</p>
-    <p class="mono" style="margin-top:14px;">Recomposición · Tren superior — v2</p>
+<div class="rest-bar" id="restBar" hidden>
+  <div class="rest-fill" id="restFill"></div>
+  <div class="rest-inner">
+    <div class="rest-txt"><span class="rest-lbl">Descanso · <span id="restName"></span></span><span class="rest-time" id="restTime">0:00</span></div>
+    <button class="rest-btn" id="restAdd">+30 s</button>
+    <button class="rest-btn" id="restStop" aria-label="Cerrar temporizador">✕</button>
   </div>
-</footer>
+</div>
 
 <script>
-(function(){
-  "use strict";
-  var KEY = "recomp-tren-superior-v2";
-  var memory = null; // respaldo si localStorage no está disponible
+/* ---------------- datos de la rutina ---------------- */
+const PLAN = {
+  a:{ label:"Día A", tab:"Tren superior", focus:"Empieza por pecho: press plano, cruces, espalda y hombro",
+    ex:[
+      {id:"fa3",rest:180,name:"Press de pecho en máquina (convergente)",zone:"Pecho",series:3,reps:"8–12",care:true,
+        setup:["Ajusta el asiento para que las asas queden a la altura de la mitad del pecho (línea de los pezones o un poco por debajo).",
+               "Si la máquina tiene ajuste de posición inicial, ponlo para que al empezar las asas estén justo delante del pecho y no por detrás.",
+               "Espalda bien apoyada en el respaldo y pies firmes en el suelo."],
+        how:["Antes de empujar, lleva los hombros hacia atrás y abajo y saca pecho. Mantén esa posición toda la serie.",
+             "Codos a unos 45–60° del torso. No los abras en cruz a 90°.",
+             "Empuja sin llegar a bloquear del todo los codos y baja en 2–3 segundos.",
+             "Para cuando las manos lleguen a la altura del pecho. Si los codos pasan por detrás de la línea del cuerpo, estás estresando la parte delantera del hombro."]},
+      {id:"fa3c",rest:120,name:"Cruces en polea / pec deck",zone:"Pecho",series:3,reps:"12–15",care:true,
+        setup:["Polea: coloca las dos poleas a la altura del hombro o un poco por encima y da un paso adelante, con un pie delante del otro.",
+               "Pec deck: ajusta el asiento para que las asas queden a la altura del pecho. Si tiene ajuste de recorrido, ponlo para que los brazos no se abran por detrás de la línea del pecho."],
+        how:["Después del press el pecho ya está cansado: usa un peso con el que controles bien la vuelta.",
+             "Codos ligeramente flexionados y siempre igual de flexionados. Imagina que abrazas un árbol.",
+             "Junta las manos delante del pecho y aprieta 1 segundo.",
+             "Vuelve despacio y para cuando las manos estén a la altura del pecho, o un poco antes. No dejes que los brazos se vayan hacia atrás.",
+             "Ante cualquier sensación de inestabilidad en el hombro, para y acorta el rango."]},
+      {id:"fa1",rest:150,name:"Jalón al pecho",zone:"Espalda",series:3,reps:"8–12",
+        setup:["Ajusta el rodillo para que te bloquee los muslos firmemente al sentarte.",
+               "Usa un agarre neutro (palmas enfrentadas), a la anchura de los hombros. Siempre al pecho, nunca por detrás de la nuca."],
+        how:["Saca pecho e inclínate hacia atrás unos 10–15°.",
+             "Empieza bajando los omóplatos (hombros lejos de las orejas) y luego tira llevando los codos hacia abajo y hacia atrás, cerca del cuerpo.",
+             "Lleva el agarre hasta la parte alta del pecho y aprieta la espalda 1 segundo.",
+             "Sube controlado hasta tener los brazos casi estirados, sin dejar que el peso te suba los hombros de golpe."]},
+      {id:"fa2",rest:150,name:"Remo en máquina con apoyo de pecho",zone:"Espalda",series:3,reps:"10–12",
+        setup:["Ajusta el asiento para que las asas queden a la altura de la parte baja del pecho.",
+               "Coloca el apoyo de pecho a una distancia en la que llegues a las asas con los brazos estirados y notes un ligero estiramiento en la espalda."],
+        how:["Pecho pegado al apoyo durante toda la serie. Si se despega, estás usando impulso.",
+             "Tira llevando los codos hacia atrás, cerca del cuerpo, y junta los omóplatos 1 segundo.",
+             "Vuelve despacio hasta estirar los brazos, dejando que los omóplatos se separen."]},
+      {id:"fa5",rest:150,name:"Press de hombro en máquina",zone:"Hombro",series:2,reps:"10–12",care:true,
+        setup:["Ajusta el asiento para que, sentado, las asas queden a la altura de los hombros o de la barbilla.",
+               "Si la máquina tiene agarre neutro (palmas enfrentadas), úsalo: carga menos la parte delantera del hombro."],
+        how:["Espalda pegada al respaldo, sin arquear la zona lumbar.",
+             "Empuja hacia arriba sin llegar a bloquear los codos.",
+             "Baja hasta que las manos estén más o menos a la altura de la barbilla, no más abajo.",
+             "Empieza ligero. Si notas molestia en la parte delantera del hombro, acorta el recorrido o quítalo."]},
+      {id:"fa4",rest:90,name:"Elevaciones laterales en polea",zone:"Hombro",series:4,reps:"12–20",
+        setup:["Polea: ponla en la posición más baja y colócate de lado a ella. Agarra el asa con la mano del lado más alejado, con el cable pasando por delante del cuerpo. Si hay muñequera o tobillera, úsala en la muñeca.",
+               "Se hace a un brazo: termina todas las repeticiones de un lado y cambia. El descanso cuenta desde que acabas los dos lados."],
+        how:["Inclina el torso un poco hacia el lado contrario a la polea.",
+             "Sube llevando el codo hacia fuera: el codo guía y la mano lo sigue. Codo ligeramente flexionado.",
+             "Sube hasta la altura del hombro y no más.",
+             "No gires la mano como si vaciaras una jarra. Mantén la muñeca neutra.",
+             "Baja en 2–3 segundos, sin balanceo. Aquí el peso importa menos que hacerlo limpio."]},
+      {id:"fa6",rest:90,name:"Curl en polea a un brazo",zone:"Bíceps",series:3,reps:"10–12",
+        setup:["Polea en la posición más baja, con asa individual.",
+               "Ponte de cara a la polea, a un paso de distancia."],
+        how:["Codo pegado al costado y quieto.",
+             "Sube con la palma mirando hacia arriba. Arriba del todo, gira un poco la muñeca llevando el meñique hacia fuera y aprieta el bíceps 1 segundo.",
+             "Baja despacio hasta casi estirar el brazo.",
+             "Empieza por el brazo más débil y haz las mismas repeticiones con el otro.",
+             "El descanso cuenta desde que terminas los dos brazos: mientras trabaja uno, el otro ya está descansando."]},
+      {id:"fa7",rest:120,name:"Pushdown en polea",zone:"Tríceps",series:3,reps:"10–15",
+        setup:["Polea en la posición más alta, con barra recta, barra en V o cuerda.",
+               "Ponte a un paso de la polea, con el torso ligeramente inclinado hacia delante."],
+        how:["Codos pegados a los costados y quietos: solo se mueven los antebrazos.",
+             "Extiende hasta estirar del todo y aprieta el tríceps abajo. Con cuerda, separa los extremos al final.",
+             "Sube hasta que el antebrazo quede más o menos paralelo al suelo, sin que los codos se vayan hacia delante."]},
+    ]},
+  b:{ label:"Día B", tab:"Tren superior", focus:"Empieza por espalda: remo, press inclinado, cruces y hombro",
+    ex:[
+      {id:"fb1",rest:120,name:"Remo en polea sentado",zone:"Espalda",series:3,reps:"10–12",
+        setup:["Asa de agarre neutro (en V o estrecha).",
+               "Pies en la plataforma, rodillas ligeramente flexionadas."],
+        how:["Espalda recta y torso casi vertical. Un balanceo pequeño está bien, pero no tires con la espalda baja.",
+             "Tira hacia el ombligo con los codos pegados al cuerpo y junta los omóplatos.",
+             "Al volver, estira los brazos y deja que los hombros vayan un poco hacia delante, sin redondear la zona lumbar."]},
+      {id:"fb3m",rest:180,name:"Press inclinado con mancuernas",zone:"Pecho",series:3,reps:"8–12",care:true,
+        setup:["Banco a unos 30° (segundo o tercer agujero). Por encima de 45° el ejercicio pasa a ser casi de hombro.",
+               "Para subir las mancuernas, apóyalas en los muslos, túmbate y súbelas ayudándote con un pequeño empujón de las rodillas."],
+        how:["Agarre semineutro: palmas giradas unos 30–45° hacia ti en vez de mirando al frente. Es bastante más amable para un Bankart.",
+             "Omóplatos juntos y pegados al banco, pecho arriba.",
+             "Baja controlado hasta que los codos queden más o menos a la altura del torso. No busques un estiramiento máximo.",
+             "Sube en un arco suave hasta que las mancuernas queden encima de la parte alta del pecho, sin chocarlas arriba.",
+             "Al terminar, lleva las mancuernas al pecho y luego a los muslos. Nunca las dejes caer abiertas hacia los lados con los brazos estirados: es la posición de más riesgo para tu hombro."]},
+      {id:"fb3c",rest:120,name:"Cruces en polea / pec deck",zone:"Pecho",series:3,reps:"12–15",care:true,
+        setup:["Polea: coloca las dos poleas a la altura del hombro o un poco por encima y da un paso adelante, con un pie delante del otro.",
+               "Pec deck: ajusta el asiento para que las asas queden a la altura del pecho. Si tiene ajuste de recorrido, ponlo para que los brazos no se abran por detrás de la línea del pecho."],
+        how:["Después del press el pecho ya está cansado: usa un peso con el que controles bien la vuelta.",
+             "Codos ligeramente flexionados y siempre igual de flexionados. Imagina que abrazas un árbol.",
+             "Junta las manos delante del pecho y aprieta 1 segundo.",
+             "Vuelve despacio y para cuando las manos estén a la altura del pecho, o un poco antes. No dejes que los brazos se vayan hacia atrás.",
+             "Ante cualquier sensación de inestabilidad en el hombro, para y acorta el rango."]},
+      {id:"fb2",rest:120,name:"Pull-over en polea",zone:"Espalda",series:3,reps:"12–15",care:true,
+        setup:["Polea en la posición más alta, con barra recta o cuerda.",
+               "Da dos pasos atrás e inclínate desde la cadera unos 30–45°, con las rodillas un poco flexionadas."],
+        how:["Brazos casi rectos y codos ligeramente flexionados, siempre igual.",
+             "Lleva la barra en arco hasta los muslos apretando los dorsales. No conviertas el ejercicio en un pushdown.",
+             "Vuelve hasta que los brazos queden más o menos a la altura de la cabeza y notes el estiramiento en la espalda. No hace falta pasar más allá.",
+             "Por tu hombro, si notas tirón en la parte delantera al subir los brazos, acorta el recorrido de arriba."]},
+      {id:"fb4",rest:90,name:"Elevaciones laterales en polea",zone:"Hombro",series:4,reps:"12–20",
+        setup:["Polea: ponla en la posición más baja y colócate de lado a ella. Agarra el asa con la mano del lado más alejado, con el cable pasando por delante del cuerpo. Si hay muñequera o tobillera, úsala en la muñeca.",
+               "Se hace a un brazo: termina todas las repeticiones de un lado y cambia. El descanso cuenta desde que acabas los dos lados."],
+        how:["Inclina el torso un poco hacia el lado contrario a la polea.",
+             "Sube llevando el codo hacia fuera: el codo guía y la mano lo sigue. Codo ligeramente flexionado.",
+             "Sube hasta la altura del hombro y no más.",
+             "No gires la mano como si vaciaras una jarra. Mantén la muñeca neutra.",
+             "Baja en 2–3 segundos, sin balanceo. Aquí el peso importa menos que hacerlo limpio."]},
+      {id:"fb7",rest:90,name:"Face pulls",zone:"Hombro",series:3,reps:"15–20",care:true,
+        setup:["Polea a la altura del pecho o del cuello (algo más baja de lo habitual, por tu hombro) y accesorio de cuerda.",
+               "Da uno o dos pasos atrás hasta que haya tensión con los brazos estirados."],
+        how:["Agarra la cuerda con los pulgares hacia ti.",
+             "Tira hacia la barbilla o el cuello separando los extremos de la cuerda, con los codos algo por debajo de la línea de los hombros.",
+             "Junta los omóplatos al final y aguanta 1 segundo.",
+             "Por tu Bankart, no termines con las manos por detrás de la cabeza ni fuerces el giro de los brazos hacia atrás. Para cuando las manos queden a los lados de la cara.",
+             "Peso ligero y controlado. Es un ejercicio de calidad, no de carga."]},
+      {id:"fb6",rest:120,name:"Extensión sobre la cabeza",zone:"Tríceps",series:3,reps:"10–15",
+        setup:["Polea a la altura del pecho o un poco más baja, con cuerda.",
+               "Ponte de espaldas a la polea, con la cuerda por encima de la cabeza, y da una zancada hacia delante. Inclina el torso un poco hacia delante."],
+        how:["Codos apuntando al frente y cerca de la cabeza. No los abras hacia los lados.",
+             "Solo se mueven los antebrazos: estira hacia delante y arriba hasta extender del todo.",
+             "Vuelve despacio dejando que la cuerda vaya detrás de la cabeza hasta notar un buen estiramiento.",
+             "Abdomen firme para no arquear la espalda. Si el hombro molesta, inclina más el torso hacia delante para que el brazo no quede tan vertical."]},
+      {id:"fb5h",rest:90,name:"Curl martillo en polea a un brazo",zone:"Bíceps",series:3,reps:"10–12",
+        setup:["Polea en la posición más baja.",
+               "Usa la cuerda cogiéndola por uno de sus extremos, justo por encima del tope, o un asa individual cogida de lado, con el pulgar hacia arriba.",
+               "Ponte de cara a la polea, a un paso de distancia."],
+        how:["Codo pegado al costado y quieto.",
+             "Sube con el pulgar hacia arriba, sin girar la muñeca, hasta que la mano llegue cerca del hombro.",
+             "Baja en 2–3 segundos hasta casi estirar el brazo.",
+             "Empieza por el brazo más débil. El descanso cuenta desde que terminas los dos brazos."]},
+    ]},
+  c:{ label:"Día C", tab:"Tren superior", focus:"Empieza por espalda: jalón, remo, cruces y hombro",
+    ex:[
+      {id:"fc1",rest:150,name:"Jalón al pecho",zone:"Espalda",series:3,reps:"8–12",
+        setup:["Ajusta el rodillo para que te bloquee los muslos firmemente al sentarte.",
+               "Agarre neutro o con las palmas hacia delante, a la anchura de los hombros. Evita los agarres muy abiertos. Siempre al pecho, nunca por detrás de la nuca."],
+        how:["Saca pecho e inclínate hacia atrás unos 10–15°.",
+             "Empieza bajando los omóplatos (hombros lejos de las orejas) y luego tira llevando los codos hacia abajo y hacia los costados.",
+             "Lleva el agarre hasta la parte alta del pecho y aprieta la espalda 1 segundo.",
+             "Sube controlado hasta tener los brazos casi estirados, sin dejar que el peso te suba los hombros de golpe."]},
+      {id:"fc2",rest:150,name:"Remo en máquina con apoyo de pecho",zone:"Espalda",series:3,reps:"10–12",
+        setup:["Ajusta el asiento para que las asas queden a la altura de la parte baja del pecho.",
+               "Coloca el apoyo de pecho a una distancia en la que llegues a las asas con los brazos estirados y notes un ligero estiramiento en la espalda."],
+        how:["Pecho pegado al apoyo durante toda la serie. Si se despega, estás usando impulso.",
+             "Tira llevando los codos hacia atrás, cerca del cuerpo, y junta los omóplatos 1 segundo.",
+             "Vuelve despacio hasta estirar los brazos, dejando que los omóplatos se separen."]},
+      {id:"fc3",rest:120,name:"Cruces en polea / pec deck",zone:"Pecho",series:3,reps:"12–15",care:true,
+        setup:["Polea: coloca las dos poleas a la altura del hombro o un poco por encima y da un paso adelante, con un pie delante del otro.",
+               "Pec deck: ajusta el asiento para que las asas queden a la altura del pecho. Si tiene ajuste de recorrido, ponlo para que los brazos no se abran por detrás de la línea del pecho."],
+        how:["Después del press el pecho ya está cansado: usa un peso con el que controles bien la vuelta.",
+             "Codos ligeramente flexionados y siempre igual de flexionados. Imagina que abrazas un árbol.",
+             "Junta las manos delante del pecho y aprieta 1 segundo.",
+             "Vuelve despacio y para cuando las manos estén a la altura del pecho, o un poco antes. No dejes que los brazos se vayan hacia atrás.",
+             "Ante cualquier sensación de inestabilidad en el hombro, para y acorta el rango."]},
+      {id:"fc4",rest:90,name:"Elevaciones laterales en polea",zone:"Hombro",series:4,reps:"12–20",
+        setup:["Polea: ponla en la posición más baja y colócate de lado a ella. Agarra el asa con la mano del lado más alejado, con el cable pasando por delante del cuerpo. Si hay muñequera o tobillera, úsala en la muñeca.",
+               "Se hace a un brazo: termina todas las repeticiones de un lado y cambia. El descanso cuenta desde que acabas los dos lados."],
+        how:["Inclina el torso un poco hacia el lado contrario a la polea.",
+             "Sube llevando el codo hacia fuera: el codo guía y la mano lo sigue. Codo ligeramente flexionado.",
+             "Sube hasta la altura del hombro y no más.",
+             "No gires la mano como si vaciaras una jarra. Mantén la muñeca neutra.",
+             "Baja en 2–3 segundos, sin balanceo. Aquí el peso importa menos que hacerlo limpio."]},
+      {id:"fc5",rest:90,name:"Face pulls",zone:"Hombro",series:3,reps:"15–20",care:true,
+        setup:["Polea a la altura del pecho o del cuello (algo más baja de lo habitual, por tu hombro) y accesorio de cuerda.",
+               "Da uno o dos pasos atrás hasta que haya tensión con los brazos estirados."],
+        how:["Agarra la cuerda con los pulgares hacia ti.",
+             "Tira hacia la barbilla o el cuello separando los extremos de la cuerda, con los codos algo por debajo de la línea de los hombros.",
+             "Junta los omóplatos al final y aguanta 1 segundo.",
+             "Por tu Bankart, no termines con las manos por detrás de la cabeza ni fuerces el giro de los brazos hacia atrás. Para cuando las manos queden a los lados de la cara.",
+             "Peso ligero y controlado. Es un ejercicio de calidad, no de carga."]},
+      {id:"fc6p",rest:90,name:"Curl en polea a un brazo",zone:"Bíceps",series:3,reps:"10–12",
+        setup:["Polea en la posición más baja, con asa individual.",
+               "Ponte de cara a la polea, a un paso de distancia."],
+        how:["Codo pegado al costado y quieto.",
+             "Sube con la palma mirando hacia arriba. Arriba del todo, gira un poco la muñeca llevando el meñique hacia fuera y aprieta el bíceps 1 segundo.",
+             "Baja despacio hasta casi estirar el brazo.",
+             "Empieza por el brazo más débil y haz las mismas repeticiones con el otro.",
+             "El descanso cuenta desde que terminas los dos brazos: mientras trabaja uno, el otro ya está descansando."]},
+      {id:"fc7",rest:120,name:"Press francés en máquina",zone:"Tríceps",series:3,reps:"10–15",
+        setup:["Ajusta el asiento para que los codos apoyen en el acolchado y queden alineados con el eje de giro de la máquina.",
+               "Usa los agarres neutros (palmas enfrentadas) si los tiene.",
+               "Si no hay máquina, hazlo como extensión en polea a dos manos: polea alta con cuerda, como el pushdown, o por encima de la cabeza."],
+        how:["Codos fijos en el acolchado: solo se mueven los antebrazos.",
+             "Extiende hasta estirar del todo y aprieta el tríceps 1 segundo.",
+             "Vuelve despacio hasta notar el estiramiento, sin dejar que el peso caiga."]},
+    ]},
+  casa:{ label:"Casa", tab:"Core", focus:"Pared abdominal · ~6 min · 3–4 días por semana", home:true,
+    ex:[
+      {id:"fd1",rest:30,name:"Hollowing con respiración",zone:"Core",series:2,reps:"8 × 10 s",units:["reps"],
+        setup:["Túmbate boca arriba con las rodillas flexionadas y los pies apoyados en el suelo.",
+               "Pon una mano sobre el abdomen, por debajo del ombligo, para notar si se activa."],
+        how:["Coge aire y, al soltarlo despacio, lleva el ombligo hacia la columna.",
+             "La pelvis no se mueve y la espalda no se aplasta contra el suelo: solo se mete la tripa.",
+             "Aguanta 10 segundos respirando corto, sin soltar la tripa. Relaja y repite.",
+             "Apunta cuántas repeticiones de 10 segundos completas bien."]},
+      {id:"fd2",rest:45,name:"Dead bug",zone:"Core",series:2,reps:"8 por lado",units:["reps"],
+        setup:["Boca arriba, brazos estirados hacia el techo y caderas y rodillas dobladas a 90°."],
+        how:["Antes de empezar, mete la tripa como en el hollowing y deja la zona lumbar apoyada en el suelo, sin apretarla a la fuerza.",
+             "Baja a la vez un brazo y la pierna contraria, despacio, soltando el aire.",
+             "Baja solo hasta donde la lumbar siga apoyada. Si se despega o se arquea, acorta el recorrido.",
+             "Vuelve y alterna lados. Por el hombro, basta con bajar el brazo hasta la altura de la cabeza."]},
+      {id:"fd3",rest:60,name:"Suitcase carry",zone:"Core",series:2,reps:"30 s por lado",units:["kg","s"],
+        setup:["Una mancuerna o kettlebell pesada en una sola mano. Se hace en el gimnasio o en casa si tienes peso.",
+               "Espacio para caminar en línea recta."],
+        how:["De pie y erguido, con el hombro del lado del peso bajo y en posición neutra.",
+             "Camina 30 segundos sin inclinarte hacia el lado del peso. El abdomen hace la fuerza para mantenerte recto.",
+             "Cambia de mano y repite.",
+             "Es seguro para tu hombro: el brazo cuelga sin moverse."]},
+    ]},
+};
 
-  function load(){
-    try{
-      var raw = localStorage.getItem(KEY);
-      if(raw){ return JSON.parse(raw); }
-    }catch(e){ /* sin almacenamiento: se usa memoria */ }
-    return memory || { day:"A", done:{}, kg:{} };
-  }
-  function save(state){
-    memory = state;
-    try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){ /* ignorar */ }
-  }
+/* ---------------- estado / persistencia ---------------- */
+const KEY="fullbody_tracker_v1";
+let state={entries:{},pref:null};
+try{const raw=localStorage.getItem(KEY);if(raw)state=Object.assign(state,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
 
-  var state = load();
-  if(!state.done){ state.done = {}; }
-  if(!state.kg){ state.kg = {}; }
-  if(!state.reps){ state.reps = {}; }
-  if(["A","B","C","D"].indexOf(state.day) === -1){ state.day = "A"; }
+function todayKey(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+const TODAY=todayKey();
 
-  var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
-  var panels = { A: document.getElementById("panel-A"), B: document.getElementById("panel-B"), C: document.getElementById("panel-C"), D: document.getElementById("panel-D") };
-  var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
-  var plates = Array.prototype.slice.call(document.querySelectorAll("#sleeve .plate"));
-  var progressLabel = document.getElementById("progress-label");
+function entriesFor(id){return state.entries[id]||(state.entries[id]=[]);}
+function getToday(id,series){
+  const arr=entriesFor(id);
+  let e=arr.find(x=>x.date===TODAY);
+  if(!e){e={date:TODAY,done:false,sets:Array.from({length:series},()=>({w:"",r:""}))};arr.push(e);}
+  return e;
+}
+function lastBefore(id){
+  const arr=entriesFor(id).filter(x=>x.date!==TODAY && x.sets.some(s=>s.w||s.r));
+  arr.sort((a,b)=>a.date<b.date?1:-1);
+  return arr[0]||null;
+}
+function fmtDate(key){const[,m,d]=key.split("-");const M=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];return parseInt(d)+" "+M[parseInt(m)-1];}
+function topSet(e){
+  let best=null;
+  e.sets.forEach(s=>{const w=parseFloat(s.w);if(!isNaN(w)&&(!best||w>parseFloat(best.w)))best=s;});
+  return best;
+}
 
-  function idsOfDay(day){
-    return cards
-      .map(function(c){ return c.getAttribute("data-ex"); })
-      .filter(function(id){ return id.charAt(0).toUpperCase() === day; });
-  }
+/* ---------------- render ---------------- */
+let current="a";
 
-  function renderCard(card){
-    var id = card.getAttribute("data-ex");
-    var done = !!state.done[id];
-    var btn = card.querySelector(".done-btn");
-    card.classList.toggle("is-done", done);
-    btn.setAttribute("aria-pressed", done ? "true" : "false");
-    btn.textContent = done ? "Hecho ✓ (desmarcar)" : "Marcar como hecho";
-    var input = card.querySelector(".kg input");
-    if(input && state.kg[id] != null && input.value === ""){
-      input.value = state.kg[id];
-    }
-    var repInputs = card.querySelectorAll(".rep");
-    if(repInputs.length && state.reps[id]){
-      Array.prototype.forEach.call(repInputs, function(inp){
-        var s = parseInt(inp.getAttribute("data-set"), 10);
-        if(inp.value === "" && state.reps[id][s] != null){ inp.value = state.reps[id][s]; }
-      });
-    }
-  }
-
-  function renderProgress(){
-    var ids = idsOfDay(state.day);
-    var total = ids.length;
-    var count = ids.filter(function(id){ return state.done[id]; }).length;
-    progressLabel.textContent = count + " / " + total;
-    plates.forEach(function(p, i){
-      p.style.display = (i < total) ? "" : "none";
-      p.classList.toggle("full", i < count);
-      p.classList.toggle("ok", count === total && total > 0);
-    });
-    Object.keys(panels).forEach(function(day){
-      var banner = panels[day].querySelector(".session-done");
-      var dIds = idsOfDay(day);
-      var dDone = dIds.every(function(id){ return state.done[id]; });
-      banner.classList.toggle("show", dDone && dIds.length > 0);
-    });
-  }
-
-  function setDay(day){
-    state.day = day;
-    tabs.forEach(function(t){
-      var active = t.getAttribute("data-day") === day;
-      t.setAttribute("aria-selected", active ? "true" : "false");
-    });
-    Object.keys(panels).forEach(function(k){ panels[k].hidden = (k !== day); });
-    renderProgress();
-    save(state);
-  }
-
-  tabs.forEach(function(t){
-    t.addEventListener("click", function(){ setDay(t.getAttribute("data-day")); });
+function buildTabs(){
+  const t=document.getElementById("tabs");t.innerHTML="";
+  Object.keys(PLAN).forEach(k=>{
+    const b=document.createElement("button");
+    b.className="tab";b.role="tab";b.setAttribute("aria-selected",k===current);
+    b.innerHTML=PLAN[k].label+"<small>"+PLAN[k].tab+"</small>";
+    b.onclick=()=>{current=k;buildTabs();renderDay();};
+    t.appendChild(b);
   });
+}
 
-  cards.forEach(function(card){
-    var id = card.getAttribute("data-ex");
-    card.querySelector(".done-btn").addEventListener("click", function(){
-      state.done[id] = !state.done[id];
-      renderCard(card);
-      renderProgress();
-      save(state);
-    });
-    var input = card.querySelector(".kg input");
-    if(input){
-      input.addEventListener("change", function(){
-        state.kg[id] = input.value;
-        save(state);
-      });
-    }
-    Array.prototype.forEach.call(card.querySelectorAll(".rep"), function(inp){
-      inp.addEventListener("change", function(){
-        if(!state.reps[id]){ state.reps[id] = []; }
-        state.reps[id][parseInt(inp.getAttribute("data-set"), 10)] = inp.value;
-        save(state);
-      });
-    });
-  });
+function renderDay(){
+  const day=PLAN[current];
+  document.getElementById("dayFocus").textContent=day.focus;
+  const list=document.getElementById("exList");list.innerHTML="";
+  day.ex.forEach(ex=>list.appendChild(card(ex)));
+  updateProgress();
+}
 
-  Array.prototype.slice.call(document.querySelectorAll(".reset-btn")).forEach(function(btn){
-    btn.addEventListener("click", function(){
-      var day = btn.getAttribute("data-reset");
-      idsOfDay(day).forEach(function(id){ delete state.done[id]; });
-      cards.forEach(renderCard);
-      renderProgress();
-      save(state);
-    });
-  });
+function card(ex){
+  const e=getToday(ex.id,ex.series);
+  const el=document.createElement("article");
+  el.className="card"+(e.done?" done":"");
+  el.dataset.id=ex.id;
 
-  // Estado inicial
-  cards.forEach(renderCard);
-  setDay(state.day);
-})();
+  const head=document.createElement("div");head.className="card-head";
+  const info=document.createElement("div");info.className="info";
+  const last=lastBefore(ex.id);
+  const ts=last?topSet(last):null;
+  info.innerHTML=
+    '<div class="ex-name">'+ex.name+'</div>'+
+    '<div class="ex-meta">'+
+      '<span class="pill zone">'+ex.zone+'</span>'+
+      '<span class="pill">'+ex.series+' × '+ex.reps+'</span>'+
+      '<button class="pill rest" data-rest="'+ex.rest+'" aria-label="Iniciar descanso de '+fmtRest(ex.rest)+'"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg>'+fmtRest(ex.rest)+'</button>'+
+      (ex.care?'<span class="pill care">cuida el rango</span>':'')+
+    '</div>'+
+    '<div class="last">'+(last
+        ? 'Último ('+fmtDate(last.date)+') · <b>'+lastTxt(ex,last,ts)+'</b>'
+        : 'Primera vez — marca tu referencia')+'</div>';
+  info.querySelector(".rest").onclick=()=>startRest(ex.rest,ex.name);
+  const chk=document.createElement("button");
+  chk.className="check";chk.setAttribute("aria-label","Marcar como hecho");
+  chk.innerHTML='<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+  chk.onclick=()=>{e.done=!e.done;el.classList.toggle("done",e.done);save();updateProgress();renderWeek();};
+  head.appendChild(info);head.appendChild(chk);
+
+  const sets=document.createElement("div");sets.className="sets";
+  const sh=document.createElement("div");sh.className="set-head";
+  const units=ex.units||["kg","reps"];
+  const LBL={kg:"Peso",reps:"Reps",s:"Seg"};
+  if(units.length===1)sh.classList.add("single");
+  sh.innerHTML="<span>Serie</span>"+units.map(u=>"<span>"+LBL[u]+"</span>").join("");
+  sets.appendChild(sh);
+  const rowsWrap=document.createElement("div");
+  e.sets.forEach((s,i)=>rowsWrap.appendChild(setRow(e,s,i,units)));
+  sets.appendChild(rowsWrap);
+  const add=document.createElement("button");add.className="add-set";add.textContent="+ añadir serie";
+  add.onclick=()=>{const s={w:"",r:""};e.sets.push(s);rowsWrap.appendChild(setRow(e,s,e.sets.length-1,units));save();};
+  sets.appendChild(add);
+
+  const det=document.createElement("details");det.className="howto";
+  det.innerHTML='<summary><span>Cómo hacerlo</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></summary>'+
+    '<div class="howto-body">'+
+      '<div class="howto-sec"><h4>Configuración</h4><ul>'+ex.setup.map(t=>'<li>'+t+'</li>').join('')+'</ul></div>'+
+      '<div class="howto-sec"><h4>Ejecución</h4><ul>'+ex.how.map(t=>'<li>'+t+'</li>').join('')+'</ul></div>'+
+    '</div>';
+  el.appendChild(head);el.appendChild(det);el.appendChild(sets);
+  return el;
+}
+
+function lastTxt(ex,last,ts){
+  const u=ex.units||["kg","reps"];
+  if(u[0]!=="kg"){
+    let b=0;last.sets.forEach(s=>{const r=parseFloat(s.r);if(!isNaN(r)&&r>b)b=r;});
+    return b?b+" "+u[0]:"—";
+  }
+  return (ts&&ts.w?ts.w+' kg':'—')+(ts&&ts.r?' × '+ts.r+(u[1]==="s"?" s":""):'');
+}
+function setRow(entry,s,i,units){
+  units=units||["kg","reps"];
+  const row=document.createElement("div");row.className="set-row"+(units.length===1?" single":"");
+  const n=document.createElement("div");n.className="n";n.textContent=i+1;
+  const fw=document.createElement("div");fw.className="field";
+  const iw=document.createElement("input");iw.type="number";iw.step="0.5";iw.min="0";iw.inputMode="decimal";
+  iw.placeholder="–";iw.value=s.w;iw.setAttribute("aria-label","Peso serie "+(i+1));
+  iw.oninput=()=>{s.w=iw.value;save();};
+  const uw=document.createElement("span");uw.className="unit";uw.textContent="kg";
+  fw.appendChild(iw);fw.appendChild(uw);
+  const second=units[units.length-1];
+  const fr=document.createElement("div");fr.className="field";
+  const ir=document.createElement("input");ir.type="number";ir.step="1";ir.min="0";ir.inputMode="numeric";
+  ir.placeholder="–";ir.value=s.r;ir.setAttribute("aria-label",(second==="s"?"Segundos":"Reps")+" serie "+(i+1));
+  ir.oninput=()=>{s.r=ir.value;save();};
+  const ur=document.createElement("span");ur.className="unit";ur.textContent=second;
+  fr.appendChild(ir);fr.appendChild(ur);
+  row.appendChild(n);if(units[0]==="kg")row.appendChild(fw);row.appendChild(fr);
+  return row;
+}
+
+function updateProgress(){
+  const day=PLAN[current];
+  let done=0;
+  day.ex.forEach(ex=>{const e=(state.entries[ex.id]||[]).find(x=>x.date===TODAY);if(e&&e.done)done++;});
+  document.getElementById("dayProgress").innerHTML="Hoy · <b>"+done+"</b>/"+day.ex.length+" hechos";
+}
+
+/* ---------------- semana ---------------- */
+function trainedDates(){
+  const set=new Set();
+  Object.keys(state.entries).forEach(id=>{if(id.startsWith("fd"))return;state.entries[id].forEach(e=>{if(e.done)set.add(e.date);});});
+  return set;
+}
+function renderWeek(){
+  const grid=document.getElementById("weekGrid");grid.innerHTML="";
+  const trained=trainedDates();
+  const now=new Date();
+  const dow=(now.getDay()+6)%7; // lunes=0
+  const monday=new Date(now);monday.setDate(now.getDate()-dow);
+  const labels=["L","M","X","J","V","S","D"];
+  let count=0;
+  for(let i=0;i<7;i++){
+    const d=new Date(monday);d.setDate(monday.getDate()+i);
+    const key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    const cell=document.createElement("div");cell.className="day-cell";
+    cell.innerHTML=labels[i]+'<span class="dn">'+d.getDate()+'</span>';
+    if(trained.has(key)){cell.classList.add("trained");count++;}
+    if(key===TODAY)cell.classList.add("today");
+    grid.appendChild(cell);
+  }
+  document.getElementById("weekCount").textContent=count;
+}
+
+/* ---------------- tema ---------------- */
+const SUN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"/></svg>';
+const MOON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>';
+function applyTheme(){
+  const btn=document.getElementById("themeBtn");
+  if(state.pref==="light"){document.documentElement.setAttribute("data-theme","light");btn.innerHTML=MOON;}
+  else if(state.pref==="dark"){document.documentElement.setAttribute("data-theme","dark");btn.innerHTML=SUN;}
+  else{document.documentElement.removeAttribute("data-theme");
+    const dark=window.matchMedia("(prefers-color-scheme:dark)").matches;btn.innerHTML=dark?SUN:MOON;}
+}
+document.getElementById("themeBtn").onclick=()=>{
+  const dark=state.pref? state.pref==="dark" : window.matchMedia("(prefers-color-scheme:dark)").matches;
+  state.pref=dark?"light":"dark";save();applyTheme();
+};
+
+document.getElementById("resetBtn").onclick=()=>{
+  const b=document.getElementById("resetBtn");
+  if(b.dataset.armed){state.entries={};save();renderDay();renderWeek();b.textContent="Borrar todos los datos";delete b.dataset.armed;}
+  else{b.dataset.armed="1";b.textContent="Toca de nuevo para confirmar";setTimeout(()=>{if(b.dataset.armed){b.textContent="Borrar todos los datos";delete b.dataset.armed;}},3500);}
+};
+
+
+/* ---------------- descanso ---------------- */
+function fmtRest(s){const m=Math.floor(s/60),r=s%60;return m+":"+String(r).padStart(2,"0");}
+let restTimer=null,restEnd=0,restTotal=0;
+function startRest(sec,name){
+  restTotal=sec;restEnd=Date.now()+sec*1000;
+  const bar=document.getElementById("restBar");
+  document.getElementById("restName").textContent=name;
+  bar.hidden=false;bar.classList.remove("finished");
+  clearInterval(restTimer);tickRest();restTimer=setInterval(tickRest,250);
+}
+function tickRest(){
+  const left=Math.max(0,Math.round((restEnd-Date.now())/1000));
+  document.getElementById("restTime").textContent=fmtRest(left);
+  document.getElementById("restFill").style.width=(100*(1-left/restTotal))+"%";
+  if(left<=0){clearInterval(restTimer);const bar=document.getElementById("restBar");bar.classList.add("finished");
+    document.getElementById("restTime").textContent="¡A por la serie!";
+    try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(e){}}
+}
+document.getElementById("restAdd").onclick=()=>{restEnd+=30000;restTotal+=30;document.getElementById("restBar").classList.remove("finished");clearInterval(restTimer);tickRest();restTimer=setInterval(tickRest,250);};
+document.getElementById("restStop").onclick=()=>{clearInterval(restTimer);document.getElementById("restBar").hidden=true;};
+
+/* ---------------- init ---------------- */
+applyTheme();
+buildTabs();
+renderDay();
+renderWeek();
 </script>
 </body>
 </html>
